@@ -1,0 +1,59 @@
+#battery.warning {
+  color: rgb(255, 193, 6);
+}
+
+#battery.critical {
+  color: red;
+}
+
+#battery.charging {
+  color: #096d00;
+}
+
+#battery.full {
+  color: #0060f9;
+}
+
+#network.wifi {
+  color: #89b4fa;
+}
+
+#network.ethernet {
+  color: #a6e3a1;
+}
+
+#custom-hyprsunset.enabled {
+  color: #f5c27a;
+}
+
+#custom-hyprsunset.disabled {
+  color: #7f8c8d;
+}
+
+#custom-mic.enabled {
+  background: rgb(166, 227, 161);
+  color: #000000;
+}
+
+/* BLUETOOTH */
+#bluetooth.disabled,
+#bluetooth.off {
+  color: #5c5c5c;
+}
+
+#bluetooth.on {
+  color: #89b4fa;
+}
+
+#bluetooth.connected {
+  color: #a6e3a1;
+}
+
+#bluetooth.discoverable,
+#bluetooth.pairable {
+  color: #f5c27a;
+}
+
+#bluetooth.discovering {
+  color: #fab387;
+}

@@ -2,108 +2,11 @@
   "layer": "top",
   "position": "top",
 
-  "modules-left": ["hyprland/workspaces"],
-  "modules-center": ["clock"],
-  "modules-right": [
-    "network",
-    "custom/mic",
-    "bluetooth",
-    "custom/power",
-    "cpu",
-    "memory",
-    "pulseaudio",
-    "backlight",
-    "battery",
-    "tray",
-    "custom/power-btn"
-  ],
-
-  "clock": {
-    "interval": 60,
-    "tooltip": true,
-    "format": "{:%H.%M}",
-    "tooltip-format": "{:%Y-%m-%d}",
-    "on-click": "wpaperctl next",
-    "on-click-right": "wpaperctl previous"
-  },
-
-  "cpu": {
-    "format": "CPU{usage}%"
-  },
-
-  "memory": {
-    "format": " RAM{percentage}%"
-  },
-
-  "pulseaudio": {
-    "format": "A{volume}%",
-    "format-muted": "Aoff",
-    "format-source": "󰍬",
-    "format-source-muted": "󰍭",
-    "tooltip": false,
-    "on-click": "pavucontrol",
-    "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
-    "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -5%"
-  },
-
-  "network": {
-    "interval": 1,
-    "format-wifi": "↓{bandwidthDownBits}  ↑{bandwidthUpBits}",
-    "format-ethernet": "↓{bandwidthDownBits}  ↑{bandwidthUpBits}",
-
-    "tooltip-format-wifi": "󰤨  {essid}\n󰒢  {signalStrength}%\n󰩟  {ipaddr}",
-    "tooltip-format-ethernet": "󰈀  {ifname}\n󰩟  {ipaddr}"
-  },
-
-  "battery": {
-    "format": "{icon} {capacity}%",
-    "format-charging": "󰂄 {capacity}%",
-    "format-plugged": " {capacity}%",
-    "format-full": "󰁹 Full",
-    "format-icons": [
-      "󰁺",  // 0–20%
-      "󰁼",  // 20–40%
-      "󰁾",  // 40–60%
-      "󰂀",  // 60–80%
-      "󰂂"   // 80–100%
-    ],
-    "states": {
-      "charging": "Charging",
-      "full": "Full",
-      "warning": 40,
-      "critical": 25
-    }
-  },
-
-  "bluetooth": {
-    "format": " {status}",
-    "format-connected": " {num_connections}",
-    "tooltip-format": "{controller_alias}\t{controller_address}\t{num_connections} connected",
-    "tooltip-format-connected": "{controller_alias}\t{controller_address}\t{num_connections} connected\n\n{device_enumerate}",
-    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%"
-  },
-
-  "custom/mic": {
-    "exec": "~/hypr-dots/scripts/mic.sh",
-    "interval": 1,
-    "tooltip": true,
-    "return-type": "json",
-    "on-click": "pactl set-source-mute @DEFAULT_SOURCE@ toggle"
-  },
-
-  "backlight": {
-    "format": "B{percent}%"
-  },
-
-  "custom/power": {
-    "exec": "~/hypr-dots/scripts/power.sh",
-    "interval": 5
-  },
-
-  "custom/power-btn": {
-    "format": "",
-    "tooltip": "Power menu",
-    "on-click": "wlogout"
-  }
+  "include": [
+    "modules/left.jsonc",
+    "modules/center.jsonc",
+    "modules/right.jsonc",
+    "modules/system.jsonc",
+    "modules/custom.jsonc"
+  ]
 }

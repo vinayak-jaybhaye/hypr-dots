@@ -1,0 +1,56 @@
+{
+  "cpu": {
+    "format": "CPU{usage}%",
+  },
+
+  "memory": {
+    "format": " RAM{percentage}%",
+  },
+
+  "pulseaudio": {
+    "format": "A{volume}%",
+    "format-muted": "Aoff",
+    "format-source": "󰍬",
+    "format-source-muted": "󰍭",
+    "tooltip": false,
+    "on-click": "pavucontrol",
+    "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
+    "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -5%",
+  },
+
+  "network": {
+    "interval": 1,
+    "format-wifi": "↓{bandwidthDownBits}  ↑{bandwidthUpBits}",
+    "format-ethernet": "↓{bandwidthDownBits}  ↑{bandwidthUpBits}",
+
+    "tooltip-format-wifi": "󰤨  {essid}\n󰒢  {signalStrength}%\n󰩟  {ipaddr}",
+    "tooltip-format-ethernet": "󰈀  {ifname}\n󰩟  {ipaddr}",
+  },
+
+  "bluetooth": {
+    "format": "",
+    "format-connected": "",
+    "tooltip-format": "{controller_alias}\t{controller_address}\t{num_connections} connected\t{status}",
+    "tooltip-format-connected": "{controller_alias}\t{controller_address}\t{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+  },
+
+  "battery": {
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-full": "󰁹 {capacity}",
+    "format-icons": ["󰁺", "󰁼", "󰁾", "󰂀", "󰂂"],
+    "states": {
+      "charging": "Charging",
+      "full": "Full",
+      "warning": 40,
+      "critical": 25,
+    },
+  },
+
+  "backlight": {
+    "format": "B{percent}%",
+  },
+}

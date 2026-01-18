@@ -1,0 +1,12 @@
+#workspaces button {
+  padding: 0 6px;
+  margin: 4px 2px;
+  border-radius: 6px;
+  background: transparent;
+  color: #888;
+}
+
+#workspaces button.active {
+  background: #89b4fa;
+  color: #111;
+}

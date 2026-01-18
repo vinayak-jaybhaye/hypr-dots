@@ -1,0 +1,10 @@
+* {
+  font-family: "JetBrainsMono Nerd Font Mono", monospace;
+  font-size: 12px;
+}
+
+window#waybar {
+  background: rgba(15, 15, 15, 0.85);
+  color: #e5e5e5;
+  margin: 6px;
+}

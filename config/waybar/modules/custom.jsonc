@@ -1,0 +1,28 @@
+{
+  "custom/mic": {
+    "exec": "~/hypr-dots/scripts/mic.sh",
+    "interval": 1,
+    "tooltip": true,
+    "return-type": "json",
+    "on-click": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
+  },
+
+  "custom/power": {
+    "exec": "~/hypr-dots/scripts/power.sh",
+    "interval": 5,
+  },
+
+  "custom/power-btn": {
+    "format": "",
+    "tooltip": "Power menu",
+    "on-click": "wlogout",
+  },
+
+  "custom/hyprsunset": {
+    "exec": "~/hypr-dots/scripts/hyprsunset-status.sh",
+    "interval": 2,
+    "return-type": "json",
+    "tooltip": true,
+    "on-click": "~/hypr-dots/scripts/hyprsunset-toggle.sh",
+  },
+}

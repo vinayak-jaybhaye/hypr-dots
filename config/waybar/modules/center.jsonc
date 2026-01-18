@@ -1,0 +1,12 @@
+{
+  "modules-center": ["clock", "custom/hyprsunset"],
+
+  "clock": {
+    "interval": 60,
+    "tooltip": true,
+    "format": "{:%H.%M}",
+    "tooltip-format": "{:%a, %d %b %Y}",
+    "on-click": "wpaperctl next",
+    "on-click-right": "wpaperctl previous",
+  },
+}

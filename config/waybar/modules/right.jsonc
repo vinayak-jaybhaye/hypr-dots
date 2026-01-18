@@ -1,0 +1,15 @@
+{
+  "modules-right": [
+    "network",
+    "custom/mic",
+    "bluetooth",
+    "custom/power",
+    "cpu",
+    "memory",
+    "pulseaudio",
+    "backlight",
+    "battery",
+    "tray",
+    "custom/power-btn",
+  ],
+}
