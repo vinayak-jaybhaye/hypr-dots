@@ -10,6 +10,7 @@
 #custom-power,
 #custom-power-btn,
 #custom-mic,
+#custom-dnd,
 #custom-hyprsunset {
   padding: 0 10px;
 }
@@ -21,4 +22,8 @@
 
 #bluetooth {
   font-size: 16px;
+}
+
+#custom-dnd {
+  font-size: 18px;
 }

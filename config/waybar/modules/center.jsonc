@@ -1,5 +1,5 @@
 {
-  "modules-center": ["clock", "custom/hyprsunset"],
+  "modules-center": ["clock", "custom/hyprsunset", "custom/dnd"],
 
   "clock": {
     "interval": 60,

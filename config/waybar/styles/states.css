@@ -63,3 +63,18 @@
 #bluetooth.discovering {
   color: #fab387;
 }
+
+/* PULSE AUDIO */
+#pulseaudio.muted {
+  font-size: 22px;
+  color: rgb(255, 0, 0);
+}
+
+/* CUSTOM DND */
+#custom-dnd.enabled {
+  color: #f38ba8;
+}
+
+#custom-dnd.disabled {
+  color: #a6e3a1;
+}
