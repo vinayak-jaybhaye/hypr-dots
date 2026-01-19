@@ -31,8 +31,14 @@
 }
 
 #custom-mic.enabled {
-  background: rgb(166, 227, 161);
-  color: #000000;
+  font-size: 18px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(255, 0, 0);
+}
+
+#custom-mic.disabled {
+  font-size: 22px;
+  color: rgb(255, 0, 0);
 }
 
 /* BLUETOOTH */
