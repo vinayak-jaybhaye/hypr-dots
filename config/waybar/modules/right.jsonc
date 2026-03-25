@@ -5,11 +5,12 @@
     "bluetooth",
     "custom/power",
     "cpu",
+    "temperature",
     "memory",
     "pulseaudio",
     "backlight",
     "battery",
     "tray",
-    "custom/power-btn",
-  ],
+    "custom/power-btn"
+  ]
 }
