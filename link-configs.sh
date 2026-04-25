@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
-HYPR_DOTS="$HOME/hypr-dots"
+HYPR_DOTS="${HYPR_DOTS:-$HOME/hypr-dots}"
 CONFIG_SRC="$HYPR_DOTS/config"
 FORCE=0
+BACKUP=1
+BACKUP_DIR="$HOME/.config_backup_$(date +%s)"
 
 info() {
   echo -e "\033[1;34m[INFO]\033[0m $1"
@@ -13,36 +15,72 @@ warn() {
   echo -e "\033[1;33m[WARN]\033[0m $1"
 }
 
-if [[ "$1" == "--force" ]]; then
-  FORCE=1
-fi
+error() {
+  echo -e "\033[1;31m[ERROR]\033[0m $1"
+}
 
+# -------------------------------
+# Parse args
+# -------------------------------
+for arg in "$@"; do
+  case "$arg" in
+    --force) FORCE=1 ;;
+    --no-backup) BACKUP=0 ;;
+  esac
+done
+
+# -------------------------------
+# Checks
+# -------------------------------
 if [ ! -d "$CONFIG_SRC" ]; then
-  echo "config/ directory not found in hypr-dots"
+  error "config/ directory not found in $HYPR_DOTS"
   exit 1
 fi
 
+mkdir -p "$HOME/.config"
+
+# -------------------------------
+# Link configs
+# -------------------------------
 for dir in "$CONFIG_SRC"/*; do
+  [ -d "$dir" ] || continue
+
   name="$(basename "$dir")"
   target="$HOME/.config/$name"
 
-  if [ -e "$target" ] && [ ! -L "$target" ]; then
+  # If correct symlink already exists → skip
+  if [ -L "$target" ] && [ "$(readlink -f "$target")" = "$dir" ]; then
+    info "$name already linked — skipping"
+    continue
+  fi
+
+  # If something exists at target
+  if [ -e "$target" ]; then
     if [ "$FORCE" -eq 1 ]; then
-      warn "Removing existing $target"
-      rm -rf "$target"
+      if [ "$BACKUP" -eq 1 ]; then
+        mkdir -p "$BACKUP_DIR"
+        warn "Backing up $target → $BACKUP_DIR/"
+        mv "$target" "$BACKUP_DIR/"
+      else
+        warn "Removing $target"
+        rm -rf "$target"
+      fi
     else
       warn "$target exists — skipping (use --force to replace)"
       continue
     fi
   fi
 
-  mkdir -p "$HOME/.config"
-  ln -sfn "$dir" "$target"
+  ln -s "$dir" "$target"
   info "linked $target → $dir"
 done
 
+# -------------------------------
 # Scripts permissions
+# -------------------------------
 if [ -d "$HYPR_DOTS/scripts" ]; then
-  chmod +x "$HYPR_DOTS/scripts"/* 2>/dev/null || true
+  find "$HYPR_DOTS/scripts" -type f -exec chmod +x {} \;
   info "Marked scripts executable"
 fi
+
+info "Done."

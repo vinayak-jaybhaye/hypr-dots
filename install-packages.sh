@@ -4,6 +4,8 @@ set -e
 HYPR_DOTS="$HOME/hypr-dots"
 PKGS="$HYPR_DOTS/pkglist.txt"
 
+MODE="${1:-ask}"   # auto / interactive / ask
+
 info() {
   echo -e "\033[1;34m[INFO]\033[0m $1"
 }
@@ -13,10 +15,18 @@ if [ ! -f "$PKGS" ]; then
   exit 1
 fi
 
-read -rp "Install packages from pkglist.txt? [y/N] " ans
-if [[ "$ans" =~ ^[Yy]$ ]]; then
-  info "Installing packages…"
-  sudo pacman -S --needed - < "$PKGS"
+if [ "$MODE" = "ask" ]; then
+  read -rp "Install packages from pkglist.txt? [y/N] " ans
+  [[ ! "$ans" =~ ^[Yy]$ ]] && exit 0
+fi
+
+echo "[INFO] Updating system..."
+sudo pacman -Sy --noconfirm
+
+info "Installing packages..."
+
+if [ "$MODE" = "auto" ]; then
+  sudo pacman -S --needed --noconfirm - < "$PKGS"
 else
-  info "Skipping package installation"
+  sudo pacman -S --needed - < "$PKGS"
 fi

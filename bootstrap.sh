@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-./install-packages.sh
-./link-configs.sh
+DIR="$(cd "$(dirname "$0")" && pwd)"
+
+"$DIR/install-packages.sh"
+"$DIR/link-configs.sh"
