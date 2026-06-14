@@ -1,5 +1,48 @@
 # Mako Notification Daemon Configuration
-# Catppuccin Mocha theme colors and DND rules are loaded here.
+# Glassmorphic Catppuccin Mocha Style
+
+# Positioning and Layout
+anchor=top-right
+max-history=100
+sort=-time
+
+# Geometry
+width=320
+height=110
+margin=12,12
+padding=14
+border-size=2
+border-radius=10
+
+# Fonts and Content Styling
+font=JetBrainsMono Nerd Font 10
+markup=1
+format=<b>%s</b>\n%b
+
+# Colors (Catppuccin Mocha with 90% opacity for glassmorphism)
+background-color=#1e1e2ee6
+text-color=#cdd6f4ff
+border-color=#cba6f7ff
+progress-color=over #313244ff
+
+# Default behavior
+default-timeout=6000
+ignore-timeout=0
+
+# Urgency Rules (Timeouts based on importance/urgency)
+[urgency=low]
+border-color=#313244ff
+default-timeout=3000
+text-color=#a6adc8ff
+
+[urgency=normal]
+border-color=#89b4faff
+default-timeout=7000
+
+[urgency=high]
+border-color=#f38ba8ff
+text-color=#f38ba8ff
+default-timeout=0
 
 # Do Not Disturb Mode Rules
 [mode=do-not-disturb]
