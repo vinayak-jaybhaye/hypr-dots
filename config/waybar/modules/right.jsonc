@@ -1,16 +1,34 @@
 {
   "modules-right": [
-    "network",
-    "custom/mic",
-    "bluetooth",
-    "custom/power",
-    "cpu",
-    "temperature",
-    "memory",
-    "pulseaudio",
-    "backlight",
-    "battery",
-    "tray",
-    "custom/power-btn"
-  ]
+    "group/connections",
+    "group/audio",
+    "group/hardware",
+    "group/power-group",
+    "group/sys-status"
+  ],
+
+  "group/connections": {
+    "orientation": "horizontal",
+    "modules": ["network", "bluetooth"]
+  },
+
+  "group/audio": {
+    "orientation": "horizontal",
+    "modules": ["pulseaudio", "pulseaudio#microphone", "backlight"]
+  },
+
+  "group/hardware": {
+    "orientation": "horizontal",
+    "modules": ["cpu", "temperature", "memory"]
+  },
+
+  "group/power-group": {
+    "orientation": "horizontal",
+    "modules": ["custom/power", "battery"]
+  },
+
+  "group/sys-status": {
+    "orientation": "horizontal",
+    "modules": ["idle_inhibitor", "tray", "custom/power-btn"]
+  }
 }

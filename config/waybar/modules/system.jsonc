@@ -1,61 +1,103 @@
 {
   "cpu": {
-    "format": "CPU{usage}%"
+    "interval": 5,
+    "format": " {usage}%",
+    "tooltip": true
   },
   "temperature": {
-    "hwmon-path": "/sys/class/hwmon/hwmon6/temp1_input",
-    "format": "CPU {temperatureC}°C",
-    "critical-threshold": 70
+    "critical-threshold": 75,
+    "hwmon-path-abs": [
+      "/sys/devices/platform/coretemp.0/hwmon",
+      "/sys/devices/pci0000:00/0000:00:18.3/hwmon"
+    ],
+    "input-filename": "temp1_input",
+    "format": " {temperatureC}°C",
+    "format-critical": "🔥  {temperatureC}°C",
+    "tooltip": true
   },
   "memory": {
-    "format": " RAM{percentage}%"
+    "interval": 10,
+    "format": " {percentage}%",
+    "tooltip": true,
+    "tooltip-format": "RAM: {used:0.1f}G / {total:0.1f}G\nSwap: {swapUsed:0.1f}G / {swapTotal:0.1f}G"
   },
   "pulseaudio": {
-    "format": "A{volume}%",
-    "format-muted": "",
-    "format-source": "󰍬",
-    "format-source-muted": "󰍭",
-    "tooltip": true,
+    "format": "{icon} {volume}%",
+    "format-bluetooth": "{icon} {volume}%",
+    "format-muted": " Muted",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["", "", ""]
+    },
+    "scroll-step": 5,
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
     "on-click-right": "pavucontrol",
     "on-scroll-up": "wpctl set-volume -l 1.3 @DEFAULT_AUDIO_SINK@ 5%+",
     "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-",
-    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    "tooltip": true,
+    "tooltip-format": "{desc} | {volume}%"
+  },
+  "pulseaudio#microphone": {
+    "format": "{format_source}",
+    "format-source": " {volume}%",
+    "format-source-muted": " Muted",
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "on-scroll-up": "wpctl set-volume -l 1.3 @DEFAULT_AUDIO_SOURCE@ 5%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-",
+    "scroll-step": 5,
+    "tooltip": true,
+    "tooltip-format": "Microphone: {volume}%"
   },
   "network": {
-    "interval": 1,
-    "format-wifi": "↓{bandwidthDownBytes}  ↑{bandwidthUpBytes}",
-    "format-ethernet": "↓{bandwidthDownBytes}  ↑{bandwidthUpBytes}",
-    "tooltip-format-wifi": "󰤨  {essid}\n󰒢  {signalStrength}%\n󰩟  {ipaddr}",
-    "tooltip-format-ethernet": "󰈀  {ifname}\n󰩟  {ipaddr}"
+    "interval": 2,
+    "format-wifi": " ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
+    "format-ethernet": "󰈀 ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
+    "format-disconnected": "⚠ Disconnected",
+    "tooltip-format-wifi": "󰤨 {essid}\n󰒢 {signalStrength}%\n󰩟 {ipaddr}",
+    "tooltip-format-ethernet": "󰈀 {ifname}\n󰩟 {ipaddr}",
+    "on-click": "kitty -e nmtui"
   },
   "bluetooth": {
     "format": "",
     "format-connected": "",
+    "format-connected-battery": "",
     "tooltip-format": "{controller_alias}\t{controller_address}\t{num_connections} connected\t{status}",
     "tooltip-format-connected": "{controller_alias}\t{controller_address}\t{num_connections} connected\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%"
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+    "on-click": "blueman-manager"
   },
   "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
     "format": "{icon} {capacity}%",
     "format-charging": "󰂄 {capacity}%",
     "format-plugged": " {capacity}%",
-    "format-full": "󰁹 {capacity}",
-    "format-icons": [
-      "󰁺",
-      "󰁼",
-      "󰁾",
-      "󰂀",
-      "󰂂"
-    ],
-    "states": {
-      "charging": "Charging",
-      "full": "Full",
-      "warning": 40,
-      "critical": 25
-    }
+    "format-full": "󰁹 {capacity}%",
+    "format-icons": ["󰁺", "󰁼", "󰁾", "󰂀", "󰂂"],
+    "tooltip-format": "{capacity}% ({time})"
   },
   "backlight": {
-    "format": "B{percent}%"
+    "format": "{icon} {percent}%",
+    "format-icons": ["", "", "", "", "", "", "", "", ""],
+    "on-scroll-up": "brightnessctl set 5%+",
+    "on-scroll-down": "brightnessctl set 5%-",
+    "tooltip": false
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    },
+    "tooltip-format-activated": "Idle Inhibitor: Active",
+    "tooltip-format-deactivated": "Idle Inhibitor: Inactive"
   }
 }

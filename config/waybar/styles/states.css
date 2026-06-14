@@ -1,80 +1,79 @@
+/* BATTERY STATES */
 #battery.warning {
-  color: rgb(255, 193, 6);
+  color: @yellow;
 }
 
 #battery.critical {
-  color: red;
+  color: @red;
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 #battery.charging {
-  color: #096d00;
+  color: @green;
 }
 
 #battery.full {
-  color: #0060f9;
+  color: @green;
 }
 
-#network.wifi {
-  color: #89b4fa;
-}
-
-#network.ethernet {
-  color: #a6e3a1;
-}
-
+/* CUSTOM HYPRSUNSET STATES */
 #custom-hyprsunset.enabled {
-  color: #f5c27a;
+  color: @peach;
 }
 
 #custom-hyprsunset.disabled {
-  color: #7f8c8d;
+  color: @overlay0;
 }
 
-#custom-mic.enabled {
-  font-size: 18px;
-  color: rgb(255, 255, 255);
-  background-color: rgb(255, 0, 0);
+/* AUDIO & MICROPHONE STATES */
+#pulseaudio.muted {
+  color: @red;
 }
 
-#custom-mic.disabled {
-  font-size: 22px;
-  color: rgb(255, 0, 0);
+#pulseaudio.microphone.muted {
+  color: @red;
 }
 
-/* BLUETOOTH */
+/* BLUETOOTH STATES */
 #bluetooth.disabled,
 #bluetooth.off {
-  color: #5c5c5c;
+  color: @overlay0;
 }
 
 #bluetooth.on {
-  color: #89b4fa;
+  color: @blue;
 }
 
 #bluetooth.connected {
-  color: #a6e3a1;
+  color: @green;
 }
 
 #bluetooth.discoverable,
 #bluetooth.pairable {
-  color: #f5c27a;
+  color: @peach;
 }
 
 #bluetooth.discovering {
-  color: #fab387;
+  color: @sapphire;
 }
 
-/* PULSE AUDIO */
-#pulseaudio.muted {
-  font-size: 22px;
-  color: rgb(255, 0, 0);
-}
-
-/* CUSTOM DND */
+/* DND STATES */
 #custom-dnd.enabled {
-  color: #f38ba8;
+  color: @red;
 }
 
 #custom-dnd.disabled {
-  color: #a6e3a1;
+  color: @overlay0;
+}
+
+/* BLINK ANIMATION */
+@keyframes blink {
+  to {
+    background-color: @red;
+    color: @base;
+  }
 }

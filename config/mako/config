@@ -1,0 +1,6 @@
+# Mako Notification Daemon Configuration
+# Catppuccin Mocha theme colors and DND rules are loaded here.
+
+# Do Not Disturb Mode Rules
+[mode=do-not-disturb]
+invisible=1

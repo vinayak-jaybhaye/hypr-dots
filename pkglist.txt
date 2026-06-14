@@ -20,3 +20,15 @@ pamixer
 mako
 xdg-desktop-portal-hyprland
 mpv
+thunar
+network-manager-applet
+blueman
+polkit-kde-agent
+upower
+pipewire
+pipewire-pulse
+wireplumber
+libnotify
+pavucontrol
+zsh
+ttf-jetbrains-mono-nerd

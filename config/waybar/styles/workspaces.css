@@ -1,12 +1,41 @@
+#workspaces {
+  background-color: rgba(30, 30, 46, 0.45); /* Semi-transparent Catppuccin Base */
+  border-radius: 16px;
+  padding: 2px 6px;
+  margin: 4px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#workspaces:hover {
+  background-color: rgba(49, 50, 68, 0.65); /* Surface1 on hover */
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 12px rgba(137, 180, 250, 0.12);
+}
+
 #workspaces button {
-  padding: 0 6px;
-  margin: 4px 2px;
-  border-radius: 6px;
-  background: transparent;
-  color: #888;
+  padding: 0 8px;
+  margin: 2px 2px;
+  border-radius: 12px;
+  background-color: transparent;
+  color: @overlay0;
+  border: none;
+  transition: all 0.2s ease-in-out;
+}
+
+#workspaces button:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: @text;
 }
 
 #workspaces button.active {
-  background: #89b4fa;
-  color: #111;
+  background-color: @blue;
+  color: @crust;
+  box-shadow: 0 2px 6px rgba(137, 180, 250, 0.4);
+}
+
+#workspaces button.urgent {
+  background-color: @red;
+  color: @crust;
 }

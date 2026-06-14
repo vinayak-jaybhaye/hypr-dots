@@ -1,6 +1,12 @@
 {
   "layer": "top",
   "position": "top",
+  "height": 44,
+  "spacing": 4,
+  "margin-top": 6,
+  "margin-bottom": 0,
+  "margin-left": 8,
+  "margin-right": 8,
 
   "include": [
     "modules/left.jsonc",

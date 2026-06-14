@@ -1,4 +1,16 @@
 #!/usr/bin/env bash
+# link-configs.sh — Symlink config directories to ~/.config/
+# Purpose: Creates symlinks from this repo's config/ subdirectories to ~/.config/.
+# Flags:
+#   --force      — replace existing configs (backs up by default)
+#   --no-backup  — skip backup when using --force (destructive!)
+# Behavior:
+#   - Skips directories that are already correctly symlinked
+#   - Backs up existing configs to ~/.config_backup_<timestamp>/
+#   - Sets executable permissions on all files in scripts/
+# Environment:
+#   HYPR_DOTS — override the repo path (default: ~/hypr-dots)
+# CAUTION: Bugs in this script can delete user configs. Test changes carefully.
 set -euo pipefail
 
 HYPR_DOTS="${HYPR_DOTS:-$HOME/hypr-dots}"

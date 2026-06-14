@@ -1,29 +1,135 @@
-#tray,
+/* Glassmorphic Pill Container Styling for Groups and Standalone Clock */
+#group-center-trio,
+#group-connections,
+#group-audio,
+#group-hardware,
+#group-power-group,
+#group-sys-status {
+  background-color: rgba(30, 30, 46, 0.45); /* Semi-transparent Catppuccin Base */
+  border-radius: 16px;
+  padding: 2px 8px;
+  margin: 4px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover effects for the pills */
+#group-center-trio:hover,
+#group-connections:hover,
+#group-audio:hover,
+#group-hardware:hover,
+#group-power-group:hover,
+#group-sys-status:hover {
+  background-color: rgba(49, 50, 68, 0.65); /* Surface1 on hover */
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 12px rgba(137, 180, 250, 0.12); /* Subtle blue glow */
+}
+
+/* Individual Module Styles (Inside the Pills) */
 #clock,
-#battery,
-#network,
-#pulseaudio,
-#cpu,
-#memory,
-#bluetooth,
-#backlight,
-#custom-power,
-#custom-power-btn,
-#custom-mic,
+#custom-hyprsunset,
 #custom-dnd,
-#custom-hyprsunset {
-  padding: 0 10px;
+#network,
+#bluetooth,
+#pulseaudio,
+#pulseaudio.microphone,
+#backlight,
+#cpu,
+#temperature,
+#memory,
+#custom-power,
+#battery,
+#idle-inhibitor,
+#tray,
+#custom-power-btn {
+  background-color: transparent;
+  border: none;
+  padding: 0 8px;
+  margin: 0;
+  transition: all 0.2s ease-in-out;
 }
 
-#custom-power-btn,
-#custom-hyprsunset {
-  font-size: 20px;
+/* Individual Module Colors */
+#clock {
+  color: @lavender;
 }
 
-#bluetooth {
-  font-size: 16px;
+#custom-hyprsunset {
+  color: @peach;
 }
 
 #custom-dnd {
-  font-size: 18px;
+  color: @pink;
+}
+
+#network {
+  color: @teal;
+}
+
+#bluetooth {
+  color: @blue;
+}
+
+#pulseaudio {
+  color: @green;
+}
+
+#pulseaudio.microphone {
+  color: @yellow;
+}
+
+#backlight {
+  color: @peach;
+}
+
+#cpu {
+  color: @mauve;
+}
+
+#temperature {
+  color: @maroon;
+}
+
+#memory {
+  color: @pink;
+}
+
+#custom-power {
+  color: @rosewater;
+}
+
+#battery {
+  color: @green;
+}
+
+#idle-inhibitor {
+  color: @red;
+}
+
+#custom-power-btn {
+  color: @red;
+  padding: 0 10px;
+}
+
+/* Hover micro-animations for individual interactive modules */
+#custom-hyprsunset:hover,
+#custom-dnd:hover,
+#network:hover,
+#bluetooth:hover,
+#pulseaudio:hover,
+#pulseaudio.microphone:hover,
+#backlight:hover,
+#custom-power-btn:hover,
+#idle-inhibitor:hover {
+  color: @text;
+}
+
+/* Window title formatting (directly on the bar) */
+#window {
+  background-color: transparent;
+  border: none;
+  color: @subtext0;
+  padding: 0 12px;
+  font-weight: normal;
 }
