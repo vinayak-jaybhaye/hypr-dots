@@ -9,7 +9,7 @@
   "clock": {
     "interval": 60,
     "tooltip": true,
-    "format": " {:%H:%M}",
+    "format": "{:%H:%M}",
     "tooltip-format": "<span>{:%A, %B %d, %Y}</span>\n<tt><small>{calendar}</small></tt>",
     "calendar": {
       "mode": "month",
