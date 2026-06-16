@@ -1,0 +1,12 @@
+# wofi - Application Launcher Configuration
+show=drun
+width=550
+height=400
+location=center
+allow_markup=true
+allow_images=true
+image_size=28
+prompt=Search...
+no_actions=true
+insensitive=true
+hide_scroll=true

@@ -1,0 +1,74 @@
+/* wofi - Minimalist Spotlight Theme (Catppuccin Mocha) */
+
+* {
+  font-family: "JetBrainsMono Nerd Font", "JetBrainsMono NF", "JetBrainsMono NFM", sans-serif;
+  font-size: 14px;
+}
+
+window {
+  margin: 0px;
+  background-color: #1e1e2e; /* Base */
+  border: 2px solid #313244; /* Surface0 */
+  border-radius: 12px;
+}
+
+#outer-box {
+  padding: 18px;
+  border: none;
+  background-color: transparent;
+}
+
+#input {
+  margin: 0px;
+  padding: 10px 14px;
+  background-color: #181825; /* Mantle */
+  color: #cdd6f4; /* Text */
+  border: 1px solid #313244; /* Surface0 */
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+#input:focus {
+  border: 1px solid #cba6f7; /* Mauve on focus */
+}
+
+#scroll {
+  margin-top: 14px; /* Separation between search bar and list */
+  border: none;
+  background-color: transparent;
+}
+
+#inner-box {
+  margin: 0px;
+  border: none;
+  background-color: transparent;
+}
+
+#entry {
+  padding: 8px 12px;
+  margin: 2px 0px;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #cdd6f4;
+}
+
+#entry:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+#entry:selected {
+  background-color: #313244; /* Surface0 highlight */
+}
+
+#entry:selected #text {
+  color: #cba6f7; /* Selected text turns Mauve */
+}
+
+#text {
+  margin-left: 12px;
+  color: #cdd6f4;
+}
+
+#img {
+  margin-right: 4px;
+}

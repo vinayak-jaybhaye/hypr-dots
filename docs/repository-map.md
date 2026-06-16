@@ -112,7 +112,22 @@ All program configurations reside under the `config/` directory, which gets mapp
 
 ---
 
+### Launcher Configuration (`config/wofi/`)
+
+#### [config](file:///home/phantom/hypr-dots/config/wofi/config)
+- **Purpose**: Window layout, dimensions, icons, search prompt, and general parameters for the Wofi application launcher.
+- **Owner**: Application Launcher.
+- **Modification**: Modify default window sizing, search prompt text, or display mode settings.
+
+#### [style.css](file:///home/phantom/hypr-dots/config/wofi/style.css)
+- **Purpose**: Stylesheet for the Wofi search window using a glassmorphic Catppuccin Mocha theme.
+- **Owner**: Application Launcher Styling.
+- **Modification**: Modify colors, borders, focus box shadows, or selection list styles.
+
+---
+
 ### Waybar Configuration (`config/waybar/`)
+
 
 #### [config.jsonc](file:///home/phantom/hypr-dots/config/waybar/config.jsonc)
 - **Purpose**: Main Waybar layout configuration; lists modular includes.
