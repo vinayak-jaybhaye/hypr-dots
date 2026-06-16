@@ -6,7 +6,7 @@
 
   "custom/power-btn": {
     "format": "",
-    "tooltip": "Power menu",
+    "tooltip-format": "Power menu",
     "on-click": "wlogout"
   },
 

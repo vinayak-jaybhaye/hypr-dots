@@ -109,7 +109,7 @@
 
 #custom-power-btn {
   color: @red;
-  padding: 0 10px;
+  margin-right: 10px;
 }
 
 /* Hover micro-animations for individual interactive modules */
