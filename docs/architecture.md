@@ -45,7 +45,7 @@ Waybar uses a two-level structure for both its configurations (JSON) and layouts
 
 ## Startup Sequence
 
-Applications and services are launched sequentially via `exec-once` directives in [exec.conf](file:///home/phantom/hypr-dots/config/hypr/exec.conf). The startup sequence is ordered as follows:
+Applications and services are launched sequentially via `exec-once` directives in [exec.conf](../config/hypr/exec.conf). The startup sequence is ordered as follows:
 
 | Order | Command / Service | Description | Why It's Needed |
 | :--- | :--- | :--- | :--- |
@@ -65,9 +65,9 @@ Applications and services are launched sequentially via `exec-once` directives i
 
 The repository utilizes the **Catppuccin Mocha** palette across all UI elements for a unified look.
 
-- **Status Bar (Waybar)**: Canonical CSS variables are defined in [base.css](file:///home/phantom/hypr-dots/config/waybar/styles/base.css) (e.g., `@base`, `@mantle`, `@text`, `@blue`, `@green`). Colors are mapped to modules in `modules.css` using these variables.
-- **Terminal (Kitty)**: Color definitions are hardcoded as `color0` through `color15` inside [kitty.conf](file:///home/phantom/hypr-dots/config/kitty/kitty.conf) to match the Mocha palette.
-- **Compositor (Hyprland)**: Border colors are hardcoded as gradient hex values inside [hyprland.conf border settings](file:///home/phantom/hypr-dots/config/hypr/hyprland.conf) (`rgba(33ccffee)` and `rgba(00ff99ee)`).
+- **Status Bar (Waybar)**: Canonical CSS variables are defined in [base.css](../config/waybar/styles/base.css) (e.g., `@base`, `@mantle`, `@text`, `@blue`, `@green`). Colors are mapped to modules in `modules.css` using these variables.
+- **Terminal (Kitty)**: Color definitions are hardcoded as `color0` through `color15` inside [kitty.conf](../config/kitty/kitty.conf) to match the Mocha palette.
+- **Compositor (Hyprland)**: Border colors are hardcoded as gradient hex values inside [hyprland.conf border settings](../config/hypr/hyprland.conf) (`rgba(33ccffee)` and `rgba(00ff99ee)`).
 - **Notifications (Mako)**: Mako has a blank configuration file, meaning it falls back to the default desktop behavior or user system defaults.
 
 > [!WARNING]
@@ -82,7 +82,7 @@ Custom integrations use a **Toggle/Status Script Pattern** to connect the Waybar
 ### Communication Pattern
 For custom toggleable modules (such as Night Mode or Do Not Disturb):
 
-1. **Waybar Custom Module**: Configured in [custom.jsonc](file:///home/phantom/hypr-dots/config/waybar/modules/custom.jsonc) with `"return-type": "json"`. It runs a status script at intervals or listens to a system signal.
+1. **Waybar Custom Module**: Configured in [custom.jsonc](../config/waybar/modules/custom.jsonc) with `"return-type": "json"`. It runs a status script at intervals or listens to a system signal.
 2. **Status Script**: Runs periodically, checks process state, and outputs JSON with text, tooltip, and CSS class (e.g. `{"text":"󰖔","tooltip":"Hyprsunset Enabled","class":"enabled"}`).
 3. **Toggle Script**: Kills or starts the target daemon, waits briefly, and executes `pkill -RTMIN+N waybar` to force Waybar to instantly refresh the corresponding module.
 4. **Keybinding**: Sourced keybinds trigger the toggle script, which automatically updates the status bar as a result.

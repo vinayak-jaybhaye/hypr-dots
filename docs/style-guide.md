@@ -8,7 +8,7 @@ This document establishes the coding conventions, formatting standards, director
 
 All automated modification agents and human contributors must adhere to these operational principles:
 
-1. **Read-First Protocol**: Always read [AGENTS.md](file:///home/phantom/hypr-dots/AGENTS.md) and [docs/architecture.md](file:///home/phantom/hypr-dots/docs/architecture.md) before planning or executing any changes.
+1. **Read-First Protocol**: Always read [AGENTS.md](../AGENTS.md) and [docs/architecture.md](../docs/architecture.md) before planning or executing any changes.
 2. **Preserve Context**: Maintain existing comment headers, explanations, and file structures. Do not delete non-obvious helper logic.
 3. **Verify Before Check-in**:
    - Always run `bash -n <script>` to check syntax on shell files.
@@ -82,7 +82,7 @@ Styles are stored under `config/waybar/styles/` or the root `config/waybar/style
 
 ### Colors & Palette Integration
 - **Zero Hex Code Rule**: Never hardcode hex color strings (`#ffffff`, `#1e1e2e`) directly inside `modules.css`, `states.css`, or `workspaces.css`.
-- **Variable Usage**: All colors must reference the variables defined in [base.css](file:///home/phantom/hypr-dots/config/waybar/styles/base.css) (e.g. `@base`, `@text`, `@mauve`, `@red`).
+- **Variable Usage**: All colors must reference the variables defined in [base.css](../config/waybar/styles/base.css) (e.g. `@base`, `@text`, `@mauve`, `@red`).
 - **Indentation**: Use **2 spaces** for CSS properties.
 
 ---
