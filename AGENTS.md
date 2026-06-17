@@ -110,8 +110,8 @@ When changing the theme, all four locations (waybar base.css, kitty.conf, hyprla
 
 ### Adding Window Rules
 
-- Add to `windowrules.conf` (currently empty — ready for use)
-- Use the Hyprland v2 syntax: `windowrulev2 = <rule>, <match>`
+- Add to `windowrules.conf`
+- Use the unified window rule syntax: `windowrule = <rule> [value], match:<criteria> <regex>`
 
 ---
 

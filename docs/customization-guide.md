@@ -265,19 +265,19 @@ This file is currently **empty** — a blank slate for your custom rules.
 
 ```conf
 # Float a specific app:
-windowrulev2 = float, class:^(pavucontrol)$
+windowrule = float 1, match:class ^(pavucontrol)$
 
 # Set size for floating windows:
-windowrulev2 = size 800 600, class:^(pavucontrol)$
+windowrule = size 800 600, match:class ^(pavucontrol)$
 
 # Make a window transparent:
-windowrulev2 = opacity 0.9 0.8, class:^(kitty)$
+windowrule = opacity 0.9 0.8, match:class ^(kitty)$
 
 # Send an app to a specific workspace:
-windowrulev2 = workspace 2, class:^(firefox)$
+windowrule = workspace 2, match:class ^(firefox)$
 
 # Disable blur for certain windows:
-windowrulev2 = noblur, class:^(firefox)$
+windowrule = no_blur 1, match:class ^(firefox)$
 ```
 
 Use `hyprctl clients` to find the `class` and `title` of running windows.

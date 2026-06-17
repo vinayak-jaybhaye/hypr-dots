@@ -59,9 +59,9 @@ All program configurations reside under the `config/` directory, which gets mapp
 - **Modification**: High risk. When editing submaps (e.g. Opacity or Mouse simulation), always verify there is a corresponding `submap = reset` sequence to prevent locking user inputs.
 
 #### [windowrules.conf](../config/hypr/windowrules.conf)
-- **Purpose**: Specific rules for resizing, floating, or assigning applications to workspaces. (Currently empty placeholder).
+- **Purpose**: Specific rules for resizing, floating, or assigning applications to workspaces. (Defines rules for utility/dialog windows).
 - **Owner**: Window Management.
-- **Modification**: Add custom window matching rules using the Hyprland v2 layout: `windowrulev2 = rule, match`.
+- **Modification**: Add custom window matching rules using the unified window rule layout: `windowrule = rule [value], match:criteria regex`.
 
 #### [hypridle.conf](../config/hypr/hypridle.conf)
 - **Purpose**: Idle management timeouts. Triggers screen dimming, lock, monitor power off, and system suspend.
