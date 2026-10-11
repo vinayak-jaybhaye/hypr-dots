@@ -5,6 +5,7 @@ hyprpaper
 hyprsunset
 waybar
 kitty
+foot
 kitty-shell-integration
 kitty-terminfo
 wofi
