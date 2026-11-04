@@ -1,11 +1,12 @@
 {
-  "modules-left": ["hyprland/workspaces", "hyprland/window"],
+  "modules-left": ["ext/workspaces", "hyprland/window"],
 
-  "hyprland/workspaces": {
-    "on-scroll-up": "hyprctl dispatch workspace e+1",
-    "on-scroll-down": "hyprctl dispatch workspace e-1",
+  "ext/workspaces": {
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
     "all-outputs": true,
     "active-only": false,
+    "sort-by-id": true,
     "on-click": "activate",
     "format": "{name}"
   },

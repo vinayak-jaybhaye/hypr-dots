@@ -40,10 +40,12 @@ hypr-dots/
 ├── pkglist.txt               # 22 pacman packages
 ├── config/
 │   ├── hypr/                 # Hyprland + ecosystem configs
-│   │   ├── hyprland.conf     #   Root config (sources others at bottom)
-│   │   ├── exec.conf         #   Autostart services
-│   │   ├── keybinds.conf     #   All keybinds + submaps
-│   │   ├── windowrules.conf  #   Window rules (currently empty)
+│   │   ├── hyprland.lua      #   Root Lua config (requires modular components)
+│   │   ├── programs.lua      #   Default application preferences
+│   │   ├── exec.lua          #   Autostart services (hl.on "hyprland.start")
+│   │   ├── keybinds.lua      #   All keybinds, dispatchers, submaps
+│   │   ├── windowrules.lua   #   Window layout and floating rules
+│   │   ├── legacy/           #   Archived original .conf backup
 │   │   ├── hypridle.conf     #   Idle → lock → dpms → suspend
 │   │   ├── hyprlock.conf     #   Lock screen layout
 │   │   ├── hyprsunset.conf   #   Night mode color profile

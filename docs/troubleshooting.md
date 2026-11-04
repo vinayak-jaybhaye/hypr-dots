@@ -30,10 +30,10 @@ bash -x ~/hypr-dots/scripts/hyprsunset-status.sh
 
 **Solutions:**
 
-1. Check that waybar is started in `exec.conf`:
+1. Check that waybar is started in `exec.lua`:
    ```bash
-   grep waybar ~/hypr-dots/config/hypr/exec.conf
-   # Should show: exec-once = waybar
+   grep waybar ~/hypr-dots/config/hypr/exec.lua
+   # Should show: hl.exec_cmd("waybar")
    ```
 
 2. Try launching manually to see errors:
@@ -120,7 +120,7 @@ pkill waybar && waybar &
 
 1. **Check if stuck in a submap.** Press `ESC` to return to the default keymap. This is the most common cause — if you entered the opacity submap (`SUPER+O`) or mouse submap (`SUPER+M`) and didn't press `ESC`, all normal keybinds are intercepted.
 
-2. Verify the bind syntax in `keybinds.conf`:
+2. Verify the bind syntax in `keybinds.lua`:
    ```bash
    hyprctl binds | head -50
    ```
@@ -130,10 +130,10 @@ pkill waybar && waybar &
    grep -i "bind\|keybind" /tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/hyprland.log
    ```
 
-4. Make sure `$mainMod` is defined:
+4. Make sure `mainMod` is defined in `keybinds.lua`:
    ```bash
-   grep mainMod ~/hypr-dots/config/hypr/keybinds.conf
-   # Should show: $mainMod = SUPER
+   grep mainMod ~/hypr-dots/config/hypr/keybinds.lua
+   # Should show: local mainMod = "SUPER"
    ```
 
 ### Mouse submap stuck
@@ -166,19 +166,18 @@ pkill waybar && waybar &
    Hyprland 2>&1 | head -50
    ```
 
-2. Verify all sourced files exist:
+2. Verify all modular Lua files exist:
    ```bash
-   ls ~/hypr-dots/config/hypr/exec.conf
-   ls ~/hypr-dots/config/hypr/keybinds.conf
-   ls ~/hypr-dots/config/hypr/windowrules.conf
+   ls ~/hypr-dots/config/hypr/exec.lua
+   ls ~/hypr-dots/config/hypr/keybinds.lua
+   ls ~/hypr-dots/config/hypr/windowrules.lua
+   ls ~/hypr-dots/config/hypr/programs.lua
    ```
 
-3. Check for syntax errors in the config:
+3. Check for syntax and config errors:
    ```bash
-   # Common issues:
-   # - Missing closing braces in sections
-   # - Invalid monitor names
-   # - Typos in dispatcher names
+   luac -p ~/hypr-dots/config/hypr/*.lua
+   Hyprland --verify-config
    ```
 
 4. Test with a minimal config:
@@ -186,7 +185,7 @@ pkill waybar && waybar &
    # Temporarily rename the config and start fresh:
    mv ~/.config/hypr ~/.config/hypr.bak
    mkdir ~/.config/hypr
-   echo "monitor=,preferred,auto,1" > ~/.config/hypr/hyprland.conf
+   echo 'hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })' > ~/.config/hypr/hyprland.lua
    Hyprland
    ```
 
@@ -194,13 +193,13 @@ pkill waybar && waybar &
 
 **Expected behavior.** The config maps Caps Lock to Escape:
 
-```conf
-input {
-    kb_options = caps:escape
+```lua
+input = {
+    kb_options = "caps:escape",
 }
 ```
 
-To restore Caps Lock, remove or change `kb_options` in `hyprland.conf`.
+To restore Caps Lock, remove or change `kb_options` in `hyprland.lua`.
 
 ---
 
@@ -348,9 +347,9 @@ To restore Caps Lock, remove or change `kb_options` in `hyprland.conf`.
    pgrep -f "wl-paste.*cliphist"
    ```
 
-2. If not running, check `exec.conf`:
+2. If not running, check `exec.lua`:
    ```bash
-   grep wl-paste ~/hypr-dots/config/hypr/exec.conf
+   grep wl-paste ~/hypr-dots/config/hypr/exec.lua
    ```
 
 3. Verify cliphist has entries:
@@ -416,9 +415,9 @@ To restore Caps Lock, remove or change `kb_options` in `hyprland.conf`.
    pgrep blueman-applet
    ```
 
-3. Ensure they're in `exec.conf`:
+3. Ensure they're in `exec.lua`:
    ```bash
-   grep -E "nm-applet|blueman" ~/hypr-dots/config/hypr/exec.conf
+   grep -E "nm-applet|blueman" ~/hypr-dots/config/hypr/exec.lua
    ```
 
 ---

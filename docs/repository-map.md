@@ -43,25 +43,35 @@ All program configurations reside under the `config/` directory, which gets mapp
 
 ### Hyprland Composition (`config/hypr/`)
 
-#### [hyprland.conf](../config/hypr/hyprland.conf)
-- **Purpose**: Main compositor settings (monitors, scaling, input behavior, basic decoration). Sources helper configuration files at the bottom.
+#### [hyprland.lua](../config/hypr/hyprland.lua)
+- **Purpose**: Main compositor settings (monitors, scaling, input behavior, animations, decoration). Loads modular Lua files via `require()`.
 - **Owner**: Hyprland Compositor.
-- **Modification**: Safe to modify display scaling, mouse speeds, or workspace mappings. Do NOT move the source lines at the bottom.
+- **Modification**: Safe to modify display scaling, mouse speeds, or workspace mappings.
 
-#### [exec.conf](../config/hypr/exec.conf)
-- **Purpose**: Commands executed once at start (authentication agents, bars, system trays, clipboard managers).
+#### [programs.lua](../config/hypr/programs.lua)
+- **Purpose**: Default application preferences (`terminal`, `fileManager`, `menu`). Exported as a table for use across modules.
+- **Owner**: Desktop Environment.
+- **Modification**: Change default terminal or launcher here.
+
+#### [exec.lua](../config/hypr/exec.lua)
+- **Purpose**: Autostart commands executed on session start using `hl.on("hyprland.start")` (authentication agents, bars, system trays, clipboard managers).
 - **Owner**: Session Startup.
-- **Modification**: Add background services here using `exec-once = <command>`. Avoid running heavy GUI programs here.
+- **Modification**: Add background services here using `hl.exec_cmd("<command>")`. Avoid running heavy GUI programs here.
 
-#### [keybinds.conf](../config/hypr/keybinds.conf)
-- **Purpose**: All keyboard shortcuts and cursor simulation submaps.
+#### [keybinds.lua](../config/hypr/keybinds.lua)
+- **Purpose**: All keyboard shortcuts, dispatchers, and submaps (opacity, cursor simulation).
 - **Owner**: Keyboard & User Input.
-- **Modification**: High risk. When editing submaps (e.g. Opacity or Mouse simulation), always verify there is a corresponding `submap = reset` sequence to prevent locking user inputs.
+- **Modification**: High risk. When editing submaps (e.g. Opacity or Mouse simulation), always verify there is a corresponding `hl.dsp.submap("reset")` sequence to prevent locking user inputs.
 
-#### [windowrules.conf](../config/hypr/windowrules.conf)
-- **Purpose**: Specific rules for resizing, floating, or assigning applications to workspaces. (Defines rules for utility/dialog windows).
+#### [windowrules.lua](../config/hypr/windowrules.lua)
+- **Purpose**: Window matching rules using `hl.window_rule` for resizing, floating, or assigning applications.
 - **Owner**: Window Management.
-- **Modification**: Add custom window matching rules using the unified window rule layout: `windowrule = rule [value], match:criteria regex`.
+- **Modification**: Add custom window matching rules using the `hl.window_rule` table syntax.
+
+#### [legacy/](../config/hypr/legacy/)
+- **Purpose**: Preserved backup of original Hyprlang `.conf` files (`hyprland.conf`, `exec.conf`, `keybinds.conf`, `windowrules.conf`) prior to native Lua migration.
+- **Owner**: Migration Backup.
+- **Modification**: Read-only historical reference.
 
 #### [hypridle.conf](../config/hypr/hypridle.conf)
 - **Purpose**: Idle management timeouts. Triggers screen dimming, lock, monitor power off, and system suspend.
@@ -81,7 +91,7 @@ All program configurations reside under the `config/` directory, which gets mapp
 #### [hyprpaper.conf](../config/hypr/hyprpaper.conf)
 - **Purpose**: Static wallpaper configurations. (Disabled/unused in favor of `wpaperd`).
 - **Owner**: Wallpaper System (Legacy).
-- **Modification**: Safe to modify, but has no effect unless enabled in `exec.conf`.
+- **Modification**: Safe to modify, but has no effect unless enabled in `exec.lua`.
 
 ---
 

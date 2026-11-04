@@ -1,4 +1,5 @@
 hyprland
+lua
 hypridle
 hyprlock
 hyprpaper

@@ -52,18 +52,13 @@ Selection colors, tab bar colors, and cursor color are also set here.
 
 ### Hyprland borders
 
-**File:** `config/hypr/hyprland.conf`, `general` section:
+**File:** `config/hypr/hyprland.lua`, `general.col` table:
 
-```conf
-col.active_border = rgba(33ccffee) rgba(00ff99ee) 45deg
-col.inactive_border = rgba(595959aa)
-```
-
-The active border uses a gradient. To use Catppuccin colors instead:
-
-```conf
-col.active_border = rgba(89b4faee) rgba(cba6f7ee) 45deg
-col.inactive_border = rgba(585b70aa)
+```lua
+col = {
+    active_border   = { colors = { "rgba(cba6f7ee)", "rgba(89b4faee)" }, angle = 45 },
+    inactive_border = "rgba(313244aa)",
+},
 ```
 
 ---
@@ -84,7 +79,7 @@ To change the font, update all three locations. Ensure the Nerd Font variant is 
 
 ## Keybindings
 
-**File:** `config/hypr/keybinds.conf`
+**File:** `config/hypr/keybinds.lua`
 
 ### Structure
 
@@ -168,7 +163,7 @@ submap = reset
 
 ## Animations
 
-**File:** `config/hypr/hyprland.conf`, `animations` section
+**File:** `config/hypr/hyprland.lua`, `hl.curve` and `hl.animation` calls
 
 ### Bezier curves
 
@@ -182,42 +177,44 @@ Five bezier curves are defined:
 | `almostLinear` | 0.5, 0.5, 0.75, 1 | Slight ease-out |
 | `quick` | 0.15, 0, 0.1, 1 | Snappy |
 
-### Animation lines
+### Animation declarations
 
-```conf
-# Syntax: animation = NAME, ENABLED, SPEED, CURVE [, STYLE]
-animation = windows, 1, 4.79, easeOutQuint
-animation = windowsIn, 1, 4.1, easeOutQuint, popin 87%
-animation = fade, 1, 3.03, quick
-animation = workspaces, 1, 1.94, almostLinear, fade
+```lua
+-- Syntax: hl.animation({ leaf = NAME, enabled = BOOLEAN, speed = NUMBER, bezier = CURVE [, style = STYLE] })
+hl.animation({ leaf = "windows",    enabled = true, speed = 4.79, bezier = "easeOutQuint" })
+hl.animation({ leaf = "windowsIn",  enabled = true, speed = 4.1,  bezier = "easeOutQuint", style = "popin 87%" })
+hl.animation({ leaf = "fade",       enabled = true, speed = 3.03, bezier = "quick" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 1.94, bezier = "almostLinear", style = "fade" })
 ```
 
-Speed is in 100ms units (e.g., `4.79` = ~480ms). To disable an animation, set the second parameter to `0`.
+Speed is in 100ms units (e.g., `4.79` = ~480ms). To disable an animation, set `enabled = false`.
 
 ### Adding a custom animation
 
-```conf
-# Define a new bezier curve:
-bezier = myBounce, 0.68, -0.55, 0.27, 1.55
+```lua
+-- Define a new bezier curve:
+hl.curve("myBounce", { type = "bezier", points = { {0.68, -0.55}, {0.27, 1.55} } })
 
-# Use it:
-animation = windowsIn, 1, 5, myBounce, slide
+-- Use it:
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 5, bezier = "myBounce", style = "slide" })
 ```
 
 ---
 
 ## Layout
 
-**File:** `config/hypr/hyprland.conf`
+**File:** `config/hypr/hyprland.lua`
 
 ### Default layout
 
 The default layout is **master** (set in `general.layout`):
 
-```conf
-general {
-    layout = master
-}
+```lua
+hl.config({
+    general = {
+        layout = "master",
+    },
+})
 ```
 
 Toggle between layouts at runtime:
@@ -226,58 +223,75 @@ Toggle between layouts at runtime:
 
 ### Gaps and borders
 
-```conf
-general {
-    gaps_in = 2       # gap between windows
-    gaps_out = 2      # gap between windows and screen edge
-    border_size = 2   # window border thickness in pixels
-}
+```lua
+hl.config({
+    general = {
+        gaps_in = 4,       -- gap between windows
+        gaps_out = 8,      -- gap between windows and screen edge
+        border_size = 2,   -- window border thickness in pixels
+    },
+})
 ```
 
 ### Dwindle-specific settings
 
-```conf
-dwindle {
-    preserve_split = true   # keep split direction when moving windows
-}
+```lua
+hl.config({
+    dwindle = {
+        preserve_split = true,   -- keep split direction when moving windows
+    },
+})
 ```
 
 ### Rounding and opacity
 
-```conf
-decoration {
-    rounding = 5           # corner radius
-    rounding_power = 1     # rounding intensity
-    active_opacity = 1     # focused window opacity (1 = opaque)
-    inactive_opacity = 1   # unfocused window opacity
-}
+```lua
+hl.config({
+    decoration = {
+        rounding = 10,           -- corner radius
+        active_opacity = 1.0,    -- focused window opacity (1 = opaque)
+        inactive_opacity = 0.90, -- unfocused window opacity
+        dim_inactive = true,
+        dim_strength = 0.12,
+    },
+})
 ```
 
 ---
 
 ## Window Rules
 
-**File:** `config/hypr/windowrules.conf`
+**File:** `config/hypr/windowrules.lua`
 
-This file is currently **empty** — a blank slate for your custom rules.
+Defines per-application rules to keep dialogs and utilities properly floating.
 
 ### Adding window rules
 
-```conf
-# Float a specific app:
-windowrule = float 1, match:class ^(pavucontrol)$
+```lua
+-- Float and resize a specific app:
+hl.window_rule({
+    match = { class = "^(pavucontrol)$" },
+    float = true,
+    size = "800 600",
+})
 
-# Set size for floating windows:
-windowrule = size 800 600, match:class ^(pavucontrol)$
+-- Make a window transparent:
+hl.window_rule({
+    match = { class = "^(kitty)$" },
+    opacity = "0.9 0.8",
+})
 
-# Make a window transparent:
-windowrule = opacity 0.9 0.8, match:class ^(kitty)$
+-- Send an app to a specific workspace:
+hl.window_rule({
+    match = { class = "^(firefox)$" },
+    workspace = "2",
+})
 
-# Send an app to a specific workspace:
-windowrule = workspace 2, match:class ^(firefox)$
-
-# Disable blur for certain windows:
-windowrule = no_blur 1, match:class ^(firefox)$
+-- Disable blur for certain windows:
+hl.window_rule({
+    match = { class = "^(firefox)$" },
+    no_blur = true,
+})
 ```
 
 Use `hyprctl clients` to find the `class` and `title` of running windows.
@@ -286,18 +300,23 @@ Use `hyprctl clients` to find the `class` and `title` of running windows.
 
 ## Startup Applications
 
-**File:** `config/hypr/exec.conf`
+**File:** `config/hypr/exec.lua`
 
-Current startup sequence:
+Current startup sequence using `hl.on("hyprland.start", function() ... end)`:
 
-```conf
-exec-once = nm-applet              # network tray
-exec-once = blueman-applet         # bluetooth tray
-exec-once = waybar                 # status bar
-exec-once = hyprsunset             # night mode
-exec-once = /usr/lib/polkit-kde-authentication-agent-1
-exec-once = wl-paste --type text --watch cliphist store
-exec-once = wl-paste --type image --watch cliphist store
+```lua
+hl.on("hyprland.start", function()
+    hl.exec_cmd("nm-applet")
+    hl.exec_cmd("blueman-applet")
+    hl.exec_cmd("waybar")
+    hl.exec_cmd("hyprsunset")
+    hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
+    hl.exec_cmd("wl-paste --type text --watch cliphist store")
+    hl.exec_cmd("wl-paste --type image --watch cliphist store")
+    hl.exec_cmd("hypridle")
+    hl.exec_cmd("wpaperd")
+end)
+```
 exec-once = hypridle               # idle manager
 exec-once = wpaperd                # wallpaper daemon
 ```
@@ -470,10 +489,10 @@ duration = "0"      # disable rotation (static)
 
 **File:** `config/hypr/hyprpaper.conf`
 
-Hyprpaper is configured but commented out in `exec.conf`. It's kept as an alternative. To switch to hyprpaper:
+Hyprpaper is configured but commented out in `exec.lua`. It's kept as an alternative. To switch to hyprpaper:
 
-1. Uncomment `exec-once = hyprpaper` in `exec.conf`
-2. Comment out `exec-once = wpaperd`
+1. Uncomment `hl.exec_cmd("hyprpaper")` in `exec.lua`
+2. Comment out `hl.exec_cmd("wpaperd")`
 3. Configure `hyprpaper.conf` with your wallpaper path
 
 ### Live wallpaper (mpvpaper)

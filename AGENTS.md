@@ -18,15 +18,16 @@ This is a Hyprland desktop environment dotfiles repository for a laptop running 
 
 ## Architectural Rules
 
-### Config Sourcing Order
+### Hyprland Lua Module Architecture
 
-Hyprland loads `hyprland.conf` first, then sources these files **at the bottom** in this exact order:
+Hyprland uses a modular **native Lua configuration** system (`hyprland.lua`). The entry point is `config/hypr/hyprland.lua`, which initializes core settings and loads modular components via `require()`:
 
-1. `exec.conf` — autostart services
-2. `keybinds.conf` — all keybinds and submaps
-3. `windowrules.conf` — window rules
+1. `programs.lua` — default user applications table (`terminal`, `fileManager`, `menu`)
+2. `exec.lua` — autostart services using `hl.on("hyprland.start", function() ... end)`
+3. `keybinds.lua` — keyboard shortcuts, submaps, mouse buttons, and media keys
+4. `windowrules.lua` — per-window rules using `hl.window_rule`
 
-**This order matters.** Variables defined in `hyprland.conf` (like `$terminal`, `$fileManager`, `$menu`) must be defined before they're referenced in sourced files. Moving the `source` directives or reordering them can break the config.
+**Module Resolution:** `hyprland.lua` dynamically sets `package.path` so that modules inside `config/hypr/` resolve cleanly regardless of invocation directory. Legacy `.conf` files are archived in `config/hypr/legacy/`.
 
 ### Waybar Module Architecture
 
@@ -63,11 +64,11 @@ Custom waybar modules use a **toggle/status pattern**:
 
 - **Canonical source:** Catppuccin Mocha palette defined as CSS `@define-color` variables in `config/waybar/styles/base.css`
 - **Kitty:** has its own copy of the same palette as `colorN` values in `kitty.conf`
-- **Hyprland:** border colors are hardcoded hex in `hyprland.conf` `general {}` section (not Catppuccin — uses cyan/green gradient)
+- **Hyprland:** border colors are defined as hex/gradient in `hyprland.lua` `general.col` table (`rgba(cba6f7ee)` and `rgba(89b4faee)`)
 - **Hyprlock:** uses hardcoded `rgba()` values
-- **Mako:** empty config — uses mako's built-in defaults
+- **Mako:** styled with Catppuccin Mocha theme in `config/mako/config`
 
-When changing the theme, all four locations (waybar base.css, kitty.conf, hyprland.conf borders, hyprlock.conf) must be updated independently.
+When changing the theme, all four locations (waybar base.css, kitty.conf, hyprland.lua borders, hyprlock.conf) must be updated independently.
 
 ---
 
@@ -75,9 +76,10 @@ When changing the theme, all four locations (waybar base.css, kitty.conf, hyprla
 
 ### General
 
-- **Never rename or move config files** without updating all references (source paths in hyprland.conf, include paths in waybar config.jsonc, @import paths in style.css, script paths in keybinds.conf and custom.jsonc)
+- **Never rename or move config files** without updating all references (module require paths in hyprland.lua, include paths in waybar config.jsonc, @import paths in style.css, script paths in keybinds.lua and custom.jsonc)
 - **Always preserve existing comments** — they document intent and structure
 - **Test shell scripts** with `bash -n <script>` before committing
+- **Validate Lua syntax** with `luac -p <file>` and verify config with `Hyprland --verify-config`
 - **Validate JSON** in any modified `.jsonc` files (trailing commas and `//` comments are allowed by waybar's JSONC parser, but malformed structure will break the bar)
 
 ### Adding a New Waybar Module
@@ -90,28 +92,33 @@ When changing the theme, all four locations (waybar base.css, kitty.conf, hyprla
 
 ### Adding a New Keybind
 
-- Add to `keybinds.conf` under the appropriate section comment block
-- Follow the existing pattern: `bind = $mainMod, KEY, action, args`
-- If adding a new section, use the existing comment style: `########################` / `### SECTION NAME #####` / `########################`
+- Add to `keybinds.lua` under the appropriate section comment block
+- Follow the existing pattern: `hl.bind(keys, dispatcher_or_function, opts)`
+- If adding a new section, use the existing comment banner style
 
 ### Adding a New Submap
 
-- **CAUTION:** Submaps are the most fragile part of the keybind config
-- Every `submap = <name>` must have a matching `submap = reset` to return to the default map
-- If a submap is opened but never reset, ALL keybinds outside that submap stop working
-- Always include an escape/cancel bind: `bind = , escape, submap, reset`
-- Test thoroughly after any submap changes
+- **CAUTION:** Submaps capture all keyboard input until explicitly exited
+- Every submap created with `hl.define_submap("<name>", function() ... end)` must have an escape binding: `hl.bind("escape", hl.dsp.submap("reset"))`
+- Submaps are entered via `hl.dsp.submap("<name>")`
+- Test thoroughly after any submap changes using `Hyprland --verify-config`
 
 ### Adding an Autostart Service
 
-- Add `exec-once = <command>` to `exec.conf`
+- Add `hl.exec_cmd("<command>")` inside the `hl.on("hyprland.start", function() ... end)` block in `exec.lua`
 - Place order-sensitive services (e.g., clipboard watchers) after the services they depend on
-- Use `exec-once` (not `exec`) — `exec` re-runs on every config reload
 
 ### Adding Window Rules
 
-- Add to `windowrules.conf`
-- Use the unified window rule syntax: `windowrule = <rule> [value], match:<criteria> <regex>`
+- Add to `windowrules.lua`
+- Use the native `hl.window_rule` table syntax:
+  ```lua
+  hl.window_rule({
+      match = { class = "^(app)$" },
+      float = true,
+      size = "800 600",
+  })
+  ```
 
 ---
 
@@ -119,12 +126,12 @@ When changing the theme, all four locations (waybar base.css, kitty.conf, hyprla
 
 | File | Risk | Why |
 |------|------|-----|
-| `keybinds.conf` | **HIGH** | Contains 2 submaps (opacity, mouse). Incorrect `submap`/`submap = reset` pairing breaks ALL keybinds globally. |
-| `exec.conf` | **MEDIUM** | Startup order matters — clipboard watchers must run after waybar for tray integration; polkit agent must start for privilege escalation. |
+| `keybinds.lua` | **HIGH** | Contains submaps (opacity, mouse). Missing escape/reset bindings breaks ALL keybinds globally. |
+| `exec.lua` | **MEDIUM** | Startup order matters — clipboard watchers must run after waybar for tray integration; polkit agent must start for privilege escalation. |
 | `modules/right.jsonc` | **MEDIUM** | Module ordering directly controls visual bar layout. Adding modules here without definitions in system.jsonc/custom.jsonc causes waybar errors. |
 | `styles/base.css` | **MEDIUM** | CSS `@define-color` variables are used by every other stylesheet. Renaming or removing a variable breaks styles globally. |
 | `link-configs.sh` | **HIGH** | Handles backup + symlink logic. Bugs here can delete existing user configs. The `--force` flag removes existing targets. |
-| `hyprland.conf` | **MEDIUM** | `source` directives at the bottom load the entire config chain. Moving these above variable definitions breaks `$terminal`, `$fileManager`, `$menu` references. |
+| `hyprland.lua` | **MEDIUM** | Root compositor entry point. Syntax or type errors prevent Hyprland from starting. |
 
 ---
 
@@ -135,15 +142,16 @@ When changing the theme, all four locations (waybar base.css, kitty.conf, hyprla
 3. **Check [docs/architecture.md](docs/architecture.md)** for dependency relationships between components
 4. **Check [docs/repository-map.md](docs/repository-map.md)** to understand every file's purpose
 5. **Understand the signal/refresh mechanism** if touching waybar scripts — a wrong signal number will refresh the wrong module or do nothing
-6. **Check for hardcoded paths** — monitor `eDP-1` is hardcoded in `hyprland.conf`, `wpaperd/config.toml`, and `scripts/livewall.sh`
+6. **Check for hardcoded paths** — monitor `eDP-1` is hardcoded in `hyprland.lua`, `wpaperd/config.toml`, and `scripts/livewall.sh`
 
 ## After Making Changes
 
 1. **Run `bash -n`** on any modified shell scripts to check syntax
-2. **Verify JSON syntax** on any modified `.jsonc` files (e.g., `python3 -c "import json; json.load(open('file.jsonc'))"` — note: strip comments first if using strict JSON parsers)
-3. **Update [docs/repository-map.md](docs/repository-map.md)** if files were added or removed
-4. **Record significant architectural decisions** in `docs/decisions/NNNN-title.md`
-5. **Update this file** if modification rules or architectural patterns changed
+2. **Run `luac -p` and `Hyprland --verify-config`** on any modified `.lua` files
+3. **Verify JSON syntax** on any modified `.jsonc` files (e.g., `python3 -c "import json; json.load(open('file.jsonc'))"` — note: strip comments first if using strict JSON parsers)
+4. **Update [docs/repository-map.md](docs/repository-map.md)** if files were added or removed
+5. **Record significant architectural decisions** in `docs/decisions/NNNN-title.md`
+6. **Update this file** if modification rules or architectural patterns changed
 
 ---
 

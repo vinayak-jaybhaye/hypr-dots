@@ -9,22 +9,25 @@ This document describes the architectural layout, configuration hierarchy, start
 The configurations in this repository are designed to be modular. Instead of a single monolithic configuration, settings are split into specialized files and composed at runtime.
 
 ### Hyprland Composition
-At startup, Hyprland reads the main configuration file `hyprland.conf` which defines core hardware settings, variables, and styling. At the bottom of the file, it imports other modular components in a strict order:
+At startup, Hyprland reads the main configuration file `hyprland.lua` which defines core hardware settings, variables, and styling. It requires modular Lua components cleanly via `require()`:
 
 ```mermaid
 graph TD
-    A["hyprland.conf (Main Core)"] --> B["exec.conf (Autostart)"]
-    A --> C["keybinds.conf (Binds & Submaps)"]
-    A --> D["windowrules.conf (Window Rules)"]
+    A["hyprland.lua (Main Core)"] --> P["programs.lua (Apps)"]
+    A --> B["exec.lua (Autostart Hook)"]
+    A --> C["keybinds.lua (Binds & Submaps)"]
+    A --> D["windowrules.lua (Window Rules)"]
+    C --> P
     
     style A fill:#b4befe,stroke:#313244,stroke-width:2px,color:#11111b
+    style P fill:#89dceb,stroke:#313244,stroke-width:1px,color:#11111b
     style B fill:#fab387,stroke:#313244,stroke-width:1px,color:#11111b
     style C fill:#a6e3a1,stroke:#313244,stroke-width:1px,color:#11111b
     style D fill:#f9e2af,stroke:#313244,stroke-width:1px,color:#11111b
 ```
 
-> [!IMPORTANT]
-> The source directives must remain at the very bottom of `hyprland.conf`. Sourced files (especially `keybinds.conf`) reference variables (like `$terminal`, `$fileManager`, and `$menu`) that must be defined first in `hyprland.conf`.
+> [!NOTE]
+> `programs.lua` exports default user applications (`terminal`, `fileManager`, `menu`) as a standard Lua table required by `keybinds.lua`. Autostart commands in `exec.lua` are attached to the `hyprland.start` lifecycle hook. Legacy `.conf` files are archived in `config/hypr/legacy/`.
 
 ### Waybar Composition
 Waybar uses a two-level structure for both its configurations (JSON) and layouts (CSS):
@@ -45,7 +48,7 @@ Waybar uses a two-level structure for both its configurations (JSON) and layouts
 
 ## Startup Sequence
 
-Applications and services are launched sequentially via `exec-once` directives in [exec.conf](../config/hypr/exec.conf). The startup sequence is ordered as follows:
+Applications and services are launched sequentially via the `hyprland.start` event hook in [exec.lua](../config/hypr/exec.lua). The startup sequence is ordered as follows:
 
 | Order | Command / Service | Description | Why It's Needed |
 | :--- | :--- | :--- | :--- |
@@ -67,11 +70,11 @@ The repository utilizes the **Catppuccin Mocha** palette across all UI elements 
 
 - **Status Bar (Waybar)**: Canonical CSS variables are defined in [base.css](../config/waybar/styles/base.css) (e.g., `@base`, `@mantle`, `@text`, `@blue`, `@green`). Colors are mapped to modules in `modules.css` using these variables.
 - **Terminal (Kitty)**: Color definitions are hardcoded as `color0` through `color15` inside [kitty.conf](../config/kitty/kitty.conf) to match the Mocha palette.
-- **Compositor (Hyprland)**: Border colors are hardcoded as gradient hex values inside [hyprland.conf border settings](../config/hypr/hyprland.conf) (`rgba(33ccffee)` and `rgba(00ff99ee)`).
-- **Notifications (Mako)**: Mako has a blank configuration file, meaning it falls back to the default desktop behavior or user system defaults.
+- **Compositor (Hyprland)**: Border colors are configured as gradient values inside [hyprland.lua border settings](../config/hypr/hyprland.lua) (`rgba(cba6f7ee)` and `rgba(89b4faee)`).
+- **Notifications (Mako)**: Mako is styled with the Catppuccin Mocha theme with glassmorphic opacity.
 
 > [!WARNING]
-> Theme configuration is distributed. There is no automated script to update colors across all four files. If a new color palette is introduced, it must be changed manually in `base.css`, `kitty.conf`, and `hyprland.conf`.
+> Theme configuration is distributed. There is no automated script to update colors across all files. If a new color palette is introduced, it must be changed manually in `base.css`, `kitty.conf`, and `hyprland.lua`.
 
 ---
 

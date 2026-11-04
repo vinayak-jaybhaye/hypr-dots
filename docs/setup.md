@@ -103,7 +103,7 @@ Creates symlinks from `~/hypr-dots/config/<app>/` → `~/.config/<app>/` for eac
 | `config/wpaperd/` | `~/.config/wpaperd/` |
 
 > [!IMPORTANT]
-> The Hyprland config uses `source = ~/hypr-dots/config/hypr/...` for sourced files, so both the symlink at `~/.config/hypr/` and the actual repo at `~/hypr-dots/` must exist. If you cloned to a different path, update the `source` lines in `hyprland.conf` and the script paths in `keybinds.conf` and waybar module configs.
+> The Hyprland config uses native Lua (`hyprland.lua`) with modular requires (`require("exec")`, `require("keybinds")`, etc.) which resolve dynamically relative to the configuration directory. Ensure `config/hypr/` is symlinked to `~/.config/hypr/`. Custom script paths in `keybinds.lua` and Waybar configs point to `~/hypr-dots/scripts/`.
 
 ---
 
