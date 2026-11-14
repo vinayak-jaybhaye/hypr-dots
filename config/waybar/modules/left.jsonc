@@ -6,7 +6,7 @@
     "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
     "all-outputs": true,
     "active-only": false,
-    "sort-by-id": true,
+    "sort-by-name": true,
     "on-click": "activate",
     "format": "{name}"
   },
