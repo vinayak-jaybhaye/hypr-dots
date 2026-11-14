@@ -133,3 +133,105 @@
   padding: 0 12px;
   font-weight: normal;
 }
+
+/* ========================================================================= */
+/* Vertical Orientation Styles (Left & Right)                               */
+/* ========================================================================= */
+window#waybar.vertical #group-center-trio,
+window#waybar.left #group-center-trio,
+window#waybar.right #group-center-trio,
+window#waybar.vertical #group-connections,
+window#waybar.left #group-connections,
+window#waybar.right #group-connections,
+window#waybar.vertical #group-audio,
+window#waybar.left #group-audio,
+window#waybar.right #group-audio,
+window#waybar.vertical #group-hardware,
+window#waybar.left #group-hardware,
+window#waybar.right #group-hardware,
+window#waybar.vertical #group-power-group,
+window#waybar.left #group-power-group,
+window#waybar.right #group-power-group,
+window#waybar.vertical #group-sys-status,
+window#waybar.left #group-sys-status,
+window#waybar.right #group-sys-status {
+  padding: 6px 0;
+  margin: 4px 4px;
+}
+
+window#waybar.vertical #clock,
+window#waybar.left #clock,
+window#waybar.right #clock,
+window#waybar.vertical #custom-hyprsunset,
+window#waybar.left #custom-hyprsunset,
+window#waybar.right #custom-hyprsunset,
+window#waybar.vertical #custom-dnd,
+window#waybar.left #custom-dnd,
+window#waybar.right #custom-dnd,
+window#waybar.vertical #network,
+window#waybar.left #network,
+window#waybar.right #network,
+window#waybar.vertical #bluetooth,
+window#waybar.left #bluetooth,
+window#waybar.right #bluetooth,
+window#waybar.vertical #pulseaudio,
+window#waybar.left #pulseaudio,
+window#waybar.right #pulseaudio,
+window#waybar.vertical #pulseaudio.microphone,
+window#waybar.left #pulseaudio.microphone,
+window#waybar.right #pulseaudio.microphone,
+window#waybar.vertical #backlight,
+window#waybar.left #backlight,
+window#waybar.right #backlight,
+window#waybar.vertical #cpu,
+window#waybar.left #cpu,
+window#waybar.right #cpu,
+window#waybar.vertical #temperature,
+window#waybar.left #temperature,
+window#waybar.right #temperature,
+window#waybar.vertical #memory,
+window#waybar.left #memory,
+window#waybar.right #memory,
+window#waybar.vertical #custom-power,
+window#waybar.left #custom-power,
+window#waybar.right #custom-power,
+window#waybar.vertical #battery,
+window#waybar.left #battery,
+window#waybar.right #battery,
+window#waybar.vertical #idle-inhibitor,
+window#waybar.left #idle-inhibitor,
+window#waybar.right #idle-inhibitor,
+window#waybar.vertical #tray,
+window#waybar.left #tray,
+window#waybar.right #tray,
+window#waybar.vertical #custom-power-btn,
+window#waybar.left #custom-power-btn,
+window#waybar.right #custom-power-btn {
+  padding: 5px 0;
+  margin: 0;
+  min-width: 40px;
+}
+
+window#waybar.vertical #group-center-trio #custom-hyprsunset {
+  padding: 4px 0 2px 0;
+}
+
+window#waybar.vertical #group-center-trio #clock,
+window#waybar.left #group-center-trio #clock,
+window#waybar.right #group-center-trio #clock {
+  padding: 2px 0;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+window#waybar.vertical #group-center-trio #custom-dnd {
+  padding: 2px 0 4px 0;
+}
+
+window#waybar.vertical #custom-power-btn,
+window#waybar.left #custom-power-btn,
+window#waybar.right #custom-power-btn {
+  margin-right: 0;
+  margin-bottom: 4px;
+}
+

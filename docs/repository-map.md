@@ -140,9 +140,19 @@ All program configurations reside under the `config/` directory, which gets mapp
 
 
 #### [config.jsonc](../config/waybar/config.jsonc)
-- **Purpose**: Main Waybar layout configuration; lists modular includes.
+- **Purpose**: Root Waybar configuration; sets active position (`top`, `bottom`, `left`, `right`), margins, and includes the corresponding layout config.
 - **Owner**: Status Bar.
-- **Modification**: Edit to change bar margins, height, or global spacing.
+- **Modification**: Can be switched manually or dynamically via `scripts/waybar-position.sh`.
+
+#### [config-horizontal.jsonc](../config/waybar/config-horizontal.jsonc)
+- **Purpose**: Shared horizontal bar configuration for `top` and `bottom` positions.
+- **Owner**: Status Bar Horizontal Layout.
+- **Modification**: Adjust horizontal bar height, horizontal modules, or module groups.
+
+#### [config-vertical.jsonc](../config/waybar/config-vertical.jsonc)
+- **Purpose**: Shared vertical bar configuration for `left` and `right` positions.
+- **Owner**: Status Bar Vertical Layout.
+- **Modification**: Adjust vertical bar width, vertical modules, stacked clock, or compact status formats.
 
 #### [style.css](../config/waybar/style.css)
 - **Purpose**: Master stylesheet imports. Only contains `@import` rules.
@@ -207,3 +217,8 @@ Helper scripts used for status outputs, toggle actions, or live wallpapers.
 - **Purpose**: Toggles the running state of `mpvpaper` live wallpaper.
 - **Owner**: User Command Action.
 - **Modification**: Safe to modify if adding audio toggles or fallback screens.
+
+#### [waybar-position.sh](../scripts/waybar-position.sh)
+- **Purpose**: Switches Waybar position between `top`, `bottom`, `left`, and `right`, reloading Waybar with the corresponding horizontal or vertical layout.
+- **Owner**: Status Bar Management.
+- **Modification**: Add custom margin presets, menu prompts, or notification triggers.

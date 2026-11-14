@@ -1,18 +1,12 @@
 {
-  "layer": "top",
-  "position": "left",
-  "height": 44,
-  "spacing": 4,
-  "margin-top": 6,
-  "margin-bottom": 0,
-  "margin-left": 4,
-  "margin-right": 4,
+  "name": "vertical",
+  "position": "right",
+  "margin-top": 4,
+  "margin-bottom": 4,
+  "margin-left": 0,
+  "margin-right": 6,
 
   "include": [
-    "modules/left.jsonc",
-    "modules/center.jsonc",
-    "modules/right.jsonc",
-    "modules/system.jsonc",
-    "modules/custom.jsonc"
+    "config-vertical.jsonc"
   ]
 }

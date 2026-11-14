@@ -150,7 +150,8 @@ hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = tr
 -- ########################
 -- ### CUSTOM #############
 -- ########################
-hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("~/hypr-dots/scripts/toggle-livewall.sh"))
+hl.bind(mainMod .. " + W",         hl.dsp.exec_cmd("~/hypr-dots/scripts/toggle-livewall.sh"))
+hl.bind(mainMod .. " + ALT + W",   hl.dsp.exec_cmd("~/hypr-dots/scripts/waybar-position.sh"))
 
 -- Window Groups - group multiple windows into one container
 hl.bind(mainMod .. " + G",         hl.dsp.group.toggle())

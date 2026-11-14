@@ -1,0 +1,15 @@
+{
+  "name": "horizontal",
+  "layer": "top",
+  "position": "top",
+  "height": 44,
+  "spacing": 4,
+
+  "include": [
+    "modules/left.jsonc",
+    "modules/center.jsonc",
+    "modules/right.jsonc",
+    "modules/system.jsonc",
+    "modules/custom.jsonc"
+  ]
+}

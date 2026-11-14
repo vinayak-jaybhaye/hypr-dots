@@ -39,3 +39,23 @@
   background-color: @red;
   color: @crust;
 }
+
+/* ========================================================================= */
+/* Vertical Orientation Workspaces (Left & Right)                            */
+/* ========================================================================= */
+window#waybar.vertical #workspaces,
+window#waybar.left #workspaces,
+window#waybar.right #workspaces {
+  padding: 6px 0;
+  margin: 4px 4px;
+}
+
+window#waybar.vertical #workspaces button,
+window#waybar.left #workspaces button,
+window#waybar.right #workspaces button {
+  padding: 4px 0;
+  margin: 2px 3px;
+  min-width: 32px;
+  min-height: 28px;
+}
+
