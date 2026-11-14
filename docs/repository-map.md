@@ -35,6 +35,11 @@ The root directory contains repository setup scripts, package lists, and metadat
 - **Owner**: Package Management.
 - **Modification**: Add AUR packages here if they are not available in the official Arch repositories and require an AUR helper (e.g. yay or paru).
 
+#### [.gitignore](../.gitignore)
+- **Purpose**: Git ignore rules for editor settings and temporary files.
+- **Owner**: Repository Management.
+- **Modification**: Add local development or IDE paths here.
+
 ---
 
 ## Config Directory (`config/`)

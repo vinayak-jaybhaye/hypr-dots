@@ -1,10 +1,10 @@
 {
   "name": "vertical",
-  "position": "right",
+  "position": "left",
   "margin-top": 4,
   "margin-bottom": 4,
-  "margin-left": 0,
-  "margin-right": 6,
+  "margin-left": 6,
+  "margin-right": 0,
 
   "include": [
     "config-vertical.jsonc"

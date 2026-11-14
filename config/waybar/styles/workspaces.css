@@ -57,5 +57,6 @@ window#waybar.right #workspaces button {
   margin: 2px 3px;
   min-width: 32px;
   min-height: 28px;
+  font-size: 14px;
 }
 

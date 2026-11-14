@@ -5,7 +5,8 @@
 #group-hardware,
 #group-power-group,
 #group-sys-status {
-  background-color: rgba(30, 30, 46, 0.45); /* Semi-transparent Catppuccin Base */
+  background-color: rgba(30, 30, 46, 0.45);
+  /* Semi-transparent Catppuccin Base */
   border-radius: 16px;
   padding: 2px 8px;
   margin: 4px 4px;
@@ -21,9 +22,11 @@
 #group-hardware:hover,
 #group-power-group:hover,
 #group-sys-status:hover {
-  background-color: rgba(49, 50, 68, 0.65); /* Surface1 on hover */
+  background-color: rgba(49, 50, 68, 0.65);
+  /* Surface1 on hover */
   border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 4px 12px rgba(137, 180, 250, 0.12); /* Subtle blue glow */
+  box-shadow: 0 4px 12px rgba(137, 180, 250, 0.12);
+  /* Subtle blue glow */
 }
 
 /* Individual Module Styles (Inside the Pills) */
@@ -210,10 +213,12 @@ window#waybar.right #custom-power-btn {
   padding: 5px 0;
   margin: 0;
   min-width: 40px;
+  font-size: 17px;
 }
 
 window#waybar.vertical #group-center-trio #custom-hyprsunset {
   padding: 4px 0 2px 0;
+  font-size: 16px;
 }
 
 window#waybar.vertical #group-center-trio #clock,
@@ -226,6 +231,7 @@ window#waybar.right #group-center-trio #clock {
 
 window#waybar.vertical #group-center-trio #custom-dnd {
   padding: 2px 0 4px 0;
+  font-size: 16px;
 }
 
 window#waybar.vertical #custom-power-btn,
@@ -234,4 +240,3 @@ window#waybar.right #custom-power-btn {
   margin-right: 0;
   margin-bottom: 4px;
 }
-
