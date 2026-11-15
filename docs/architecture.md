@@ -146,7 +146,7 @@ The diagram below illustrates how components interact and rely on each other:
 
 ## Runtime Assumptions
 
-1. **Hardware**: Single built-in laptop screen (`eDP-1`, 1080p @ 60Hz).
+1. **Hardware**: Single built-in laptop screen (`eDP-1`, 1920×1200 OLED @ 60Hz, 10-bit native).
 2. **OS**: Arch Linux with systemd, using `pacman` as the package manager.
 3. **Audio**: PipeWire/WirePlumber, using `wpctl` command bindings.
 4. **Network**: NetworkManager backend, with `nm-applet` tray manager.

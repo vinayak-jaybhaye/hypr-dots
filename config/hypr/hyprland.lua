@@ -32,6 +32,13 @@ hl.monitor({
     mode     = "preferred",
     position = "0x0",
     scale    = 1,
+    bitdepth = 10, -- 10-bit SDR: smooth gradients, zero banding, 0ms fullscreen transitions, optimal battery
+
+    -- ### MANUAL HDR MODE ###
+    -- To enable full HDR (e.g. for HDR movies/gaming), uncomment the lines below and reload:
+--  cm            = "hdredid", -- enables ST.2084 PQ curve using monitor EDID primaries
+--  sdrbrightness = 1.2,       -- boost/balance SDR desktop brightness in HDR mode (typical: 1.0 - 1.5)
+--  sdrsaturation = 1.0,       -- adjust SDR color saturation in HDR mode
 })
 
 -- #############################
@@ -89,6 +96,10 @@ hl.config({
 
     animations = {
         enabled = true,
+    },
+
+    render = {
+        cm_auto_hdr = 0, -- Prevents 2s black screen on fullscreen video; keep 0 for regular use
     },
 
     dwindle = {
