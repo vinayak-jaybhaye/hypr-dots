@@ -1,170 +1,20 @@
-# Dependency Reference
+# Dependencies
 
-Every dependency used by this Hyprland configuration, grouped by category.
+The two manifests are the authoritative installer inputs. Installation modes and conflict handling are described in the [setup guide](setup.md).
 
-> [!NOTE]
-> Packages in the **"Automated Install"** column are installed automatically by `install-packages.sh`. Official packages are in `pkglist.txt` and AUR packages are in `aur-pkglist.txt`.
+| Feature | Packages or commands |
+|---|---|
+| Compositor and validation | `hyprland` supplies Hyprland and hyprctl. `lua` supplies luac for syntax checks. |
+| Lock, idle and night light | `hyprlock`, `hypridle`, `hyprsunset`, `brightnessctl` and systemd |
+| Bar, notifications and launcher | `waybar`, `mako` (including makoctl), `libnotify` (notify-send), `wofi` |
+| Terminals and file manager | `foot` for Super+Return, `kitty` for Waybar's network terminal, `zsh`, `thunar`, `ttf-jetbrains-mono-nerd`. Kitty pulls in its terminfo and shell integration. |
+| Clipboard and screenshots | `wl-clipboard`, `cliphist`, `grim`, `slurp` |
+| Wallpaper rotation | `wpaperd` supplies the daemon and wpaperctl. Images come from the user's Pictures directory. |
+| Audio and media keys | `pipewire`, `pipewire-pulse`, `wireplumber` (wpctl), `pavucontrol`, `playerctl`. The standalone mic helper uses pactl from libpulse. |
+| Tray and authentication | `network-manager-applet` (nm-applet) uses NetworkManager (nmtui), `blueman` supplies the Bluetooth tools, `polkit-kde-agent` provides the Arch authentication agent. |
+| Desktop integration | `xdg-desktop-portal-hyprland` and `upower` for the battery power readout |
+| Live wallpaper and power menu | The AUR manifest contains `mpvpaper` and `wlogout`. Each is needed for its respective control. |
 
----
+The disabled mouse submap can be enabled with `ydotool` from Arch's extra repository and its user service `ydotool.service`. Choose a free entry binding when enabling it. The alternative wallpaper configuration requires `hyprpaper` if selected in place of wpaperd.
 
-## Core (Hyprland Ecosystem)
-
-| Package | Purpose | Used by | Automated Install | Required |
-|---|---|---|---|---|
-| `hyprland` | Wayland compositor — the window manager itself | Everything | Yes | **Required** |
-| `lua` | Native Lua runtime powering Hyprland configuration engine | `hyprland.lua`, `programs.lua`, `exec.lua`, `keybinds.lua`, `windowrules.lua` | Yes | **Required** |
-| `hypridle` | Idle daemon — triggers lock, DPMS off, suspend after timeouts | `exec.lua`, `hypridle.conf` | Yes | **Required** |
-| `hyprlock` | Lock screen — displays clock, date, username, password field | `hypridle.conf`, `keybinds.lua` (`SUPER+Escape`) | Yes | **Required** |
-| `hyprpaper` | Static wallpaper daemon (currently **disabled** in favor of wpaperd) | `hyprpaper.conf`, `exec.lua` (commented out) | Yes | Optional |
-| `hyprsunset` | Night/warm color filter — reduces blue light | `exec.lua`, `hyprsunset.conf`, `hyprsunset-toggle.sh`, `hyprsunset-status.sh` | Yes | Recommended |
-
----
-
-## Bar & UI
-
-| Package | Purpose | Used by | Automated Install | Required |
-|---|---|---|---|---|
-| `waybar` | Status bar — displays workspaces, clock, system info, custom modules | `exec.lua`, `config/waybar/` (all files) | Yes | **Required** |
-| `wofi` | Application launcher (drun mode) and clipboard picker (dmenu mode) | `programs.lua` (`menu`), `keybinds.lua` (clipboard `SUPER+V`) | Yes | **Required** |
-| `mako` | Notification daemon — shows desktop notifications | `exec.lua` (implicitly), `mako-dnd-toggle.sh`, `mako-dnd-status.sh` | Yes | **Required** |
-
----
-
-## Terminal
-
-| Package | Purpose | Used by | Automated Install | Required |
-|---|---|---|---|---|
-| `kitty` | GPU-accelerated terminal emulator | `config/kitty/kitty.conf` | Yes | **Required** |
-| `foot` | Fast Wayland terminal emulator | `programs.lua` (`terminal`), `config/foot/foot.ini` | Yes | **Required** |
-| `kitty-shell-integration` | Shell integration for kitty (prompt tracking, etc.) | `kitty.conf` (implicit) | Yes | Recommended |
-| `kitty-terminfo` | Terminfo entries for kitty terminal | System-wide terminal compatibility | Yes | Recommended |
-
----
-
-## Clipboard
-
-| Package | Purpose | Used by | Automated Install | Required |
-|---|---|---|---|---|
-| `cliphist` | Clipboard history manager — stores and retrieves clipboard entries | `exec.lua` (wl-paste pipes to cliphist), `keybinds.lua` (`SUPER+V`, `SUPER+Shift+V`) | Yes | **Required** |
-| `wl-clipboard` | Provides `wl-copy` and `wl-paste` — Wayland clipboard tools | `exec.lua` (clipboard watchers), `keybinds.lua` (screenshot copy, clipboard) | Yes | **Required** |
-
----
-
-## Screenshots
-
-| Package | Purpose | Used by | Automated Install | Required |
-|---|---|---|---|---|
-| `grim` | Screenshot tool for Wayland — captures full screen or region | `keybinds.lua` (all screenshot binds: `Print`, `SUPER+Print`, `SUPER+Shift+Print`) | Yes | **Required** |
-| `slurp` | Region selector — lets you draw a rectangle to select an area | `keybinds.lua` (region screenshot binds: `SUPER+Print`, `SUPER+Shift+Print`) | Yes | **Required** |
-
----
-
-## Wallpaper
-
-| Package | Purpose | Used by | Automated Install | Required |
-|---|---|---|---|---|
-| `wpaperd` | Wallpaper daemon — rotates static wallpapers from a directory | `exec.lua`, `config/wpaperd/config.toml` | Yes | **Required** |
-| `mpv` | Media player — used as dependency for mpvpaper | `pkglist.txt` | Yes | Optional |
-| `mpvpaper` | Live wallpaper — plays a video as the desktop background | `scripts/livewall.sh`, `scripts/toggle-livewall.sh` | Yes (AUR) | Optional |
-
----
-
-## System Utilities
-
-| Package | Purpose | Used by | Automated Install | Required |
-|---|---|---|---|---|
-| `jq` | JSON processor — used by scripts for parsing JSON data | Various scripts | Yes | Recommended |
-| `playerctl` | Media player controller — play/pause/next/prev | `keybinds.lua` (`XF86AudioNext`, `XF86AudioPause`, etc.) | Yes | Recommended |
-| `brightnessctl` | Screen & keyboard backlight control | `keybinds.lua` (`XF86MonBrightnessUp/Down`), `hypridle.conf` (kbd backlight off) | Yes | **Required** |
-| `pamixer` | PulseAudio mixer CLI (alternative to wpctl) | Available for scripts | Yes | Optional |
-
----
-
-## Desktop Integration
-
-| Package | Purpose | Used by | Automated Install | Required |
-|---|---|---|---|---|
-| `xdg-desktop-portal-hyprland` | XDG portal — enables screen sharing, file dialogs, etc. | System integration (screen sharing in browsers, etc.) | Yes | **Required** |
-
----
-
-## Package Details and Configuration
-
-These packages are actively used by configs and scripts and are managed automatically by the setup scripts.
-
-### Input Simulation
-
-| Package | Purpose | Used by | Source |
-|---|---|---|---|
-| `ydotool` | Simulates mouse movement, clicks, and scroll from keyboard | `keybinds.lua` (mouse submap: `SUPER+M`) | AUR: `aur-pkglist.txt` |
-
-`ydotool` requires its daemon to be running:
-
-```bash
-sudo systemctl enable --now ydotoold
-```
-
-### Power Menu
-
-| Package | Purpose | Used by | Source |
-|---|---|---|---|
-| `wlogout` | Graphical power/logout menu | `modules/custom.jsonc` (power-btn `on-click`) | AUR: `aur-pkglist.txt` |
-
-### System Monitoring
-
-| Package | Purpose | Used by | Source |
-|---|---|---|---|
-| `upower` | Battery information (wattage, charge state) | `scripts/power.sh` (battery wattage display) | Official: `pkglist.txt` |
-
-### Live Wallpaper
-
-| Package | Purpose | Used by | Source |
-|---|---|---|---|
-| `mpvpaper` | Plays video files as live wallpaper via mpv | `scripts/livewall.sh` | AUR: `aur-pkglist.txt` |
-
-### Network & Bluetooth Tray
-
-| Package | Purpose | Used by | Source |
-|---|---|---|---|
-| `network-manager-applet` | Provides `nm-applet` — network tray icon and nmtui | `exec.lua`, `modules/system.jsonc` (network `on-click: kitty -e nmtui`) | Official: `pkglist.txt` |
-| `blueman` | Provides `blueman-applet` — bluetooth tray icon and manager | `exec.lua`, `modules/system.jsonc` (bluetooth `on-click: blueman-manager`) | Official: `pkglist.txt` |
-
-### Authentication
-
-| Package | Purpose | Used by | Source |
-|---|---|---|---|
-| `polkit-kde-agent` | Privilege elevation dialogs (e.g., for pacman in GUI apps) | `exec.lua` | Official: `pkglist.txt` |
-
-### File Manager
-
-| Package | Purpose | Used by | Source |
-|---|---|---|---|
-| `thunar` | Graphical file manager | `programs.lua` (`fileManager`), `keybinds.lua` (`SUPER+E`) | Official: `pkglist.txt` |
-
-### Audio (PipeWire)
-
-| Package | Purpose | Used by | Source |
-|---|---|---|---|
-| `pipewire` | Audio/video server | System audio backend | Official: `pkglist.txt` |
-| `pipewire-pulse` | PulseAudio compatibility (provides `pactl`) | `scripts/mic.sh` (microphone mute detection) | Official: `pkglist.txt` |
-| `wireplumber` | PipeWire session manager (provides `wpctl`) | `keybinds.lua` (volume controls: `wpctl set-volume`, `wpctl set-mute`), `modules/system.jsonc` (pulseaudio module scroll/click) | Official: `pkglist.txt` |
-
-> [!TIP]
-> Most Arch Linux + Hyprland installations already have PipeWire, wireplumber, and a polkit agent installed.
-
----
-
-## Quick Install Commands
-
-If you choose to perform a manual installation without `bootstrap.sh`:
-
-```bash
-# From official repos:
-sudo pacman -S --needed - < ~/hypr-dots/pkglist.txt
-
-# From AUR:
-yay -S --needed $(cat ~/hypr-dots/aur-pkglist.txt)
-
-# Enable ydotool daemon if you use it:
-sudo systemctl enable --now ydotoold
-```
+The installation scripts use Bash, GNU coreutils, util-linux (flock) and pacman on Arch. Runtime process checks and refresh signals use procps-ng. [Official manifest](../pkglist.txt) · [AUR manifest](../aur-pkglist.txt)

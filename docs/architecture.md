@@ -32,7 +32,7 @@ graph TD
 ### Waybar Composition
 Waybar uses a two-level structure for both its configurations (JSON) and layouts (CSS):
 
-1. **Configuration JSON (`config.jsonc`)**:
+1. **Configuration JSON**. The project default or saved edge selects a horizontal or vertical profile. Each profile draws on the same module fragments. The including profile wins for each field it overrides.
    - Includes layout fragments from `modules/left.jsonc` (workspaces, active window title).
    - Includes layout fragments from `modules/center.jsonc` (clock, custom night mode, custom DND).
    - Includes layout fragments from `modules/right.jsonc` (ordered list of system modules).
@@ -54,7 +54,7 @@ Applications and services are launched sequentially via the `hyprland.start` eve
 | :--- | :--- | :--- | :--- |
 | **1** | `nm-applet` | NetworkManager Applet | Provides the system tray network indicator and network selector. |
 | **2** | `blueman-applet` | Bluetooth Manager Applet | Provides the system tray Bluetooth controls and connection status. |
-| **3** | `waybar` | Status Bar | Renders the primary user interface bar (workspaces, system status, clock). |
+| **3** | `waybar-position.sh --start` | Status Bar | Renders the primary user interface bar (workspaces, system status, clock). |
 | **4** | `hyprsunset` | Night Light filter | Starts the blue-light/temperature filter to protect eyes. Starts enabled. |
 | **5** | `/usr/lib/polkit-kde-authentication-agent-1` | Polkit Authentication Agent | Handles graphical permission escalation dialogs (e.g., when launching package managers). |
 | **6** | `wl-paste --type text --watch cliphist store` | Clipboard Manager (Text) | Monitors clipboard copy actions and stores text snippets in `cliphist`. |
@@ -69,6 +69,7 @@ Applications and services are launched sequentially via the `hyprland.start` eve
 The repository utilizes the **Catppuccin Mocha** palette across all UI elements for a unified look.
 
 - **Status Bar (Waybar)**: Canonical CSS variables are defined in [base.css](../config/waybar/styles/base.css) (e.g., `@base`, `@mantle`, `@text`, `@blue`, `@green`). Colors are mapped to modules in `modules.css` using these variables.
+- **Terminal (Foot)**: The default terminal reads its palette from [foot.ini](../config/foot/foot.ini).
 - **Terminal (Kitty)**: Color definitions are hardcoded as `color0` through `color15` inside [kitty.conf](../config/kitty/kitty.conf) to match the Mocha palette.
 - **Compositor (Hyprland)**: Border colors are configured as gradient values inside [hyprland.lua border settings](../config/hypr/hyprland.lua) (`rgba(cba6f7ee)` and `rgba(89b4faee)`).
 - **Notifications (Mako)**: Mako is styled with the Catppuccin Mocha theme with glassmorphic opacity.
@@ -88,7 +89,7 @@ For custom toggleable modules (such as Night Mode or Do Not Disturb):
 1. **Waybar Custom Module**: Configured in [custom.jsonc](../config/waybar/modules/custom.jsonc) with `"return-type": "json"`. It runs a status script at intervals or listens to a system signal.
 2. **Status Script**: Runs periodically, checks process state, and outputs JSON with text, tooltip, and CSS class (e.g. `{"text":"󰖔","tooltip":"Hyprsunset Enabled","class":"enabled"}`).
 3. **Toggle Script**: Kills or starts the target daemon, waits briefly, and executes `pkill -RTMIN+N waybar` to force Waybar to instantly refresh the corresponding module.
-4. **Keybinding**: Sourced keybinds trigger the toggle script, which automatically updates the status bar as a result.
+4. **Click action**: The night light and DND widgets invoke the toggle scripts through the deployed `hypr/scripts` directory.
 
 ### Signal Allocations
 To avoid conflicts, Waybar signals (`RTMIN+N`) must be unique:
@@ -137,8 +138,9 @@ The diagram below illustrates how components interact and rely on each other:
 
 ## Shared Resources
 
-- **Fonts**: `JetBrainsMono Nerd Font` must be installed. It is used as the monospace font in Kitty, Waybar icon formatting, and Hyprlock text layouts.
+- **Fonts**: `JetBrainsMono Nerd Font` must be installed. Waybar and Hyprlock request the Nerd Font family. Foot and Kitty request JetBrains Mono and use fontconfig fallback when needed.
 - **Wallpapers**: Static wallpapers must be saved in `~/Pictures/wallpapers/`. The active wallpaper rotating configuration in `wpaperd` expects this path.
+- **Waybar position**: The session launcher uses `${XDG_STATE_HOME:-$HOME/.local/state}/hypr-dots/waybar-position.jsonc`. Edge changes replace this file atomically.
 - **Live Wallpaper**: The toggle live wallpaper script expects a video file located at `~/Pictures/live-wallpapers/stone-bridge.mp4`.
 - **Screenshots**: Screens taken using print key combinations are saved to `~/Pictures/`.
 
@@ -146,9 +148,9 @@ The diagram below illustrates how components interact and rely on each other:
 
 ## Runtime Assumptions
 
-1. **Hardware**: Single built-in laptop screen (`eDP-1`, 1920×1200 OLED @ 60Hz, 10-bit native).
+1. **Hardware**: The named Samsung panel uses 10-bit SDR. Other monitors use their preferred mode with automatic scale and placement.
 2. **OS**: Arch Linux with systemd, using `pacman` as the package manager.
 3. **Audio**: PipeWire/WirePlumber, using `wpctl` command bindings.
 4. **Network**: NetworkManager backend, with `nm-applet` tray manager.
 5. **Bluetooth**: BlueZ stack, with `blueman-applet` GUI.
-6. **Daemons**: `ydotoold` system service must be enabled/running for the mouse-simulation keybind submap to work.
+6. **Daemons**: The optional mouse submap requires the `ydotool` user service when enabled.

@@ -8,16 +8,16 @@ Common issues and their solutions. Start with the [General Diagnostics](#general
 
 ```bash
 # Check the Hyprland log for errors:
-cat /tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/hyprland.log | grep -iE "error|warn"
+cat "$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/hyprland.log" | grep -iE "error|warn"
 
 # List running processes to verify daemons:
 pgrep -a "waybar|wpaperd|hypridle|hyprsunset|nm-applet|blueman"
 
 # Check if scripts are executable:
-ls -la ~/hypr-dots/scripts/
+ls -la "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"
 
 # Test a script manually:
-bash -x ~/hypr-dots/scripts/hyprsunset-status.sh
+bash -x "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"hyprsunset-status.sh
 ```
 
 ---
@@ -32,13 +32,13 @@ bash -x ~/hypr-dots/scripts/hyprsunset-status.sh
 
 1. Check that waybar is started in `exec.lua`:
    ```bash
-   grep waybar ~/hypr-dots/config/hypr/exec.lua
-   # Should show: hl.exec_cmd("waybar")
+   grep waybar "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/"exec.lua
+   # Should show: waybar-position.sh with --start
    ```
 
 2. Try launching manually to see errors:
    ```bash
-   waybar
+   "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/waybar-position.sh" --start
    ```
 
 3. Validate the config syntax:
@@ -56,7 +56,7 @@ bash -x ~/hypr-dots/scripts/hyprsunset-status.sh
 5. Make sure the symlink is correct:
    ```bash
    ls -la ~/.config/waybar
-   # Should point to ~/hypr-dots/config/waybar
+   # Should point to config/waybar in your checkout
    ```
 
 ### Waybar modules not updating
@@ -67,14 +67,14 @@ bash -x ~/hypr-dots/scripts/hyprsunset-status.sh
 
 1. Check that scripts are executable:
    ```bash
-   chmod +x ~/hypr-dots/scripts/*.sh
+   chmod +x "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"*.sh
    ```
 
 2. Run the status script directly to check output:
    ```bash
-   ~/hypr-dots/scripts/hyprsunset-status.sh
-   ~/hypr-dots/scripts/mako-dnd-status.sh
-   ~/hypr-dots/scripts/power.sh
+   "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"hyprsunset-status.sh
+   "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"mako-dnd-status.sh
+   "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"power.sh
    ```
 
 3. Verify signal numbers match between toggle and custom module:
@@ -103,9 +103,9 @@ bash -x ~/hypr-dots/scripts/hyprsunset-status.sh
 sudo pacman -S ttf-jetbrains-mono-nerd
 ```
 
-Then restart waybar:
+Then reload Waybar:
 ```bash
-pkill waybar && waybar &
+pkill -USR2 -x waybar
 ```
 
 ---
@@ -118,7 +118,7 @@ pkill waybar && waybar &
 
 **Solutions:**
 
-1. **Check if stuck in a submap.** Press `ESC` to return to the default keymap. This is the most common cause — if you entered the opacity submap (`SUPER+O`) or mouse submap (`SUPER+M`) and didn't press `ESC`, all normal keybinds are intercepted.
+1. **Check if stuck in a submap.** Press `ESC` to return to the default keymap. This is the most common cause — if you entered the opacity submap (`SUPER+O`) or optional mouse submap and didn't press `ESC`, all normal keybinds are intercepted.
 
 2. Verify the bind syntax in `keybinds.lua`:
    ```bash
@@ -127,12 +127,12 @@ pkill waybar && waybar &
 
 3. Check the Hyprland log for bind errors:
    ```bash
-   grep -i "bind\|keybind" /tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/hyprland.log
+   grep -i "bind\|keybind" "$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/hyprland.log"
    ```
 
 4. Make sure `mainMod` is defined in `keybinds.lua`:
    ```bash
-   grep mainMod ~/hypr-dots/config/hypr/keybinds.lua
+   grep mainMod "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/"keybinds.lua
    # Should show: local mainMod = "SUPER"
    ```
 
@@ -142,7 +142,7 @@ pkill waybar && waybar &
 
 **Solution:** Press `ESC` to exit the mouse submap.
 
-**Prevention:** The mouse submap is entered with `SUPER+M`. Be aware that this key also tries to switch to master layout, but the submap takes precedence.
+**Prevention:** The mouse submap is disabled by default. If you enable it, give it a dedicated entry key and keep its Escape binding.
 
 ### Opacity submap stuck
 
@@ -168,15 +168,15 @@ pkill waybar && waybar &
 
 2. Verify all modular Lua files exist:
    ```bash
-   ls ~/hypr-dots/config/hypr/exec.lua
-   ls ~/hypr-dots/config/hypr/keybinds.lua
-   ls ~/hypr-dots/config/hypr/windowrules.lua
-   ls ~/hypr-dots/config/hypr/programs.lua
+   ls "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/"exec.lua
+   ls "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/"keybinds.lua
+   ls "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/"windowrules.lua
+   ls "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/"programs.lua
    ```
 
 3. Check for syntax and config errors:
    ```bash
-   luac -p ~/hypr-dots/config/hypr/*.lua
+   luac -p "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/"*.lua
    Hyprland --verify-config
    ```
 
@@ -229,13 +229,13 @@ To restore Caps Lock, remove or change `kb_options` in `hyprland.lua`.
 4. Check the wpaperd config:
    ```bash
    cat ~/.config/wpaperd/config.toml
-   # Should show [eDP-1] section with path to wallpapers
+   # Should show [any] section with path to wallpapers
    ```
 
 5. Make sure the monitor name matches:
    ```bash
    hyprctl monitors | grep Monitor
-   # Should show eDP-1 — update config.toml if different
+   # Use an output name here only for a monitor-specific wallpaper override
    ```
 
 ### Live wallpaper not working
@@ -256,13 +256,13 @@ To restore Caps Lock, remove or change `kb_options` in `hyprland.lua`.
 
 3. Run the script manually:
    ```bash
-   bash -x ~/hypr-dots/scripts/livewall.sh
+   bash -x "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"livewall.sh
    ```
 
 4. Check the monitor name in `scripts/livewall.sh`:
    ```bash
-   grep MONITOR ~/hypr-dots/scripts/livewall.sh
-   # Should match your actual monitor: eDP-1
+   grep MONITOR "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"livewall.sh
+   # LIVEWALL_OUTPUT defaults to ALL. Set it to the desired output for single-monitor video.
    ```
 
 ---
@@ -312,7 +312,7 @@ To restore Caps Lock, remove or change `kb_options` in `hyprland.lua`.
 
 1. Test the toggle script:
    ```bash
-   ~/hypr-dots/scripts/hyprsunset-toggle.sh
+   "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"hyprsunset-toggle.sh
    ```
 
 2. Check if hyprsunset process toggles:
@@ -322,7 +322,7 @@ To restore Caps Lock, remove or change `kb_options` in `hyprland.lua`.
 
 3. Check the status script output:
    ```bash
-   ~/hypr-dots/scripts/hyprsunset-status.sh
+   "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"hyprsunset-status.sh
    # Should output JSON with text, tooltip, class
    ```
 
@@ -349,7 +349,7 @@ To restore Caps Lock, remove or change `kb_options` in `hyprland.lua`.
 
 2. If not running, check `exec.lua`:
    ```bash
-   grep wl-paste ~/hypr-dots/config/hypr/exec.lua
+   grep wl-paste "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/"exec.lua
    ```
 
 3. Verify cliphist has entries:
@@ -417,7 +417,7 @@ To restore Caps Lock, remove or change `kb_options` in `hyprland.lua`.
 
 3. Ensure they're in `exec.lua`:
    ```bash
-   grep -E "nm-applet|blueman" ~/hypr-dots/config/hypr/exec.lua
+   grep -E "nm-applet|blueman" "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/"exec.lua
    ```
 
 ---
@@ -426,23 +426,23 @@ To restore Caps Lock, remove or change `kb_options` in `hyprland.lua`.
 
 ### ydotool not working
 
-**Symptoms:** Mouse submap keys (`SUPER+M` then HJKL) don't move the cursor.
+**Symptoms:** Keys in an explicitly enabled mouse submap don't move the cursor.
 
 **Solutions:**
 
 1. Install ydotool:
    ```bash
-   yay -S ydotool
+   sudo pacman -S ydotool
    ```
 
 2. Enable and start the daemon:
    ```bash
-   sudo systemctl enable --now ydotoold
+   systemctl --user enable --now ydotool
    ```
 
 3. Check daemon status:
    ```bash
-   systemctl status ydotoold
+   systemctl --user status ydotool
    ```
 
 4. Test ydotool directly:
@@ -479,7 +479,7 @@ fc-list | grep -i "JetBrainsMono Nerd"
 fc-cache -fv
 
 # Restart waybar:
-pkill waybar && waybar &
+pkill -USR2 -x waybar
 ```
 
 ---

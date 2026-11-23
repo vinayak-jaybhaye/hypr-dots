@@ -34,7 +34,7 @@ Scripts are stored under `scripts/`. Keep scripts short and focused on a single 
   set -euo pipefail
   ```
 - **Quoting**: Quote all variables containing file paths or user input to prevent word splitting issues. Simple, static strings do not require excessive quoting.
-- **Waybar Output**: Status scripts must output valid JSON to stdout on a single line containing `text`, `tooltip`, and `class` fields. Print error responses to stderr, not stdout.
+- **Waybar Output**: JSON status scripts must output valid JSON to stdout on a single line containing `text`, `tooltip`, and `class` fields. Print error responses to stderr, not stdout.
 
 ### Script Naming Conventions
 Follow a structured naming format depending on script purpose:
@@ -56,8 +56,8 @@ Hyprland configurations are stored under `config/hypr/`.
   # SECTION NAME — Brief description of section
   # #######################################################################################
   ```
-- **Sourcing**: Keep `source` directives at the very bottom of the main file.
-- **Inline Comments**: Use a single space after `#` for explanation comments. Align comments to the right if explaining individual configuration lines.
+- **Sourcing**: Keep Lua `require()` calls at the very bottom of the main file.
+- **Inline Comments**: Use `--` in Lua and `#` in daemon configs. Align comments to the right if explaining individual configuration lines.
 
 ---
 
@@ -68,7 +68,7 @@ Waybar configurations are stored under `config/waybar/`.
 ### JSON/JSONC Standards
 - **Indentation**: Use **2 spaces** for indentation.
 - **Comments**: Waybar uses a JSONC parser; inline comments (`//`) are allowed and should be used to describe the purpose of custom modules.
-- **File Structure**: Always keep layout directives (`modules-left`, `modules-center`, `modules-right`) isolated in separate files under `modules/`.
+- **File Structure**: Keep shared module ordering under `modules/`. Override arrays in the vertical profile when its contents differ.
 
 ### Module Naming Rules
 - Built-in system modules should match the default Waybar module name (e.g. `"cpu"`, `"memory"`, `"pulseaudio"`).

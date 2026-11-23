@@ -1,104 +1,41 @@
 # hypr-dots
 
-Hyprland desktop environment dotfiles for Arch Linux — Catppuccin Mocha themed, laptop-optimized, fully scripted setup.
+A Catppuccin Mocha Hyprland desktop for Arch Linux. Foot opens on Super+Return, Wofi launches applications, and Waybar can sit on any of the four screen edges. The master and dwindle layouts, Vim-style window controls, clipboard history, and wallpaper controls are configured in native Lua and shell.
 
-## Features
+## Install
 
-- **Hyprland** window manager with master layout (toggle to dwindle)
-- **Catppuccin Mocha** palette across all components
-- **Waybar** status bar with modular config and rich system modules
-- **Kitty** terminal, **Wofi** launcher, **Thunar** file manager
-- **Wpaperd** rotating wallpapers + **mpvpaper** live wallpaper toggle
-- **Hypridle / Hyprlock** idle management and lock screen
-- **Hyprsunset** night mode with waybar toggle
-- **Mako** notifications with Do Not Disturb toggle
-- **Clipboard history** via cliphist + wl-clipboard
-- **Screenshots** via grim + slurp (full, region, clipboard)
-- **Vim-style HJKL** navigation + opacity and mouse submaps
-- One-command bootstrap installer with automatic symlinks
+From an up-to-date Arch system, run these commands as your desktop user.
 
-## Quick Install
-
-```bash
-git clone https://github.com/vinayak-jaybhaye/hypr-dots.git ~/hypr-dots
-cd ~/hypr-dots
+```sh
+git clone https://github.com/vinayak-jaybhaye/hypr-dots.git
+cd hypr-dots
 ./bootstrap.sh
 ```
 
-This runs `install-packages.sh` (installs packages from `pkglist.txt` via pacman) then `link-configs.sh` (symlinks `config/*` → `~/.config/*` with backup).
+You can clone anywhere. Bootstrap offers to install the official packages, offers the AUR packages when yay or paru is available, then links each application's directory under `$XDG_CONFIG_HOME` (normally `~/.config`). Existing configurations are skipped. To adopt the project configuration for conflicting apps, `./link-configs.sh --force` backs them up first. Wallpaper images and videos are supplied by the user. [Setup and recovery](docs/setup.md)
 
-> **Note:** Some runtime dependencies are not in `pkglist.txt` — install manually:
-> `ydotool`, `wlogout`, `upower`, `mpvpaper`, `nm-applet`, `blueman`
+## Where to make changes
 
-## Repository Structure
+| Where | What it controls |
+|---|---|
+| `config/hypr/` | Display profiles, compositor settings, application defaults, shortcuts, startup, lock and idle |
+| `config/waybar/` | Horizontal and vertical layouts, shared module definitions, styles and palette |
+| `config/{foot,kitty,mako,wofi,wpaperd}/` | Native configuration for each application |
+| `scripts/` | Executable desktop helpers shared by shortcuts and Waybar |
+| `bootstrap.sh`, `install-packages.sh`, `link-configs.sh` | Full setup, packages only, and links only |
+| `pkglist.txt`, `aur-pkglist.txt` | Arch and AUR package manifests |
+| `docs/decisions/` | Design decisions and their history |
 
-```
-hypr-dots/
-├── bootstrap.sh              # Entry point: install + link
-├── install-packages.sh       # Installs packages from pkglist.txt
-├── link-configs.sh           # Symlinks config/ → ~/.config/
-├── pkglist.txt               # 22 pacman packages
-├── config/
-│   ├── hypr/                 # Hyprland + ecosystem configs
-│   │   ├── hyprland.lua      #   Root Lua config (requires modular components)
-│   │   ├── programs.lua      #   Default application preferences
-│   │   ├── exec.lua          #   Autostart services (hl.on "hyprland.start")
-│   │   ├── keybinds.lua      #   All keybinds, dispatchers, submaps
-│   │   ├── windowrules.lua   #   Window layout and floating rules
-│   │   ├── legacy/           #   Archived original .conf backup
-│   │   ├── hypridle.conf     #   Idle → lock → dpms → suspend
-│   │   ├── hyprlock.conf     #   Lock screen layout
-│   │   ├── hyprsunset.conf   #   Night mode color profile
-│   │   └── hyprpaper.conf    #   Wallpaper (disabled, using wpaperd)
-│   ├── kitty/
-│   │   └── kitty.conf        # Terminal: font, colors, opacity
-│   ├── mako/
-│   │   └── config            # Notifications (empty — uses defaults)
-│   ├── waybar/
-│   │   ├── config.jsonc      # Root config (includes modules/*.jsonc)
-│   │   ├── style.css         # Root stylesheet (imports styles/*.css)
-│   │   ├── modules/          # Module definitions + bar layout
-│   │   │   ├── left.jsonc    #   Workspaces + window title
-│   │   │   ├── center.jsonc  #   Clock + hyprsunset + DND
-│   │   │   ├── right.jsonc   #   System modules layout
-│   │   │   ├── system.jsonc  #   Built-in module definitions
-│   │   │   └── custom.jsonc  #   Custom module definitions
-│   │   └── styles/           # Modular stylesheets
-│   │       ├── base.css      #   Catppuccin Mocha CSS variables
-│   │       ├── modules.css   #   Module colors + hover effects
-│   │       ├── states.css    #   State styles + blink animation
-│   │       └── workspaces.css#   Workspace button styles
-│   └── wpaperd/
-│       └── config.toml       # Wallpaper rotation (eDP-1, 10min)
-├── scripts/                  # Waybar helpers + utilities
-│   ├── hyprsunset-status.sh  #   Night mode status JSON
-│   ├── hyprsunset-toggle.sh  #   Night mode toggle
-│   ├── mako-dnd-status.sh    #   DND status JSON
-│   ├── mako-dnd-toggle.sh    #   DND toggle
-│   ├── mic.sh                #   Microphone mute status JSON
-│   ├── power.sh              #   Battery wattage text
-│   ├── livewall.sh           #   Start mpvpaper live wallpaper
-│   └── toggle-livewall.sh    #   Toggle mpvpaper on/off
-└── docs/                     # Detailed documentation
-    ├── architecture.md       #   System architecture + dependencies
-    └── repository-map.md     #   Complete file-by-file reference
-```
-
-<!-- Screenshots coming soon -->
+The reference laptop keeps its 10-bit SDR panel profile. Other outputs use their preferred mode. Edit the named monitor rule in `config/hypr/hyprland.lua` to tune a specific display. Super+Alt+W saves the bar position for the current user.
 
 ## Documentation
 
-See [`docs/`](docs/) for detailed documentation:
+- [Setup](docs/setup.md) and [dependencies](docs/dependency-reference.md)
+- [Shortcuts and daily workflows](docs/workflows.md) and [customization](docs/customization-guide.md)
+- [Architecture](docs/architecture.md) and [repository map](docs/repository-map.md)
+- [Troubleshooting](docs/troubleshooting.md)
+- [Contributor instructions](AGENTS.md) and [style guide](docs/style-guide.md)
 
-- [**Architecture**](docs/architecture.md) — config hierarchy, startup sequence, theme system, component dependencies
-- [**Repository Map**](docs/repository-map.md) — every file's purpose and modification guidelines
+<!-- Screenshots coming soon -->
 
-For AI agents and automated tools, see [**AGENTS.md**](AGENTS.md).
-
-## Contributing
-
-1. Read [AGENTS.md](AGENTS.md) before making changes — it contains architectural rules and modification guidelines
-2. Test shell scripts with `bash -n` before committing
-3. Verify JSON syntax on `.jsonc` files
-4. Preserve existing comments in all config files
-5. Update `docs/repository-map.md` when adding or removing files
+Run `./tests/deployment.sh` for an isolated installation and bar-position smoke test. It uses Bash and Python 3, with stand-ins for the package managers and desktop processes.

@@ -21,9 +21,9 @@ The root directory contains repository setup scripts, package lists, and metadat
 - **Modification**: Safe to edit if changing the installation prompts, logging, or error-handling behaviour.
 
 #### [link-configs.sh](../link-configs.sh)
-- **Purpose**: Symlinks configurations from the repository's `config/` directory into `~/.config/`. Backs up existing files by default.
+- **Purpose**: Symlinks configurations from the repository's `config/` directory under `XDG_CONFIG_HOME` (default `~/.config/`). Conflicts are skipped unless forced.
 - **Owner**: Symlink & Deployment System.
-- **Modification**: High risk. Ensure symlinking logic is robust. Test changes using the `--no-backup` or `--force` flags.
+- **Modification**: High risk. Ensure symlinking logic is robust. Test conflict and backup behavior in a temporary home.
 
 #### [pkglist.txt](../pkglist.txt)
 - **Purpose**: Flat text list of official Arch packages required by the desktop environment.
@@ -34,6 +34,8 @@ The root directory contains repository setup scripts, package lists, and metadat
 - **Purpose**: Flat text list of AUR packages required by the desktop environment.
 - **Owner**: Package Management.
 - **Modification**: Add AUR packages here if they are not available in the official Arch repositories and require an AUR helper (e.g. yay or paru).
+
+The compatibility name `pkglist.yay.txt` links to `aur-pkglist.txt`. Edit the AUR manifest once for both names.
 
 #### [.gitignore](../.gitignore)
 - **Purpose**: Git ignore rules for editor settings and temporary files.
@@ -100,7 +102,9 @@ All program configurations reside under the `config/` directory, which gets mapp
 
 ---
 
-### Terminal Configuration (`config/kitty/`)
+### Terminal Configuration
+
+[foot.ini](../config/foot/foot.ini) configures the default terminal. Kitty is also configured for the Waybar network action.
 
 #### [kitty.conf](../config/kitty/kitty.conf)
 - **Purpose**: Kitty terminal font, terminal history scrollback limits, window margins, and Catppuccin color declarations.
@@ -112,7 +116,7 @@ All program configurations reside under the `config/` directory, which gets mapp
 ### Notification Configuration (`config/mako/`)
 
 #### [config](../config/mako/config)
-- **Purpose**: Desktop notifications layout and timeouts. (Empty — uses Mako defaults).
+- **Purpose**: Desktop notifications layout and timeouts, with urgency colors and a DND mode.
 - **Owner**: Notifications.
 - **Modification**: Modify default notification timeout, border width, or fonts.
 
@@ -147,7 +151,7 @@ All program configurations reside under the `config/` directory, which gets mapp
 #### [config.jsonc](../config/waybar/config.jsonc)
 - **Purpose**: Root Waybar configuration; sets active position (`top`, `bottom`, `left`, `right`), margins, and includes the corresponding layout config.
 - **Owner**: Status Bar.
-- **Modification**: Can be switched manually or dynamically via `scripts/waybar-position.sh`.
+- **Modification**: Edit the project default here. The switcher stores user choices separately.
 
 #### [config-horizontal.jsonc](../config/waybar/config-horizontal.jsonc)
 - **Purpose**: Shared horizontal bar configuration for `top` and `bottom` positions.
@@ -181,7 +185,9 @@ All program configurations reside under the `config/` directory, which gets mapp
 
 ## Scripts Directory (`scripts/`)
 
-Helper scripts used for status outputs, toggle actions, or live wallpapers.
+Desktop helpers are also available through the relative link [config/hypr/scripts](../config/hypr/scripts).
+
+[screenshot.sh](../scripts/screenshot.sh) implements the full-screen, region and clipboard bindings.
 
 #### [hyprsunset-status.sh](../scripts/hyprsunset-status.sh)
 - **Purpose**: Checks if `hyprsunset` is active and outputs JSON for the Waybar custom night-mode module.
@@ -224,6 +230,10 @@ Helper scripts used for status outputs, toggle actions, or live wallpapers.
 - **Modification**: Safe to modify if adding audio toggles or fallback screens.
 
 #### [waybar-position.sh](../scripts/waybar-position.sh)
-- **Purpose**: Switches Waybar position between `top`, `bottom`, `left`, and `right`, reloading Waybar with the corresponding horizontal or vertical layout.
+- **Purpose**: Switches Waybar position between `top`, `bottom`, `left`, and `right`, saving the selection under XDG state and reloading the matching layout. Its `--start` mode launches the bar at login.
 - **Owner**: Status Bar Management.
 - **Modification**: Add custom margin presets, menu prompts, or notification triggers.
+
+## Regression tests
+
+[tests/deployment.sh](../tests/deployment.sh) exercises bootstrap, conflict backups, repeated linking and Waybar position changes from a renamed checkout in a disposable home.

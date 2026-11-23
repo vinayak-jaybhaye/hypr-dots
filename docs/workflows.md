@@ -11,7 +11,7 @@ When you log into the Hyprland session:
 2. The network (`nm-applet`) and Bluetooth (`blueman-applet`) system trays start in the background.
 3. The wallpaper is set by `wpaperd` (rotating a static image from `~/Pictures/wallpapers/` every 10 minutes).
 4. `hyprsunset` turns on night light/warm screen colors by default.
-5. The `waybar` panel renders along the top of the display.
+5. The `waybar` panel renders at the saved edge (bottom by default). Press `SUPER + ALT + W` to choose an edge.
 
 ---
 
@@ -19,7 +19,7 @@ When you log into the Hyprland session:
 
 Launch core programs using these shortcuts:
 
-- **Terminal (Kitty)**: Press `SUPER + Return`
+- **Terminal (Foot)**: Press `SUPER + Return`
 - **File Manager (Thunar)**: Press `SUPER + E`
 - **Application Launcher (Wofi)**: Press `SUPER + R`
 - **Lock Screen (Hyprlock)**: Press `SUPER + Escape`
@@ -50,11 +50,11 @@ The default compositor layout is **Master** (the left screen holds a large maste
 - **Close Window**: Press `SUPER + C`.
 - **Toggle Floating State**: Press `SUPER + SHIFT + C`.
 - **Toggle Fullscreen (Active Window)**: Press `SUPER + F`.
-- **Toggle Fullscreen (Clones to Entire Monitor)**: Press `SUPER + SHIFT + F`.
+- **Toggle Maximized (preserves gaps and bar space)**: Press `SUPER + SHIFT + F`.
 
 ### Switching Layouts
 - **Dwindle Layout**: Press `SUPER + D`.
-- **Master Layout**: Run `hyprctl keyword general:layout master` (Note: `SUPER + M` enters the mouse submap instead of triggering master layout due to key conflict).
+- **Master Layout**: Press `SUPER + M`.
 - **Toggle Split Direction (Dwindle)**: Press `SUPER + S`.
 - **Toggle Pseudo-tiling**: Press `SUPER + P`.
 
@@ -77,7 +77,7 @@ To dynamically change window transparency:
 
 If you do not have a physical mouse or touchpad, you can control the cursor entirely via the keyboard using the `ydotool` driver integration.
 
-1. Press `SUPER + M` to enter the **mouse submap**.
+1. Enable the commented mouse submap and its entry binding first. Choose a free shortcut because Super+M selects the master layout.
 2. All standard hotkeys are disabled until you exit this submap.
 3. Use the keys below to control the mouse:
 
@@ -121,7 +121,7 @@ Text snippets and image captures are tracked automatically.
 
 ## Night Mode & Do Not Disturb
 
-These features can be controlled via both keyboard shortcuts and status bar clicks.
+These features can be controlled by clicking their status bar widgets.
 
 ### Night Light (Blue light filter)
 - **Waybar Widget**: Shows a peach icon.
@@ -145,7 +145,7 @@ Shortcuts capture image files to `~/Pictures/`:
 
 - **Full Screen Capture**: Press `Print`. Saves to file and triggers a system notification.
 - **Region Screen Capture (Save & Copy)**: Press `SUPER + Print`. Use the cursor to drag a bounding box. Saves the file to disk, copies the image to clipboard, and sends a notification.
-- **Region Screen Capture (Clipboard Only)**: Press `SUPER + SHIFT + Print`. Drag a bounding box. Copies the image to clipboard without saving a file to disk.
+- **Region Screen Capture (Clipboard Only)**: Press `SUPER + SHIFT + S`. Drag a bounding box. Copies the image to clipboard without saving a file to disk.
 
 ---
 
@@ -165,6 +165,6 @@ You can toggle a loop of the live video wallpaper (`~/Pictures/live-wallpapers/s
 - **Lock Screen**: Press `SUPER + Escape` to run `hyprlock`. Displays time, date, username, and an invisible password prompt.
 - **Power Menu**: Click the red power button icon on the right side of Waybar to trigger the system shutdown/restart/logout power menu (requires `wlogout`).
 - **Inactivity timeouts (Hypridle)**:
-  - 10 minutes: Screen locks (`hyprlock`).
-  - 11 minutes: Backlight turns off and keyboard lights turn off.
+  - 5 minutes: Screen locks (`hyprlock`).
+  - 10 minutes: Backlight turns off and keyboard lights turn off.
   - 11 minutes: System enters low-power suspend.

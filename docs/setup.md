@@ -1,234 +1,46 @@
-# Setup Guide
+# Setup
 
-Complete installation and setup instructions for the hypr-dots Hyprland desktop environment.
+Use an up-to-date Arch Linux system with Git, sudo, and a working graphics stack. The configuration uses Hyprland's native Lua API. The versions used for validation are Hyprland 0.57.2 and Waybar 0.16.0.
 
-## Prerequisites
+## Installation
 
-Before installing, make sure you have:
+Clone the repository into a permanent location, then run `./bootstrap.sh` as your desktop user. Package installation requests sudo internally. To manage packages and configuration independently, use the same two commands bootstrap runs.
 
-| Requirement | Details |
-|---|---|
-| **OS** | Arch Linux (or Arch-based distro with `pacman`) |
-| **Hyprland** | A working Hyprland installation (compositor must already be functional) |
-| **Font** | JetBrainsMono Nerd Font — used by kitty, waybar, and hyprlock |
-| **Git** | To clone this repository |
-| **sudo** | Package installation requires root privileges |
-
-### Install the font
-
-```bash
-sudo pacman -S ttf-jetbrains-mono-nerd
-```
-
-Or download from [Nerd Fonts](https://www.nerdfonts.com/font-downloads) and install to `~/.local/share/fonts/`.
-
----
-
-## Quick Install
-
-Clone the repo and run the bootstrap script:
-
-```bash
-git clone https://github.com/vinayak-jaybhaye/hypr-dots.git ~/hypr-dots
-cd ~/hypr-dots
-chmod +x bootstrap.sh
-./bootstrap.sh
-```
-
-That's it. The bootstrap script handles package installation and config symlinks.
-
----
-
-## What Each Script Does
-
-### `bootstrap.sh`
-
-The top-level entry point. It simply runs the two setup scripts in order:
-
-1. `install-packages.sh` — installs packages from `pkglist.txt`
-2. `link-configs.sh` — symlinks config directories into `~/.config/`
-
-The script uses `set -e` so it aborts on the first error.
-
-### `install-packages.sh`
-
-Installs all packages listed in `pkglist.txt` via `pacman`. Supports three modes:
-
-| Mode | Usage | Behavior |
-|---|---|---|
-| `ask` (default) | `./install-packages.sh` | Prompts "Install packages from pkglist.txt? [y/N]" before proceeding |
-| `auto` | `./install-packages.sh auto` | Installs everything with `--noconfirm` (no prompts at all) |
-| `interactive` | `./install-packages.sh interactive` | Runs `pacman -S --needed` so pacman prompts per-package |
-
-In all modes, the script first runs `sudo pacman -Sy --noconfirm` to update the package database. The `--needed` flag ensures already-installed packages are skipped.
-
-### `link-configs.sh`
-
-Creates symlinks from `~/hypr-dots/config/<app>/` → `~/.config/<app>/` for each application directory. This means your configs are always managed from the git repo.
-
-**Behavior:**
-
-- If `~/.config/<app>` is already a symlink pointing to the correct location → **skipped**
-- If `~/.config/<app>` exists but is something else → **skipped** (prints a warning)
-- After linking, marks all files in `scripts/` as executable
-
-**Flags:**
-
-| Flag | Effect |
-|---|---|
-| `--force` | Replace existing configs instead of skipping |
-| `--no-backup` | When used with `--force`, delete existing configs without backing them up |
-
-**Backup behavior:** When `--force` is used without `--no-backup`, existing configs are moved to `~/.config_backup_<timestamp>/` before being replaced.
-
-```bash
-# Safe first run (skips existing configs):
+```sh
+./install-packages.sh
 ./link-configs.sh
-
-# Replace existing configs (backs them up first):
-./link-configs.sh --force
-
-# Replace existing configs (no backup — destructive):
-./link-configs.sh --force --no-backup
 ```
 
-**What gets linked:**
+The package installer reads the manifests next to the script. Bootstrap accepts the same package mode. The default `ask` mode prompts before installation, `interactive` uses the package manager's prompts, and `auto` adds `--noconfirm`. It uses the local sync databases with `pacman -S --needed`. If your mirrors or databases are stale, complete your normal Arch system upgrade with `sudo pacman -Syu` first. AUR packages go through yay or paru when available. Without either helper, the installer lists the packages needed for the power menu and live wallpaper.
 
-| Source | Target |
+## Links, conflicts and recovery
+
+The linker installs one directory symlink per application in `config/` under `${XDG_CONFIG_HOME:-$HOME/.config}`. The deployed `hypr/scripts` link exposes the repository's executable helpers to Hyprland and Waybar. Keep the checkout in place while using the desktop. Set `HYPR_DOTS` to select another checkout explicitly.
+
+| Command | Existing targets |
 |---|---|
-| `config/hypr/` | `~/.config/hypr/` |
-| `config/kitty/` | `~/.config/kitty/` |
-| `config/waybar/` | `~/.config/waybar/` |
-| `config/mako/` | `~/.config/mako/` |
-| `config/wpaperd/` | `~/.config/wpaperd/` |
+| `./link-configs.sh` | Keeps existing targets and reports conflicts |
+| `./link-configs.sh --force` | Moves conflicts to a unique `~/.config_backup_*` directory and prints its location |
+| `./link-configs.sh --force --no-backup` | Deletes conflicting targets before linking |
 
-> [!IMPORTANT]
-> The Hyprland config uses native Lua (`hyprland.lua`) with modular requires (`require("exec")`, `require("keybinds")`, etc.) which resolve dynamically relative to the configuration directory. Ensure `config/hypr/` is symlinked to `~/.config/hypr/`. Custom script paths in `keybinds.lua` and Waybar configs point to `~/hypr-dots/scripts/`.
+Correct links are skipped on every run. After moving the checkout, rerun the linker with `--force` to replace old links. To restore one application, verify its destination with `readlink`, unlink the project symlink, then move the matching backup into its original location.
 
----
+## Wallpapers and hardware
 
-## Manual Setup Steps
-
-If you prefer not to use `bootstrap.sh`, run each step manually:
-
-```bash
-# 1. Install packages
-sudo pacman -S --needed - < ~/hypr-dots/pkglist.txt
-
-# 2. Create config symlinks
-ln -s ~/hypr-dots/config/hypr    ~/.config/hypr
-ln -s ~/hypr-dots/config/kitty   ~/.config/kitty
-ln -s ~/hypr-dots/config/waybar  ~/.config/waybar
-ln -s ~/hypr-dots/config/mako    ~/.config/mako
-ln -s ~/hypr-dots/config/wpaperd ~/.config/wpaperd
-
-# 3. Make scripts executable
-chmod +x ~/hypr-dots/scripts/*
-```
-
----
-
-## Post-Install Steps
-
-These steps are **not automated** and must be done manually:
-
-### 1. Create wallpaper directories
-
-```bash
-mkdir -p ~/Pictures/wallpapers
-mkdir -p ~/Pictures/live-wallpapers
-```
-
-### 2. Set up the lock screen background
-
-Hyprlock expects a specific file for the lock screen background:
-
-```bash
-# Copy or symlink any image to this path:
-cp /path/to/your/image.jpg ~/Pictures/wallpapers/bg1.jpg
-```
-
-### 3. Add static wallpapers
-
-Place `.jpg` or `.png` files in `~/Pictures/wallpapers/`. The `wpaperd` daemon rotates through them every 10 minutes.
-
-### 4. Add a live wallpaper (optional)
-
-If you want the live wallpaper feature (`SUPER+W`):
-
-```bash
-# Place a video file at this exact path:
-cp /path/to/video.mp4 ~/Pictures/live-wallpapers/stone-bridge.mp4
-```
-
-### 5. Official and AUR dependencies
-
-All dependencies are cataloged and installed automatically:
-- Official Arch repository packages are listed in `pkglist.txt` and installed via `pacman`.
-- AUR packages are listed in `aur-pkglist.txt` and installed via an AUR helper (`yay`/`paru`) if detected.
-
-If you choose to run the installation steps manually, you can install them using:
-
-```bash
-# From official repos:
-sudo pacman -S --needed - < ~/hypr-dots/pkglist.txt
-
-# From AUR (using yay):
-yay -S --needed $(cat ~/hypr-dots/aur-pkglist.txt)
-
-# ydotool needs its daemon running:
-sudo systemctl enable --now ydotoold
-```
-
-| Package | Why it's needed |
+| Feature | Default or customization |
 |---|---|
-| `ydotool` | Mouse submap (keyboard-driven cursor control) |
-| `wlogout` | Power menu button in waybar |
-| `mpvpaper` | Live wallpaper playback |
-| `upower` | Battery wattage display script |
-| `network-manager-applet` | Network tray icon (`nm-applet`) |
-| `blueman` | Bluetooth tray icon (`blueman-applet`) |
-| `polkit-kde-agent` | Privilege elevation dialogs |
-| `thunar` | File manager (`SUPER+E`) |
-| `pipewire` / `pipewire-pulse` / `wireplumber` | Audio backend for `wpctl` and `pactl` |
+| Static wallpapers | Put images in `~/Pictures/wallpapers/`. Wpaperd rotates them every ten minutes on each output. |
+| Lock screen | Supply `~/Pictures/wallpapers/bg1.jpg` or edit the background path in `config/hypr/hyprlock.conf`. |
+| Live wallpaper | Supply `~/Pictures/live-wallpapers/stone-bridge.mp4`. Set `LIVEWALL_VIDEO` or `LIVEWALL_OUTPUT` in the session environment to override the file or output. Super+W toggles playback. |
+| Monitor | The laptop rule sets 10-bit SDR and scale 1 on the Samsung 0x4208 panel. Use the description from `hyprctl monitors` when adding another panel-specific rule. The catch-all rule handles other outputs. |
+| Temperature | The sensor paths are in `config/waybar/modules/system.jsonc`. Set the hwmon directory and input file for your CPU if the module is blank. |
 
-### 6. Set up a shell
+Foot and Kitty both start zsh. Network controls expect NetworkManager, and Bluetooth controls expect BlueZ and a Bluetooth adapter. Use the services already configured for your machine.
 
-The kitty config is set to use `/usr/bin/zsh`. If you don't have zsh installed:
+## Verify the desktop
 
-```bash
-sudo pacman -S zsh
-# Optionally set as default:
-chsh -s /usr/bin/zsh
+```sh
+Hyprland --verify-config -c "$PWD/config/hypr/hyprland.lua"
 ```
 
-Or change the `shell` line in `config/kitty/kitty.conf` to your preferred shell.
-
----
-
-## Verify Installation
-
-After setup, log into Hyprland and check:
-
-```bash
-# 1. All startup apps should be running:
-pgrep -a waybar        # status bar
-pgrep -a wpaperd       # wallpaper daemon
-pgrep -a hypridle      # idle manager
-pgrep -a hyprsunset    # night mode
-pgrep -a nm-applet     # network tray
-pgrep -a blueman-applet # bluetooth tray
-
-# 2. Keybinds should work:
-#    SUPER+Return → opens kitty
-#    SUPER+R      → opens wofi launcher
-#    SUPER+E      → opens thunar
-
-# 3. Waybar should be visible at the top with all modules
-
-# 4. Check for config errors in the Hyprland log:
-cat /tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/hyprland.log | grep -i error
-```
-
-> [!TIP]
-> If waybar modules show errors or blank content, check that the scripts in `~/hypr-dots/scripts/` are executable (`chmod +x`) and that all required tools (`upower`, `makoctl`, `pactl`, etc.) are installed.
+At login, Super+Return should open Foot, Super+R should open Wofi, and Super+E should open Thunar. Use Super+Alt+W to try the four bar edges. Night mode and DND should update immediately on click. Check `hyprctl configerrors` inside the session if a binding fails.

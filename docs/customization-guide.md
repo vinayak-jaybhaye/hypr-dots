@@ -65,15 +65,16 @@ col = {
 
 ## Font
 
-The font **JetBrainsMono Nerd Font** is used in three places:
+The terminal fonts and the Nerd Font used for bar icons and the lock screen can be set per application.
 
 | File | Setting |
 |---|---|
-| `config/kitty/kitty.conf` | `font_family JetBrains Mono` (line 6) |
-| `config/waybar/styles/base.css` | `font-family: "JetBrainsMono Nerd Font"` (line 30) |
+| `config/foot/foot.ini` | `font=JetBrains Mono:size=12.5` |
+| `config/kitty/kitty.conf` | `font_family JetBrains Mono` |
+| `config/waybar/styles/base.css` | `font-family: "JetBrainsMono Nerd Font"` |
 | `config/hypr/hyprlock.conf` | `font_family = JetBrainsMono Nerd Font` (labels and input field) |
 
-To change the font, update all three locations. Ensure the Nerd Font variant is installed for icon glyphs in waybar and the terminal.
+To change the font, update the corresponding files. Ensure the Nerd Font variant is installed for icon glyphs in waybar and the terminal.
 
 ---
 
@@ -81,83 +82,22 @@ To change the font, update all three locations. Ensure the Nerd Font variant is 
 
 **File:** `config/hypr/keybinds.lua`
 
-### Structure
+Add bindings to the matching section. A dispatcher describes an action and a Lua callback can sequence several actions.
 
-Keybinds are organized into clearly-labeled sections:
-
-```
-########################
-### SECTION NAME #######
-########################
+```lua
+hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("firefox"))
 ```
 
-Sections: Modifier, Launchers, Window Actions, Layout, Focus Movement, Window Movement, Resize, Window Opacity, Workspaces, Special Workspace, Clipboard, Screenshots, Mouse, Media/System, Custom.
+The optional third argument sets options such as `mouse`, `locked` and `repeating`. Put a reset binding in every submap so Escape always returns to the normal keys.
 
-### Adding a keybind
-
-Add a new `bind` line to the appropriate section:
-
-```conf
-# Syntax: bind = MODIFIERS, KEY, DISPATCHER, ARGS
-bind = $mainMod, N, exec, firefox
+```lua
+hl.bind(mainMod .. " + X", hl.dsp.submap("mymode"))
+hl.define_submap("mymode", function()
+    hl.bind("escape", hl.dsp.submap("reset"))
+end)
 ```
 
-Common dispatchers:
-- `exec` — run a command
-- `killactive` — close focused window
-- `workspace, N` — switch to workspace N
-- `movetoworkspace, N` — move window to workspace N
-- `togglefloating` — float/unfloat window
-- `fullscreen, 0|1|2` — fullscreen modes
-
-### Bind types
-
-| Prefix | Behavior |
-|---|---|
-| `bind` | Standard keybind |
-| `bindm` | Mouse button bind |
-| `bindel` | Repeats while held + works on lock screen |
-| `bindl` | Works on lock screen |
-
-### Submaps
-
-Submaps let you enter a mode where keys have different meanings. Two submaps are defined:
-
-**Opacity submap** (`SUPER+O`):
-
-```conf
-bind = $mainMod, O, submap, opacity
-submap = opacity
-bind = , 1, exec, hyprctl dispatch setprop active opacity 0.1; hyprctl dispatch submap reset
-# ... keys 2-9, 0 ...
-bind = , escape, submap, reset
-submap = reset
-```
-
-**Mouse submap** (`SUPER+M`):
-
-```conf
-bind = $mainMod, M, submap, mouse
-submap = mouse
-bind = , h, exec, ydotool mousemove -- -20 0
-# ... movement, clicks, scroll ...
-bind = , escape, submap, reset
-submap = reset
-```
-
-> [!WARNING]
-> `SUPER+M` is bound to **both** the mouse submap and the master layout switch. The submap bind (line 180) takes precedence since it appears later in the file. If you want both, change one of the keys.
-
-### Adding a new submap
-
-```conf
-bind = $mainMod, X, submap, mymode
-submap = mymode
-# Define keys for this mode
-bind = , a, exec, some-command
-bind = , escape, submap, reset
-submap = reset
-```
+Super+O opens the opacity submap. The mouse submap is commented out. Choose a free entry key if you enable it, since Super+M already selects master layout.
 
 ---
 
@@ -302,60 +242,11 @@ Use `hyprctl clients` to find the `class` and `title` of running windows.
 
 **File:** `config/hypr/exec.lua`
 
-Current startup sequence using `hl.on("hyprland.start", function() ... end)`:
-
-```lua
-hl.on("hyprland.start", function()
-    hl.exec_cmd("nm-applet")
-    hl.exec_cmd("blueman-applet")
-    hl.exec_cmd("waybar")
-    hl.exec_cmd("hyprsunset")
-    hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
-    hl.exec_cmd("wl-paste --type text --watch cliphist store")
-    hl.exec_cmd("wl-paste --type image --watch cliphist store")
-    hl.exec_cmd("hypridle")
-    hl.exec_cmd("wpaperd")
-end)
-```
-exec-once = hypridle               # idle manager
-exec-once = wpaperd                # wallpaper daemon
-```
-
-### Adding a startup app
-
-```conf
-# Run once on login:
-exec-once = firefox
-
-# Run on every config reload:
-exec = some-command
-```
-
-> [!NOTE]
-> `exec-once` runs the command only at Hyprland startup. `exec` runs it every time the config is reloaded. Use `exec-once` for daemons and apps, `exec` for setting environment variables or one-shot setup.
-
----
+Add commands to the existing `hl.on("hyprland.start", function() ... end)` block in `exec.lua`. For example, add `hl.exec_cmd("firefox")` inside that callback to launch Firefox once on login.
 
 ## Waybar
 
-### Config structure
-
-The main config is `config/waybar/config.jsonc`. It sets bar properties and includes modular configs:
-
-```jsonc
-{
-  "layer": "top",
-  "position": "top",
-  "height": 44,
-  "include": [
-    "modules/left.jsonc",     // workspaces, window title
-    "modules/center.jsonc",   // clock, hyprsunset, dnd
-    "modules/right.jsonc",    // module ordering
-    "modules/system.jsonc",   // system module configs
-    "modules/custom.jsonc"    // custom script modules
-  ]
-}
-```
+The default edge is in `config/waybar/config.jsonc`. The position menu (Super+Alt+W) stores your choice in `${XDG_STATE_HOME:-$HOME/.local/state}/hypr-dots/waybar-position.jsonc`. Each edge selects `config-horizontal.jsonc` or `config-vertical.jsonc`. Both layouts include the files in `modules/`. Put shared actions and module settings there, and add overrides to the vertical profile for compact formatting.
 
 ### Adding a module
 
@@ -406,9 +297,9 @@ Custom modules use scripts with real-time signal-based updates:
 
 ```jsonc
 "custom/mymodule": {
-  "exec": "~/hypr-dots/scripts/my-status.sh",
+  "exec": "\"${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/my-status.sh\"",
   "return-type": "json",
-  "on-click": "~/hypr-dots/scripts/my-toggle.sh",
+  "on-click": "\"${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/my-toggle.sh\"",
   "signal": 4              // update on RTMIN+4
 }
 ```
@@ -431,33 +322,7 @@ Currently used signals: `RTMIN+2` (hyprsunset), `RTMIN+3` (DND).
 
 ## Launcher (Wofi)
 
-**File:** none in this repo — wofi uses defaults.
-
-Wofi is invoked as:
-
-```conf
-$menu = wofi --show drun
-```
-
-To customize wofi, create `~/.config/wofi/config` and `~/.config/wofi/style.css`:
-
-```ini
-# ~/.config/wofi/config
-width=600
-height=400
-mode=drun
-prompt=Search...
-insensitive=true
-```
-
-```css
-/* ~/.config/wofi/style.css */
-window {
-  background-color: #1e1e2e;
-  border-radius: 12px;
-  border: 1px solid #313244;
-}
-```
+Wofi reads `config/wofi/config` for dimensions, search and icon settings, and `config/wofi/style.css` for the launcher theme. Its launch command lives in `config/hypr/programs.lua`.
 
 ---
 
@@ -468,13 +333,13 @@ window {
 **File:** `config/wpaperd/config.toml`
 
 ```toml
-[eDP-1]
+[any]
 path = "~/Pictures/wallpapers"
 duration = "10m"
 ```
 
 - Rotates through all images in `~/Pictures/wallpapers/` every 10 minutes
-- Tied to monitor `eDP-1`
+- Applies to outputs without a more specific section
 - Clicking the clock module in waybar triggers next/previous wallpaper (`wpaperctl next`/`wpaperctl previous`)
 
 To change the rotation interval:
@@ -491,7 +356,7 @@ duration = "0"      # disable rotation (static)
 
 Hyprpaper is configured but commented out in `exec.lua`. It's kept as an alternative. To switch to hyprpaper:
 
-1. Uncomment `hl.exec_cmd("hyprpaper")` in `exec.lua`
+1. Install `hyprpaper` and uncomment `hl.exec_cmd("hyprpaper")` in `exec.lua`
 2. Comment out `hl.exec_cmd("wpaperd")`
 3. Configure `hyprpaper.conf` with your wallpaper path
 
@@ -505,7 +370,7 @@ Toggle with `SUPER+W`. Uses `mpvpaper` to play a video file as the wallpaper:
 VIDEO="$HOME/Pictures/live-wallpapers/stone-bridge.mp4"
 ```
 
-To change the video, edit the `VIDEO` variable in `scripts/livewall.sh`. The video is played on loop, without audio, using hardware-accelerated decoding.
+Set `LIVEWALL_VIDEO` and optionally `LIVEWALL_OUTPUT` in the session environment to override the defaults. The video is played on loop, without audio, using hardware-accelerated decoding.
 
 ---
 
@@ -518,7 +383,7 @@ To change the video, edit the `VIDEO` variable in `scripts/livewall.sh`. The vid
 The lock screen displays:
 - **Background:** `~/Pictures/wallpapers/bg1.jpg` (no blur)
 - **Time:** centered, 72px font, positioned above center
-- **Date:** centered, 24px font (updates every second via `cmd[update:1000]`)
+- **Date:** centered, 24px font (updates every minute via `cmd[update:1000]`)
 - **Username:** centered, 16px, below center
 - **Password input:** invisible field (fully transparent border/background), centered
 
@@ -566,8 +431,8 @@ input-field {
 
 | Timeout | Action |
 |---|---|
-| 600s (10 min) | Lock screen with `hyprlock` |
-| 660s (11 min) | Turn off display (DPMS) + turn off keyboard backlight |
+| 300s (5 min) | Lock screen with `hyprlock` |
+| 600s (10 min) | Turn off display (DPMS) + turn off keyboard backlight |
 | 660s (11 min) | Suspend system |
 
 ### Customizing timeouts
@@ -581,46 +446,14 @@ listener {
 
 ### Disabling idle temporarily
 
-Click the idle inhibitor icon in waybar (coffee cup), or:
-
-```bash
-hyprctl dispatch dpms on
-```
+Click Waybar's idle inhibitor to pause idle actions.
 
 ---
 
 ## Notifications (Mako)
 
-**File:** `config/mako/config`
-
-The mako config is currently **empty**, meaning mako uses all default settings:
-
-- Position: top-right
-- Default timeout: 5 seconds
-- No custom styling
-
-### Adding mako configuration
-
-```ini
-# Example mako config
-font=JetBrainsMono Nerd Font 11
-background-color=#1e1e2e
-text-color=#cdd6f4
-border-color=#89b4fa
-border-radius=8
-border-size=2
-padding=10
-default-timeout=5000
-width=350
-max-visible=3
-
-[urgency=critical]
-background-color=#1e1e2e
-text-color=#f38ba8
-border-color=#f38ba8
-default-timeout=0
-```
+Edit `config/mako/config` to change the top-right placement, rounded borders, and urgency-specific timeouts. The DND mode hides incoming notifications until disabled.
 
 ### Do Not Disturb
 
-DND is toggled via the waybar module or `~/hypr-dots/scripts/mako-dnd-toggle.sh`. It uses `makoctl mode -t do-not-disturb` to suppress notifications.
+DND is toggled via the waybar module or `scripts/mako-dnd-toggle.sh`. It uses `makoctl mode -t do-not-disturb` to suppress notifications.

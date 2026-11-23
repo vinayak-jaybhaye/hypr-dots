@@ -4,7 +4,7 @@
 
 ## Repository Overview
 
-This is a Hyprland desktop environment dotfiles repository for a laptop running **Arch Linux**. The target hardware has a single built-in display (`eDP-1`, 1920×1080 @ 60 Hz). The repository manages all compositor, bar, terminal, notification, wallpaper, lock screen, and idle configurations through a symlink-based deployment model.
+This is a Hyprland desktop environment dotfiles repository for a laptop running **Arch Linux**. The target hardware has a single built-in display (Samsung 0x4208, `eDP-1` on the reference machine, 1920×1200 @ 60 Hz). The repository manages all compositor, bar, terminal, notification, wallpaper, lock screen, and idle configurations through a symlink-based deployment model.
 
 **Goals:**
 - Single-command reproducible setup via `bootstrap.sh`
@@ -12,7 +12,7 @@ This is a Hyprland desktop environment dotfiles repository for a laptop running 
 - Modular, maintainable configuration (split files, includes/imports)
 - Laptop-optimized defaults (power management, brightness, touchpad)
 
-**Core components:** Hyprland (compositor), Waybar (bar), Kitty (terminal), Wofi (launcher), Thunar (file manager), Mako (notifications), Wpaperd (wallpaper), Hypridle + Hyprlock (idle/lock), Hyprsunset (night mode).
+**Core components:** Hyprland (compositor), Waybar (bar), Foot (default terminal), Kitty (network terminal), Wofi (launcher), Thunar (file manager), Mako (notifications), Wpaperd (wallpaper), Hypridle + Hyprlock (idle/lock), Hyprsunset (night mode).
 
 ---
 
@@ -29,11 +29,15 @@ Hyprland uses a modular **native Lua configuration** system (`hyprland.lua`). Th
 
 **Module Resolution:** `hyprland.lua` dynamically sets `package.path` so that modules inside `config/hypr/` resolve cleanly regardless of invocation directory. Legacy `.conf` files are archived in `config/hypr/legacy/`.
 
+### Deployment paths
+
+The linker discovers the checkout from its own location and deploys under `${XDG_CONFIG_HOME:-$HOME/.config}`. Scripts stay executable in Git. Reference them through the deployed `hypr/scripts` directory link. Waybar edge changes go under `${XDG_STATE_HOME:-$HOME/.local/state}/hypr-dots/`.
+
 ### Waybar Module Architecture
 
 Waybar uses a **two-level include pattern**:
 
-**JSON (functional):** `config.jsonc` includes via the `"include"` array:
+**JSON (functional):** The root default and saved per-user position each select an orientation file. Both orientation files include these fragments, with vertical-specific overrides in `config-vertical.jsonc`:
 - `modules/left.jsonc` — defines `modules-left` array + workspaces/window configs
 - `modules/center.jsonc` — defines `modules-center` array + clock config
 - `modules/right.jsonc` — defines `modules-right` array (module ordering)
@@ -63,12 +67,13 @@ Custom waybar modules use a **toggle/status pattern**:
 ### Color System
 
 - **Canonical source:** Catppuccin Mocha palette defined as CSS `@define-color` variables in `config/waybar/styles/base.css`
+- **Foot:** the default terminal stores its palette in `config/foot/foot.ini`.
 - **Kitty:** has its own copy of the same palette as `colorN` values in `kitty.conf`
 - **Hyprland:** border colors are defined as hex/gradient in `hyprland.lua` `general.col` table (`rgba(cba6f7ee)` and `rgba(89b4faee)`)
 - **Hyprlock:** uses hardcoded `rgba()` values
 - **Mako:** styled with Catppuccin Mocha theme in `config/mako/config`
 
-When changing the theme, all four locations (waybar base.css, kitty.conf, hyprland.lua borders, hyprlock.conf) must be updated independently.
+Theme edits belong in each affected application’s native configuration, including Wofi and Mako.
 
 ---
 
@@ -142,7 +147,7 @@ When changing the theme, all four locations (waybar base.css, kitty.conf, hyprla
 3. **Check [docs/architecture.md](docs/architecture.md)** for dependency relationships between components
 4. **Check [docs/repository-map.md](docs/repository-map.md)** to understand every file's purpose
 5. **Understand the signal/refresh mechanism** if touching waybar scripts — a wrong signal number will refresh the wrong module or do nothing
-6. **Check for hardcoded paths** — monitor `eDP-1` is hardcoded in `hyprland.lua`, `wpaperd/config.toml`, and `scripts/livewall.sh`
+6. **Check for hardcoded paths** — use the generic output rule for new hardware and match the panel description for hardware-specific settings
 
 ## After Making Changes
 
@@ -159,7 +164,8 @@ When changing the theme, all four locations (waybar base.css, kitty.conf, hyprla
 
 - Use `#!/bin/sh` for POSIX-only scripts, `#!/usr/bin/env bash` only when bash features are needed (e.g., `[[ ]]`, arrays, process substitution)
 - Use **tabs** for indentation (all existing scripts use tabs)
-- Scripts that output for waybar **must** output valid JSON on stdout — `{"text":"…","tooltip":"…","class":"…"}`
+- JSON status scripts for Waybar **must** output valid JSON on stdout — `{"text":"…","tooltip":"…","class":"…"}`
+- The wattage module uses plain text and an empty result when no battery rate is available.
 - Toggle scripts should: check process with `pgrep`, toggle with `pkill`/restart, `sleep 0.1`, then signal waybar with `pkill -RTMIN+N waybar`
 - Keep scripts minimal — the current scripts are 4–17 lines; don't over-engineer
 
