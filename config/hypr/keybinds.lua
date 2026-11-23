@@ -28,10 +28,19 @@ hl.bind(mainMod .. " + escape", hl.dsp.exec_cmd("hyprlock"))
 -- ### WINDOW ACTIONS #####
 -- ########################
 hl.bind(mainMod .. " + C",         hl.dsp.window.close())
-hl.bind(mainMod .. " + F",         hl.dsp.window.fullscreen(2))                 -- window only
-hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen(1))                 -- monitor
-hl.bind(mainMod .. " + SHIFT + C", hl.dsp.window.float({ action = "toggle" }))
+-- Fullscreen: entire screen
+hl.bind(mainMod .. " + F",         hl.dsp.window.fullscreen({ mode = "fullscreen" }))
+
+-- Maximize: preserve gaps and Waybar space
+hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen({ mode = "maximized" }))
 hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.exit())
+
+-- Floating window management
+hl.bind(mainMod .. " + SHIFT + C", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + ALT + C",   hl.dsp.window.center())
+hl.bind(mainMod .. " + ALT + P",   hl.dsp.window.pin())
+hl.bind(mainMod .. " + ALT + H",   hl.dsp.window.alter_zorder({ mode = "bottom" }))
+hl.bind(mainMod .. " + ALT + L",   hl.dsp.window.alter_zorder({ mode = "top" }))
 
 -- ########################
 -- ### LAYOUT #############
@@ -79,10 +88,25 @@ hl.bind(mainMod .. " + CTRL + J", hl.dsp.window.resize({ x = 0, y = 20, relative
 hl.bind(mainMod .. " + O", hl.dsp.submap("opacity"))
 hl.define_submap("opacity", function()
     for i = 1, 9 do
-        hl.bind(tostring(i), hl.dsp.exec_cmd(string.format("hyprctl dispatch setprop active opacity 0.%d; hyprctl dispatch submap reset", i)))
+        local opacity = i / 10
+
+        hl.bind(tostring(i), function()
+            hl.dispatch(hl.dsp.window.set_prop({
+                prop = "opacity",
+                value = tostring(opacity),
+            }))
+            hl.dispatch(hl.dsp.submap("reset"))
+        end)
     end
-    hl.bind("0", hl.dsp.exec_cmd("hyprctl dispatch setprop active opacity 1.0; hyprctl dispatch submap reset"))
-    -- ESC to cancel without changing
+
+    hl.bind("0", function()
+        hl.dispatch(hl.dsp.window.set_prop({
+            prop = "opacity",
+            value = "1.0",
+        }))
+        hl.dispatch(hl.dsp.submap("reset"))
+    end)
+
     hl.bind("escape", hl.dsp.submap("reset"))
 end)
 
@@ -120,7 +144,7 @@ hl.bind("Print", hl.dsp.exec_cmd([[sh -c 'file=~/Pictures/screenshot-$(date +%F-
 hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd([[sh -c 'file=~/Pictures/screenshot-$(date +%F-%T).png && grim -g "$(slurp)" "$file" && wl-copy < "$file" && notify-send "Screenshot saved & copied" "$file"']]))
 
 -- Region → clipboard only + notify
-hl.bind(mainMod .. " + SHIFT + Print", hl.dsp.exec_cmd([[sh -c 'grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot copied to clipboard"']]))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd([[sh -c 'grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot copied to clipboard"']]))
 
 -- ########################
 -- ### MOUSE ##############
@@ -167,39 +191,39 @@ hl.bind(mainMod .. " + SHIFT + G", hl.dsp.group.move_window())
 -- #### UNCOMMENT THIS IF YDOTOOL IS NEEDED
 -- hl.bind(mainMod .. " + M", hl.dsp.submap("mouse"))
 
-hl.define_submap("mouse", function()
-    -- Movement
-    hl.bind("h", hl.dsp.exec_cmd("ydotool mousemove -- -20 0"))
-    hl.bind("l", hl.dsp.exec_cmd("ydotool mousemove -- 20 0"))
-    hl.bind("k", hl.dsp.exec_cmd("ydotool mousemove -- 0 -20"))
-    hl.bind("j", hl.dsp.exec_cmd("ydotool mousemove -- 0 20"))
-
-    -- Faster movement
-    hl.bind("SHIFT + h", hl.dsp.exec_cmd("ydotool mousemove -- -100 0"))
-    hl.bind("SHIFT + l", hl.dsp.exec_cmd("ydotool mousemove -- 100 0"))
-    hl.bind("SHIFT + k", hl.dsp.exec_cmd("ydotool mousemove -- 0 -100"))
-    hl.bind("SHIFT + j", hl.dsp.exec_cmd("ydotool mousemove -- 0 100"))
-
-    -- Clicks (ydotool click codes)
-    hl.bind("space",  hl.dsp.exec_cmd("ydotool click 0xC0"))    -- left click
-    hl.bind("Return", hl.dsp.exec_cmd("ydotool click 0xC1"))  -- right click
-
-    -- Drag (vim-style)
-    hl.bind("v", hl.dsp.exec_cmd("ydotool click 0x40"))  -- press
-    hl.bind("y", hl.dsp.exec_cmd("ydotool click 0x80"))  -- release
-
-    -- Vertical scroll
-    hl.bind("u", hl.dsp.exec_cmd("ydotool mousemove -w -- 0 2"))
-    hl.bind("d", hl.dsp.exec_cmd("ydotool mousemove -w -- 0 -2"))
-
-    -- Horizontal scroll
-    hl.bind("left",  hl.dsp.exec_cmd("ydotool mousemove -w -- -1 0"))
-    hl.bind("right", hl.dsp.exec_cmd("ydotool mousemove -w -- 1 0"))
-
-    -- Fast scroll
-    hl.bind("up",   hl.dsp.exec_cmd("ydotool mousemove -w -- 0 8"))
-    hl.bind("down", hl.dsp.exec_cmd("ydotool mousemove -w -- 0 -8"))
-
-    -- Exit
-    hl.bind("escape", hl.dsp.submap("reset"))
-end)
+-- hl.define_submap("mouse", function()
+--     -- Movement
+--     hl.bind("h", hl.dsp.exec_cmd("ydotool mousemove -- -20 0"))
+--     hl.bind("l", hl.dsp.exec_cmd("ydotool mousemove -- 20 0"))
+--     hl.bind("k", hl.dsp.exec_cmd("ydotool mousemove -- 0 -20"))
+--     hl.bind("j", hl.dsp.exec_cmd("ydotool mousemove -- 0 20"))
+--
+--     -- Faster movement
+--     hl.bind("SHIFT + h", hl.dsp.exec_cmd("ydotool mousemove -- -100 0"))
+--     hl.bind("SHIFT + l", hl.dsp.exec_cmd("ydotool mousemove -- 100 0"))
+--     hl.bind("SHIFT + k", hl.dsp.exec_cmd("ydotool mousemove -- 0 -100"))
+--     hl.bind("SHIFT + j", hl.dsp.exec_cmd("ydotool mousemove -- 0 100"))
+--
+--     -- Clicks (ydotool click codes)
+--     hl.bind("space",  hl.dsp.exec_cmd("ydotool click 0xC0"))    -- left click
+--     hl.bind("Return", hl.dsp.exec_cmd("ydotool click 0xC1"))  -- right click
+--
+--     -- Drag (vim-style)
+--     hl.bind("v", hl.dsp.exec_cmd("ydotool click 0x40"))  -- press
+--     hl.bind("y", hl.dsp.exec_cmd("ydotool click 0x80"))  -- release
+--
+--     -- Vertical scroll
+--     hl.bind("u", hl.dsp.exec_cmd("ydotool mousemove -w -- 0 2"))
+--     hl.bind("d", hl.dsp.exec_cmd("ydotool mousemove -w -- 0 -2"))
+--
+--     -- Horizontal scroll
+--     hl.bind("left",  hl.dsp.exec_cmd("ydotool mousemove -w -- -1 0"))
+--     hl.bind("right", hl.dsp.exec_cmd("ydotool mousemove -w -- 1 0"))
+--
+--     -- Fast scroll
+--     hl.bind("up",   hl.dsp.exec_cmd("ydotool mousemove -w -- 0 8"))
+--     hl.bind("down", hl.dsp.exec_cmd("ydotool mousemove -w -- 0 -8"))
+--
+--     -- Exit
+--     hl.bind("escape", hl.dsp.submap("reset"))
+-- end)

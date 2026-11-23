@@ -92,6 +92,13 @@ hl.config({
             xray              = false,
             vibrancy          = 0.1696,
         },
+        wobble = {
+            enabled = true,
+            stiffness = 200,
+            damping = 12,
+            mass = 1,
+            intensity = 0.2,
+        },
     },
 
     animations = {
