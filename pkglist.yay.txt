@@ -1,2 +1,1 @@
-wlogout
-mpvpaper
+aur-pkglist.txt

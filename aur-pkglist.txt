@@ -1,3 +1,2 @@
-ydotool
 wlogout
 mpvpaper

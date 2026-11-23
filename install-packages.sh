@@ -1,81 +1,50 @@
 #!/usr/bin/env bash
-# install-packages.sh — Install packages from pkglist.txt via pacman
-# Purpose: Reads pkglist.txt and aur-pkglist.txt, installing official and AUR packages.
-# Modes:
-#	ask (default)	— prompts user before installing
-#	auto			— installs without prompting (--noconfirm)
-#	interactive	— installs with pacman's default prompts
-# Usage: ./install-packages.sh [auto|interactive|ask]
-# Note: Installs official packages via pacman and AUR packages via yay/paru if detected.
-set -e
+# install-packages.sh — Install official packages via pacman and AUR packages via yay/paru.
+# Usage: ./install-packages.sh [ask|auto|interactive]
+# ask prompts before each package group. auto passes --noconfirm.
+# interactive uses the package managers' own prompts.
+set -euo pipefail
 
-HYPR_DOTS="$HOME/hypr-dots"
-PKGS="$HYPR_DOTS/pkglist.txt"
-AUR_PKGS="$HYPR_DOTS/aur-pkglist.txt"
+repo_dir="${HYPR_DOTS:-$(dirname -- "${BASH_SOURCE[0]}")}"
+mode="${1:-ask}"
+flags=(--needed)
+usage() { echo "Usage: $0 [ask|auto|interactive]"; }
+if (( $# > 1 )); then usage >&2; exit 2; fi
+case "$mode" in
+	ask|interactive) ;;
+	auto) flags+=(--noconfirm) ;;
+	-h|--help) usage; exit 0 ;;
+	*) usage >&2; exit 2 ;;
+esac
 
-MODE="${1:-ask}"	# auto / interactive / ask
-
-info() {
-	echo -e "\033[1;34m[INFO]\033[0m $1"
+# Filter packages, removing comments and blank lines.
+read_packages() {
+	awk '{ sub(/#.*/, ""); if (NF) print $1 }' "$1"
+}
+confirm() {
+	[[ "$mode" != ask ]] && return 0
+	local answer
+	read -rp "$1 [y/N] " answer && [[ "$answer" =~ ^[Yy]$ ]]
 }
 
-warn() {
-	echo -e "\033[1;33m[WARNING]\033[0m $1"
-}
-
-if [ ! -f "$PKGS" ]; then
-	echo "pkglist.txt not found"
-	exit 1
+[[ -r "$repo_dir/pkglist.txt" ]] || { echo "Missing $repo_dir/pkglist.txt" >&2; exit 1; }
+mapfile -t packages < <(read_packages "$repo_dir/pkglist.txt")
+confirm "Install packages from pkglist.txt?" || exit 0
+if (( ${#packages[@]} )); then
+	sudo pacman -S "${flags[@]}" "${packages[@]}"
 fi
 
-if [ "$MODE" = "ask" ]; then
-	read -rp "Install packages from pkglist.txt? [y/N] " ans
-	[[ ! "$ans" =~ ^[Yy]$ ]] && exit 0
-fi
+[[ -f "$repo_dir/aur-pkglist.txt" ]] || exit 0
+mapfile -t aur_packages < <(read_packages "$repo_dir/aur-pkglist.txt")
+(( ${#aur_packages[@]} )) || exit 0
 
-echo "[INFO] Updating system..."
-sudo pacman -Sy --noconfirm
-
-info "Installing official packages..."
-
-if [ "$MODE" = "auto" ]; then
-	sudo pacman -S --needed --noconfirm - < "$PKGS"
-else
-	sudo pacman -S --needed - < "$PKGS"
-fi
-
-if [ -f "$AUR_PKGS" ]; then
-	# Filter packages, removing comments and blank lines
-	readarray -t aur_list < <(grep -v -E '^(#|$)' "$AUR_PKGS")
-	
-	if [ ${#aur_list[@]} -gt 0 ]; then
-		# Detect AUR helper
-		AUR_HELPER=""
-		if command -v yay &>/dev/null; then
-			AUR_HELPER="yay"
-		elif command -v paru &>/dev/null; then
-			AUR_HELPER="paru"
-		fi
-
-		if [ -n "$AUR_HELPER" ]; then
-			info "Detected AUR helper: $AUR_HELPER"
-			install_aur=true
-			if [ "$MODE" = "ask" ]; then
-				read -rp "Install AUR packages from aur-pkglist.txt? [y/N] " ans_aur
-				[[ ! "$ans_aur" =~ ^[Yy]$ ]] && install_aur=false
-			fi
-
-			if [ "$install_aur" = true ]; then
-				info "Installing AUR packages..."
-				if [ "$MODE" = "auto" ]; then
-					"$AUR_HELPER" -S --needed --noconfirm "${aur_list[@]}"
-				else
-					"$AUR_HELPER" -S --needed "${aur_list[@]}"
-				fi
-			fi
-		else
-			warn "No AUR helper (yay/paru) detected. Please install an AUR helper or install these AUR packages manually:"
-			printf '  - %s\n' "${aur_list[@]}"
-		fi
+# Detect an AUR helper. Manual AUR installation is also supported.
+for helper in yay paru; do
+	if command -v "$helper" >/dev/null; then
+		confirm "Install AUR packages with $helper?" || exit 0
+		"$helper" -S "${flags[@]}" "${aur_packages[@]}"
+		exit 0
 	fi
-fi
+done
+echo "No AUR helper found. Install these packages manually for their desktop controls:" >&2
+printf '  %s\n' "${aur_packages[@]}" >&2
