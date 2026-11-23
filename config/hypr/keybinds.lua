@@ -15,6 +15,7 @@ local fileManager = programs.fileManager
 local menu        = programs.menu
 
 local mainMod = "SUPER"
+local scripts = '"${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"'
 
 -- ########################
 -- ### LAUNCHERS ##########
@@ -53,8 +54,8 @@ hl.bind(mainMod .. " + S", hl.dsp.layout("togglesplit"))
 -- Toggle master - dwindle layout
 -- NOTE: SUPER+M was previously also bound to the mouse submap below.
 -- With mouse submap entry commented out, SUPER+M switches to master layout.
-hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("hyprctl keyword general:layout master"))
-hl.bind(mainMod .. " + D", hl.dsp.exec_cmd("hyprctl keyword general:layout dwindle"))
+hl.bind(mainMod .. " + M", function() hl.config({ general = { layout = "master" } }) end)
+hl.bind(mainMod .. " + D", function() hl.config({ general = { layout = "dwindle" } }) end)
 
 -- ########################
 -- ### FOCUS MOVEMENT #####
@@ -138,13 +139,13 @@ hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("cliphist wipe"))
 -- ### SCREENSHOTS ########
 -- ########################
 -- Full screen → save + notify
-hl.bind("Print", hl.dsp.exec_cmd([[sh -c 'file=~/Pictures/screenshot-$(date +%F-%T).png && grim "$file" && notify-send "Screenshot saved" "$file"']]))
+hl.bind("Print", hl.dsp.exec_cmd(scripts .. "screenshot.sh full"))
 
 -- Region → save + copy + notify
-hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd([[sh -c 'file=~/Pictures/screenshot-$(date +%F-%T).png && grim -g "$(slurp)" "$file" && wl-copy < "$file" && notify-send "Screenshot saved & copied" "$file"']]))
+hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd(scripts .. "screenshot.sh region"))
 
 -- Region → clipboard only + notify
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd([[sh -c 'grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot copied to clipboard"']]))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(scripts .. "screenshot.sh clipboard"))
 
 -- ########################
 -- ### MOUSE ##############
@@ -174,8 +175,8 @@ hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = tr
 -- ########################
 -- ### CUSTOM #############
 -- ########################
-hl.bind(mainMod .. " + W",         hl.dsp.exec_cmd("~/hypr-dots/scripts/toggle-livewall.sh"))
-hl.bind(mainMod .. " + ALT + W",   hl.dsp.exec_cmd("~/hypr-dots/scripts/waybar-position.sh"))
+hl.bind(mainMod .. " + W",         hl.dsp.exec_cmd(scripts .. "toggle-livewall.sh"))
+hl.bind(mainMod .. " + ALT + W",   hl.dsp.exec_cmd(scripts .. "waybar-position.sh"))
 
 -- Window Groups - group multiple windows into one container
 hl.bind(mainMod .. " + G",         hl.dsp.group.toggle())

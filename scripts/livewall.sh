@@ -2,18 +2,22 @@
 # livewall.sh — Start live wallpaper using mpvpaper
 # Purpose: Plays a video as the desktop wallpaper on the specified monitor.
 # Called by: toggle-livewall.sh
-# Dependencies: mpvpaper (not in pkglist.txt — install separately)
-# CAUTION: MONITOR is hardcoded to "eDP-1" — update if monitor name changes.
-# CAUTION: VIDEO path must exist or mpvpaper will fail silently.
+# Dependencies: mpvpaper (aur-pkglist.txt)
+# Set LIVEWALL_OUTPUT in the session environment to target one monitor.
+# LIVEWALL_VIDEO can point to any readable video file.
 
-MONITOR="eDP-1"
-VIDEO="$HOME/Pictures/live-wallpapers/stone-bridge.mp4"
+MONITOR="${LIVEWALL_OUTPUT:-ALL}"
+VIDEO="${LIVEWALL_VIDEO:-$HOME/Pictures/live-wallpapers/stone-bridge.mp4}"
+if [ ! -r "$VIDEO" ]; then
+	printf 'Cannot read live wallpaper: %s\n' "$VIDEO" >&2
+	exit 1
+fi
 
-mpvpaper \
-  -o "--loop-file=inf \
-      --no-audio \
-      --hwdec=auto \
-      --vo=gpu \
-      --profile=low-latency \
-      --scale=bilinear" \
-  "$MONITOR" "$VIDEO"
+exec mpvpaper \
+	-o "--loop-file=inf \
+	    --no-audio \
+	    --hwdec=auto \
+	    --vo=gpu \
+	    --profile=low-latency \
+	    --scale=bilinear" \
+	"$MONITOR" "$VIDEO"

@@ -20,15 +20,12 @@ package.path = config_dir .. "/?.lua;" .. config_dir .. "/?/init.lua;" .. packag
 -- ################
 -- ### MONITORS ###
 -- ################
--- See https://wiki.hypr.land/Configuring/Basics/Monitors/
--- CAUTION: Monitor name "eDP-1" is hardcoded here and in:
---   - config/wpaperd/config.toml
---   - scripts/livewall.sh
--- If the monitor name changes, update all three locations.
--- For auto-detect instead, use:
--- hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
+-- See https://wiki.hypr.land/configuring/core/monitors/
+-- The built-in panel uses its tested 10-bit SDR profile. Other outputs use
+-- their preferred mode, automatic placement and compositor-selected scale.
+hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
 hl.monitor({
-    output   = "eDP-1",
+    output   = "desc:Samsung Display Corp. 0x4208",
     mode     = "preferred",
     position = "0x0",
     scale    = 1,
@@ -44,14 +41,14 @@ hl.monitor({
 -- #############################
 -- ### ENVIRONMENT VARIABLES ###
 -- #############################
--- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Environment-variables/
+-- See https://wiki.hypr.land/configuring/core/environment-variables/
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
 
 -- #####################
 -- ### LOOK AND FEEL ###
 -- #####################
--- Refer to https://wiki.hypr.land/Configuring/Basics/Variables/
+-- Refer to https://wiki.hypr.land/configuring/core/config-options/
 hl.config({
     general = {
         gaps_in  = 4,
@@ -131,7 +128,7 @@ hl.config({
     },
 })
 
--- https://wiki.hypr.land/Configuring/Advanced-and-Cool/Animations/
+-- https://wiki.hypr.land/configuring/core/animations/
 -- Bezier format: name, x1, y1, x2, y2 (CSS cubic-bezier control points)
 hl.curve("easeOutQuint",   { type = "bezier", points = { {0.23, 1},    {0.32, 1} } })
 hl.curve("easeInOutCubic", { type = "bezier", points = { {0.65, 0.05}, {0.36, 1} } })
@@ -147,7 +144,7 @@ hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.49, bezier = "line
 hl.animation({ leaf = "fade",       enabled = true, speed = 3.03, bezier = "quick" })
 hl.animation({ leaf = "workspaces", enabled = true, speed = 1.94, bezier = "almostLinear", style = "fade" })
 
--- See https://wiki.hypr.land/Configuring/Basics/Gestures/
+-- See https://wiki.hypr.land/configuring/core/gestures/
 hl.gesture({
     fingers   = 3,
     direction = "horizontal",
