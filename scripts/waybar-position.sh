@@ -1,120 +1,70 @@
 #!/usr/bin/env bash
 # waybar-position.sh — Switch Waybar position (top, bottom, left, right)
-# Purpose: Switches Waybar layout between horizontal (top/bottom) and vertical (left/right).
-# Usage:
-#   waybar-position.sh [top|bottom|left|right]
-#   If called without arguments, prompts via wofi menu.
-# Dependencies: waybar, wofi (optional, for interactive menu)
+# Horizontal and vertical profiles supply the layout for each pair of edges.
+# Usage: waybar-position.sh [top|bottom|left|right] or --start at session login.
+# If called without arguments, prompt via wofi or show usage.
+# Dependencies: waybar, wofi (for the interactive menu)
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$(dirname "$SCRIPT_DIR")"
-CONFIG_FILE="$REPO_DIR/config/waybar/config.jsonc"
+bar_dir="${XDG_CONFIG_HOME:-$HOME/.config}/waybar"
+state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/hypr-dots"
+profile="$state_dir/waybar-position.jsonc"
 
-POSITION="${1:-}"
+start_bar() {
+	# Waybar resolves relative includes from its working directory and search path.
+	cd -- "$bar_dir"
+	export WAYBAR_CONFIG_DIR=.
+	if [[ -f "$profile" ]]; then
+		export HYPR_DOTS_WAYBAR_DISPLAY="${WAYLAND_DISPLAY:-}"
+		exec waybar -c "$profile"
+	fi
+	exec waybar
+}
 
-# If no argument given, prompt via wofi or show usage
-if [ -z "$POSITION" ]; then
-	if command -v wofi >/dev/null 2>&1 && [ -n "${WAYLAND_DISPLAY:-}" ]; then
-		SELECTION=$(printf "󰕒 Top\n󰕕 Bottom\n󰕘 Left\n󰕚 Right" | wofi --dmenu --prompt "Waybar Position")
-		case "$SELECTION" in
-			*"Top"*)    POSITION="top" ;;
-			*"Bottom"*) POSITION="bottom" ;;
-			*"Left"*)   POSITION="left" ;;
-			*"Right"*)  POSITION="right" ;;
-			*)          exit 0 ;;
-		esac
-	else
-		echo "Usage: $0 [top|bottom|left|right]"
+position="${1:-}"
+if [[ "$position" == --start ]]; then
+	start_bar
+fi
+if [[ -z "$position" ]]; then
+	if [[ -z "${WAYLAND_DISPLAY:-}" ]] || ! command -v wofi >/dev/null; then
+		echo "Usage: $0 [top|bottom|left|right]" >&2
 		exit 1
 	fi
+	selection=$(printf '󰕒 Top\n󰕕 Bottom\n󰕘 Left\n󰕚 Right\n' | wofi --dmenu --prompt "Waybar Position") || exit 0
+	[[ -n "$selection" ]] || exit 0
+	position=${selection##* }
 fi
 
-POSITION="$(echo "$POSITION" | tr '[:upper:]' '[:lower:]')"
-
-case "$POSITION" in
-	top)
-		cat > "$CONFIG_FILE" <<-'EOF'
-		{
-		  "name": "horizontal",
-		  "position": "top",
-		  "margin-top": 6,
-		  "margin-bottom": 0,
-		  "margin-left": 4,
-		  "margin-right": 4,
-
-		  "include": [
-		    "config-horizontal.jsonc"
-		  ]
-		}
-		EOF
-		;;
-	bottom)
-		cat > "$CONFIG_FILE" <<-'EOF'
-		{
-		  "name": "horizontal",
-		  "position": "bottom",
-		  "margin-top": 0,
-		  "margin-bottom": 6,
-		  "margin-left": 4,
-		  "margin-right": 4,
-
-		  "include": [
-		    "config-horizontal.jsonc"
-		  ]
-		}
-		EOF
-		;;
-	left)
-		cat > "$CONFIG_FILE" <<-'EOF'
-		{
-		  "name": "vertical",
-		  "position": "left",
-		  "margin-top": 4,
-		  "margin-bottom": 4,
-		  "margin-left": 6,
-		  "margin-right": 0,
-
-		  "include": [
-		    "config-vertical.jsonc"
-		  ]
-		}
-		EOF
-		;;
-	right)
-		cat > "$CONFIG_FILE" <<-'EOF'
-		{
-		  "name": "vertical",
-		  "position": "right",
-		  "margin-top": 4,
-		  "margin-bottom": 4,
-		  "margin-left": 0,
-		  "margin-right": 6,
-
-		  "include": [
-		    "config-vertical.jsonc"
-		  ]
-		}
-		EOF
-		;;
-	*)
-		echo "Error: Unknown position '$POSITION'. Must be top, bottom, left, or right." >&2
-		exit 1
-		;;
+position=${position,,}
+case "$position" in
+	top)    layout=horizontal; margin='6 4 0 4' ;;
+	bottom) layout=horizontal; margin='0 4 6 4' ;;
+	left)   layout=vertical;   margin='4 0 4 6' ;;
+	right)  layout=vertical;   margin='4 6 4 0' ;;
+	*) echo "Unknown Waybar position: $position" >&2; exit 2 ;;
 esac
 
-# Also update ~/.config/waybar/config.jsonc if it exists on a distinct file path
-USER_CONFIG="$HOME/.config/waybar/config.jsonc"
-if [ -f "$USER_CONFIG" ] && [ "$(realpath "$CONFIG_FILE" 2>/dev/null)" != "$(realpath "$USER_CONFIG" 2>/dev/null)" ]; then
-	cp "$CONFIG_FILE" "$USER_CONFIG"
-fi
+[[ -r "$bar_dir/config-$layout.jsonc" ]] || { echo "Missing Waybar layout in $bar_dir" >&2; exit 1; }
+mkdir -p -- "$state_dir"
+temp=$(mktemp "$state_dir/.waybar-position.XXXXXX")
+trap 'rm -f -- "$temp"' EXIT
+cat > "$temp" <<JSON
+{
+  "name": "$layout",
+  "position": "$position",
+  "margin": "$margin",
+  "include": ["config-$layout.jsonc"]
+}
+JSON
+mv -T -- "$temp" "$profile"
 
-# Restart Waybar if it is running
-if pgrep -x waybar >/dev/null 2>&1; then
-	pkill -x waybar
-	sleep 0.2
-	waybar &
+# Reload a bar using the saved profile. A bar using the project default
+# needs one restart to adopt it. A stopped bar picks it up on login.
+if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
+	if ! pkill -USR2 -u "$UID" --env "HYPR_DOTS_WAYBAR_DISPLAY=$WAYLAND_DISPLAY" -x waybar &&
+		pkill -u "$UID" --env "WAYLAND_DISPLAY=$WAYLAND_DISPLAY" -x waybar; then
+		start_bar &
+	fi
 fi
-
-echo "Waybar position set to: $POSITION"
+echo "Waybar position set to $position"

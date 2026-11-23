@@ -11,9 +11,9 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("blueman-applet")                         -- Bluetooth tray icon (requires blueman)
 
     -- Status bar
-    hl.exec_cmd("waybar")
+    hl.exec_cmd([["${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/waybar-position.sh" --start]])
 
-    -- Night mode — starts enabled by default; toggle with SUPER+hyprsunset keybind
+    -- Night mode — starts enabled by default; toggle with the Waybar night light widget
     hl.exec_cmd("hyprsunset")
 
     -- Authentication agent — required for GUI apps that need root privileges (e.g. package managers)
