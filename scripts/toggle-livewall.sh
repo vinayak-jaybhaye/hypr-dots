@@ -5,6 +5,7 @@
 # Dependencies: mpvpaper, livewall.sh (in same directory)
 if pgrep -u "$(id -u)" -x mpvpaper >/dev/null; then
 	pkill -u "$(id -u)" -x mpvpaper
+	"$(dirname -- "$0")/theme.py" resume-wallpaper
 else
 	"$(dirname -- "$0")/livewall.sh" &
 fi

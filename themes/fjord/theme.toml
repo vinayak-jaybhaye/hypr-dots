@@ -1,0 +1,33 @@
+wallpapers = ["wallpaper.png"]
+
+[palette]
+base = "192932"
+mantle = "14232c"
+crust = "0d1d25"
+text = "dce9ec"
+subtext0 = "a2bdc6"
+subtext1 = "bed0d5"
+surface0 = "263c48"
+surface1 = "354e5b"
+surface2 = "476271"
+overlay0 = "6c8995"
+overlay1 = "7a96a3"
+overlay2 = "8da9b3"
+blue = "80b7dc"
+lavender = "a7b8de"
+sapphire = "70bad0"
+sky = "9ed4dd"
+teal = "80c9bd"
+green = "a4ceab"
+yellow = "e8ce95"
+peach = "dfad89"
+maroon = "d5969c"
+red = "eea5a3"
+mauve = "b9a9d8"
+pink = "d9afcc"
+flamingo = "e6bbb8"
+rosewater = "f2d4bd"
+
+[style]
+rounding = 7
+terminal_opacity = 0.94

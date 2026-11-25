@@ -15,6 +15,7 @@ At startup, Hyprland reads the main configuration file `hyprland.lua` which defi
 graph TD
     A["hyprland.lua (Main Core)"] --> P["programs.lua (Apps)"]
     A --> B["exec.lua (Autostart Hook)"]
+    A --> T["theme.lua (Selected appearance)"]
     A --> C["keybinds.lua (Binds & Submaps)"]
     A --> D["windowrules.lua (Window Rules)"]
     C --> P
@@ -39,7 +40,7 @@ Waybar uses a two-level structure for both its configurations (JSON) and layouts
    - Loads module definitions from `modules/system.jsonc` (built-in CPU, memory, battery, etc.) and `modules/custom.jsonc` (custom scripts).
 
 2. **Styling CSS (`style.css`)**:
-   - Imports `styles/base.css` (Catppuccin Mocha colors as CSS variables + root resets).
+   - Imports the selected `theme.css` palette and typography, then `styles/base.css` for global rules.
    - Imports `styles/modules.css` (individual module styles, colors, and hover effects).
    - Imports `styles/states.css` (state-dependent styles like low battery or muted audio, plus blink animations).
    - Imports `styles/workspaces.css` (workspace button styling and layout).
@@ -66,18 +67,7 @@ Applications and services are launched sequentially via the `hyprland.start` eve
 
 ## Theme System
 
-The repository utilizes the **Catppuccin Mocha** palette across all UI elements for a unified look.
-
-- **Status Bar (Waybar)**: Canonical CSS variables are defined in [base.css](../config/waybar/styles/base.css) (e.g., `@base`, `@mantle`, `@text`, `@blue`, `@green`). Colors are mapped to modules in `modules.css` using these variables.
-- **Terminal (Foot)**: The default terminal reads its palette from [foot.ini](../config/foot/foot.ini).
-- **Terminal (Kitty)**: Color definitions are hardcoded as `color0` through `color15` inside [kitty.conf](../config/kitty/kitty.conf) to match the Mocha palette.
-- **Compositor (Hyprland)**: Border colors are configured as gradient values inside [hyprland.lua border settings](../config/hypr/hyprland.lua) (`rgba(cba6f7ee)` and `rgba(89b4faee)`).
-- **Notifications (Mako)**: Mako is styled with the Catppuccin Mocha theme with glassmorphic opacity.
-
-> [!WARNING]
-> Theme configuration is distributed. There is no automated script to update colors across all files. If a new color palette is introduced, it must be changed manually in `base.css`, `kitty.conf`, and `hyprland.lua`.
-
----
+The default Mocha palette and each additional theme live in `themes/<id>/theme.toml`. Shared defaults define typography, opacity and borders. A switch validates the manifest, renders small native adapters, copies theme artwork and atomically selects the resulting build. Applications read shared behavior through native includes or links. The installer gives each application a stable directory so relative Waybar imports continue working across switches. See the [theme guide](theming.md) and [decision 0012](decisions/0012-desktop-themes.md).
 
 ## Script Execution Flow
 
@@ -139,7 +129,7 @@ The diagram below illustrates how components interact and rely on each other:
 ## Shared Resources
 
 - **Fonts**: `JetBrainsMono Nerd Font` must be installed. Waybar and Hyprlock request the Nerd Font family. Foot and Kitty request JetBrains Mono and use fontconfig fallback when needed.
-- **Wallpapers**: Static wallpapers must be saved in `~/Pictures/wallpapers/`. The active wallpaper rotating configuration in `wpaperd` expects this path.
+- **Wallpapers**: Mocha reads `~/Pictures/wallpapers/`. Other manifests can supply a rotation gallery and lock image.
 - **Waybar position**: The session launcher uses `${XDG_STATE_HOME:-$HOME/.local/state}/hypr-dots/waybar-position.jsonc`. Edge changes replace this file atomically.
 - **Live Wallpaper**: The toggle live wallpaper script expects a video file located at `~/Pictures/live-wallpapers/stone-bridge.mp4`.
 - **Screenshots**: Screens taken using print key combinations are saved to `~/Pictures/`.

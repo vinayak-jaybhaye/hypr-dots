@@ -5,11 +5,12 @@ The two manifests are the authoritative installer inputs. Installation modes and
 | Feature | Packages or commands |
 |---|---|
 | Compositor and validation | `hyprland` supplies Hyprland and hyprctl. `lua` supplies luac for syntax checks. |
+| Theme selection | `python` (3.11+) supplies TOML parsing and `libpng` supplies png2pnm for artwork validation. |
 | Lock, idle and night light | `hyprlock`, `hypridle`, `hyprsunset`, `brightnessctl` and systemd |
 | Bar, notifications and launcher | `waybar`, `mako` (including makoctl), `libnotify` (notify-send), `wofi` |
 | Terminals and file manager | `foot` for Super+Return, `kitty` for Waybar's network terminal, `zsh`, `thunar`, `ttf-jetbrains-mono-nerd`. Kitty pulls in its terminfo and shell integration. |
 | Clipboard and screenshots | `wl-clipboard`, `cliphist`, `grim`, `slurp` |
-| Wallpaper rotation | `wpaperd` supplies the daemon and wpaperctl. Images come from the user's Pictures directory. |
+| Wallpaper rotation | `wpaperd` supplies the daemon and wpaperctl. Images come from the selected theme or the user's Pictures directory. |
 | Audio and media keys | `pipewire`, `pipewire-pulse`, `wireplumber` (wpctl), `pavucontrol`, `playerctl`. The standalone mic helper uses pactl from libpulse. |
 | Tray and authentication | `network-manager-applet` (nm-applet) uses NetworkManager (nmtui), `blueman` supplies the Bluetooth tools, `polkit-kde-agent` provides the Arch authentication agent. |
 | Desktop integration | `xdg-desktop-portal-hyprland` and `upower` for the battery power readout |

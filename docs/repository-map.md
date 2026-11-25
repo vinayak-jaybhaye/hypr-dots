@@ -46,7 +46,7 @@ The compatibility name `pkglist.yay.txt` links to `aur-pkglist.txt`. Edit the AU
 
 ## Config Directory (`config/`)
 
-All program configurations reside under the `config/` directory, which gets mapped directly to `~/.config/`.
+Shared application configuration lives here. The linker exposes it alongside selected theme files through per-user directories under `hypr-dots-theme/apps/`.
 
 ### Hyprland Composition (`config/hypr/`)
 
@@ -88,7 +88,7 @@ All program configurations reside under the `config/` directory, which gets mapp
 #### [hyprlock.conf](../config/hypr/hyprlock.conf)
 - **Purpose**: Layout, styling, and text rendering rules for the lock screen.
 - **Owner**: Session Locker.
-- **Modification**: Change background image path, color variables, font sizes, or input field dimensions here.
+- **Modification**: Edit widget sizes and positions here. Set fonts, colors and artwork in the theme.
 
 #### [hyprsunset.conf](../config/hypr/hyprsunset.conf)
 - **Purpose**: Blue-light filter profile settings (target temperature, daytime timings).
@@ -107,9 +107,9 @@ All program configurations reside under the `config/` directory, which gets mapp
 [foot.ini](../config/foot/foot.ini) configures the default terminal. Kitty is also configured for the Waybar network action.
 
 #### [kitty.conf](../config/kitty/kitty.conf)
-- **Purpose**: Kitty terminal font, terminal history scrollback limits, window margins, and Catppuccin color declarations.
+- **Purpose**: Kitty scrollback limits, padding, shell and cursor behavior.
 - **Owner**: Kitty Terminal.
-- **Modification**: Modify default font size, terminal opacity (`background_opacity`), or key bindings.
+- **Modification**: Edit terminal fonts and opacity in a theme manifest.
 
 ---
 
@@ -118,7 +118,7 @@ All program configurations reside under the `config/` directory, which gets mapp
 #### [config](../config/mako/config)
 - **Purpose**: Desktop notifications layout and timeouts, with urgency colors and a DND mode.
 - **Owner**: Notifications.
-- **Modification**: Modify default notification timeout, border width, or fonts.
+- **Modification**: Adjust notification timeouts here and themed borders and fonts in the manifest.
 
 ---
 
@@ -176,7 +176,7 @@ All program configurations reside under the `config/` directory, which gets mapp
 - [custom.jsonc](../config/waybar/modules/custom.jsonc): Configuration details for custom scripts (power menus, microphone toggle status, night mode indicator).
 
 #### Styles (`config/waybar/styles/`)
-- [base.css](../config/waybar/styles/base.css): Global rules and Catppuccin Mocha color variable definitions.
+- [base.css](../config/waybar/styles/base.css): Global widget, tooltip and bar rules using the selected palette.
 - [modules.css](../config/waybar/styles/modules.css): Colors, borders, margins, and hover effects for each status bar item.
 - [states.css](../config/waybar/styles/states.css): Specialized animations (warning blinks, mute icons) for modules.
 - [workspaces.css](../config/waybar/styles/workspaces.css): Workspace indicator sizing and active state styles.
@@ -234,6 +234,16 @@ Desktop helpers are also available through the relative link [config/hypr/script
 - **Owner**: Status Bar Management.
 - **Modification**: Add custom margin presets, menu prompts, or notification triggers.
 
+## Themes
+
+- [Theme guide](theming.md) and [decision 0012](decisions/0012-desktop-themes.md) describe the interface and deployment.
+- [scripts/theme.py](../scripts/theme.py) discovers, validates, builds, publishes and reloads themes.
+- [config/hypr/theme.lua](../config/hypr/theme.lua) loads the selected native Lua appearance.
+- [themes/defaults.toml](../themes/defaults.toml) holds shared style values. The `catppuccin-mocha`, `fjord` and `dune` directories each contain a palette manifest. The latter two also contain a PNG wallpaper.
+- [themes/templates/](../themes/templates/) contains adapters for Hyprland, Hyprlock, Waybar CSS and calendar markup, Wofi, Foot, Kitty and Mako. Wpaperd's template stays with its native rotation settings in `config/wpaperd/config.toml`.
+
 ## Regression tests
+
+[tests/themes.py](../tests/themes.py) covers discovery, native configs, persistence, asset validation, invalid selections, overrides, concurrent publication and recovery.
 
 [tests/deployment.sh](../tests/deployment.sh) exercises bootstrap, conflict backups, repeated linking and Waybar position changes from a renamed checkout in a disposable home.

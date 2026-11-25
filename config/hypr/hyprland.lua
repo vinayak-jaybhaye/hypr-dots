@@ -53,12 +53,6 @@ hl.config({
     general = {
         gaps_in  = 4,
         gaps_out = 8,
-        border_size = 2,
-        -- Border gradient: Catppuccin Mauve → Blue at 45°
-        col = {
-            active_border   = { colors = { "rgba(cba6f7ee)", "rgba(89b4faee)" }, angle = 45 },
-            inactive_border = "rgba(313244aa)",
-        },
         resize_on_border = false,
         allow_tearing = false,
         -- Default layout. Can be toggled at runtime via SUPER+M (master) / SUPER+D (dwindle)
@@ -66,9 +60,7 @@ hl.config({
     },
 
     decoration = {
-        rounding = 10,
         active_opacity = 1.0,
-        inactive_opacity = 0.90,
         dim_inactive = true,
         dim_strength = 0.12,
 
@@ -76,8 +68,6 @@ hl.config({
             enabled      = true,
             range        = 12,
             render_power = 4,
-            color        = "rgba(11111b66)",
-            color_inactive = "rgba(11111b22)",
         },
 
         blur = {
@@ -127,6 +117,8 @@ hl.config({
         },
     },
 })
+
+require("theme")
 
 -- https://wiki.hypr.land/configuring/core/animations/
 -- Bezier format: name, x1, y1, x2, y2 (CSS cubic-bezier control points)

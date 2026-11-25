@@ -15,7 +15,7 @@ The package installer reads the manifests next to the script. Bootstrap accepts 
 
 ## Links, conflicts and recovery
 
-The linker installs one directory symlink per application in `config/` under `${XDG_CONFIG_HOME:-$HOME/.config}`. The deployed `hypr/scripts` link exposes the repository's executable helpers to Hyprland and Waybar. Keep the checkout in place while using the desktop. Set `HYPR_DOTS` to select another checkout explicitly.
+The linker builds the active theme and installs one directory symlink per application to a stable view in `hypr-dots-theme/apps/` under `${XDG_CONFIG_HOME:-$HOME/.config}`. The deployed `hypr/scripts` link exposes the repository's executable helpers to Hyprland and Waybar. Keep the checkout in place while using the desktop. Set `HYPR_DOTS` to select another checkout explicitly.
 
 | Command | Existing targets |
 |---|---|
@@ -23,14 +23,14 @@ The linker installs one directory symlink per application in `config/` under `${
 | `./link-configs.sh --force` | Moves conflicts to a unique `~/.config_backup_*` directory and prints its location |
 | `./link-configs.sh --force --no-backup` | Deletes conflicting targets before linking |
 
-Correct links are skipped on every run. After moving the checkout, rerun the linker with `--force` to replace old links. To restore one application, verify its destination with `readlink`, unlink the project symlink, then move the matching backup into its original location.
+Correct links are skipped on every run. After moving the checkout, rerun the linker to refresh source links in the managed views. To restore one application, verify its destination with `readlink`, unlink the project symlink, then move the matching backup into its original location.
 
 ## Wallpapers and hardware
 
 | Feature | Default or customization |
 |---|---|
-| Static wallpapers | Put images in `~/Pictures/wallpapers/`. Wpaperd rotates them every ten minutes on each output. |
-| Lock screen | Supply `~/Pictures/wallpapers/bg1.jpg` or edit the background path in `config/hypr/hyprlock.conf`. |
+| Static wallpapers | Mocha reads `~/Pictures/wallpapers/`. Themes can supply their own gallery. Wpaperd rotates them every ten minutes on each output. |
+| Lock screen | Supply `~/Pictures/wallpapers/bg1.jpg` for Mocha or provide a theme-specific lock image as described in the [theme guide](theming.md). |
 | Live wallpaper | Supply `~/Pictures/live-wallpapers/stone-bridge.mp4`. Set `LIVEWALL_VIDEO` or `LIVEWALL_OUTPUT` in the session environment to override the file or output. Super+W toggles playback. |
 | Monitor | The laptop rule sets 10-bit SDR and scale 1 on the Samsung 0x4208 panel. Use the description from `hyprctl monitors` when adding another panel-specific rule. The catch-all rule handles other outputs. |
 | Temperature | The sensor paths are in `config/waybar/modules/system.jsonc`. Set the hwmon directory and input file for your CPU if the module is blank. |

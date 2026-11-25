@@ -10,8 +10,9 @@ export XDG_STATE_HOME="$HOME/state with spaces"
 unset HYPR_DOTS WAYLAND_DISPLAY
 checkout="$sandbox/renamed checkout"
 mkdir -p "$checkout" "$XDG_CONFIG_HOME/kitty" "$sandbox/bin"
-cp -a "$root"/{bootstrap.sh,install-packages.sh,link-configs.sh,pkglist.txt,aur-pkglist.txt,config,scripts} "$checkout/"
+cp -a "$root"/{bootstrap.sh,install-packages.sh,link-configs.sh,pkglist.txt,aur-pkglist.txt,config,scripts,themes} "$checkout/"
 echo original > "$XDG_CONFIG_HOME/kitty/keep"
+ln -s "$checkout/config/foot" "$XDG_CONFIG_HOME/foot"
 ln -s "$sandbox/missing" "$XDG_CONFIG_HOME/mako"
 cd -- "$sandbox"
 
@@ -23,6 +24,7 @@ done
 export PATH="$sandbox/bin:$PATH"
 printf 'y\ny\n' | "$checkout/bootstrap.sh"
 [[ -f "$XDG_CONFIG_HOME/kitty/keep" && -L "$XDG_CONFIG_HOME/mako" && ! -e "$XDG_CONFIG_HOME/mako" ]]
+[[ "$XDG_CONFIG_HOME/foot" -ef "$XDG_CONFIG_HOME/hypr-dots-theme/apps/foot" ]]
 grep -Fxq pacman "$HOME/calls"
 grep -Fxq "$sandbox/bin/yay" "$HOME/calls"
 if grep -Eq '^-S.*y' "$HOME/calls"; then exit 1; fi
@@ -32,7 +34,7 @@ backups=("$HOME"/.config_backup_*)
 [[ ${#backups[@]} == 1 && -f "${backups[0]}/kitty/keep" && -L "${backups[0]}/mako" ]]
 "$checkout/link-configs.sh" --force
 for app in "$checkout"/config/*; do
-	[[ "$app" -ef "$XDG_CONFIG_HOME/${app##*/}" ]]
+	[[ "$XDG_CONFIG_HOME/hypr-dots-theme/apps/${app##*/}" -ef "$XDG_CONFIG_HOME/${app##*/}" ]]
 done
 after=("$HOME"/.config_backup_*)
 [[ ${#after[@]} == 1 ]]

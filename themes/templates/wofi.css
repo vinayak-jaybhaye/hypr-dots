@@ -1,0 +1,7 @@
+{{gtk_palette}}
+@import url("{{wofi_uri}}");
+* {
+  font-size: {{launcher_font_size}}px;
+  font-family: "{{ui_font}}", "JetBrainsMono NF", "JetBrainsMono NFM", sans-serif;
+}
+window { border-width: {{border_width}}px; border-radius: {{launcher_radius}}px; }

@@ -1,4 +1,5 @@
 {
+  "include": "theme-calendar.jsonc",
   "modules-center": ["group/center-trio"],
 
   "group/center-trio": {
@@ -15,14 +16,7 @@
       "mode": "month",
       "mode-mon-col": 3,
       "weeks-pos": "right",
-      "on-scroll": 1,
-      "format": {
-        "months": "<span color='#cba6f7'><b>{}</b></span>",
-        "days": "<span color='#cdd6f4'><b>{}</b></span>",
-        "weeks": "<span color='#a6e3a1'><b>W{}</b></span>",
-        "weekdays": "<span color='#f9e2af'><b>{}</b></span>",
-        "today": "<span color='#f38ba8'><b><u>{}</u></b></span>"
-      }
+      "on-scroll": 1
     },
     "on-click": "wpaperctl next",
     "on-click-right": "wpaperctl previous"

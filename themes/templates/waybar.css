@@ -1,0 +1,7 @@
+/* Catppuccin Mocha is the default palette. */
+{{gtk_palette}}
+@define-color bar_background alpha(@bar_surface, {{bar_opacity}});
+* {
+  font-size: {{bar_font_size}}px;
+  font-family: "{{ui_font}}", "JetBrainsMono NF", "JetBrainsMono Nerd Font Mono", "JetBrainsMono NFM", "Symbols Nerd Font", "Noto Color Emoji", monospace;
+}

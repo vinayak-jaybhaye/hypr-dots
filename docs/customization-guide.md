@@ -4,79 +4,9 @@ How to personalize every aspect of this Hyprland desktop environment.
 
 ---
 
-## Theme & Colors
+## Theme, colors and fonts
 
-This setup uses the **Catppuccin Mocha** color palette throughout. Colors are defined in multiple places — change them all for a consistent look.
-
-### Waybar (primary color definitions)
-
-**File:** `config/waybar/styles/base.css`
-
-All colors are defined as CSS variables with `@define-color`:
-
-```css
-@define-color base      #1e1e2e;
-@define-color text      #cdd6f4;
-@define-color blue      #89b4fa;
-/* ... etc ... */
-```
-
-To switch to a different Catppuccin flavor (Latte, Frappé, Macchiato), replace the hex values in this file. See [catppuccin.com](https://catppuccin.com/) for the full palette.
-
-Module-specific colors are in `config/waybar/styles/modules.css`:
-
-```css
-#clock      { color: @lavender; }
-#network    { color: @teal; }
-#battery    { color: @green; }
-```
-
-State-based colors (battery warning, muted audio, etc.) are in `config/waybar/styles/states.css`.
-
-### Kitty terminal
-
-**File:** `config/kitty/kitty.conf`
-
-Colors are set as direct hex values (kitty doesn't use CSS variables):
-
-```conf
-foreground #cdd6f4
-background #1e1e2e
-cursor     #f5e0dc
-color0     #45475a    # black (surface1)
-color1     #f38ba8    # red
-# ... colors 2-15 ...
-```
-
-Selection colors, tab bar colors, and cursor color are also set here.
-
-### Hyprland borders
-
-**File:** `config/hypr/hyprland.lua`, `general.col` table:
-
-```lua
-col = {
-    active_border   = { colors = { "rgba(cba6f7ee)", "rgba(89b4faee)" }, angle = 45 },
-    inactive_border = "rgba(313244aa)",
-},
-```
-
----
-
-## Font
-
-The terminal fonts and the Nerd Font used for bar icons and the lock screen can be set per application.
-
-| File | Setting |
-|---|---|
-| `config/foot/foot.ini` | `font=JetBrains Mono:size=12.5` |
-| `config/kitty/kitty.conf` | `font_family JetBrains Mono` |
-| `config/waybar/styles/base.css` | `font-family: "JetBrainsMono Nerd Font"` |
-| `config/hypr/hyprlock.conf` | `font_family = JetBrainsMono Nerd Font` (labels and input field) |
-
-To change the font, update the corresponding files. Ensure the Nerd Font variant is installed for icon glyphs in waybar and the terminal.
-
----
+Set palette roles, fonts, opacity, rounding and borders in a theme manifest. Shared GTK styles still control widget geometry and interaction states. Use a Nerd Font for the bar's icon glyphs. The [theme guide](theming.md) covers switching, component overrides and artwork.
 
 ## Keybindings
 
@@ -168,7 +98,6 @@ hl.config({
     general = {
         gaps_in = 4,       -- gap between windows
         gaps_out = 8,      -- gap between windows and screen edge
-        border_size = 2,   -- window border thickness in pixels
     },
 })
 ```
@@ -185,19 +114,7 @@ hl.config({
 
 ### Rounding and opacity
 
-```lua
-hl.config({
-    decoration = {
-        rounding = 10,           -- corner radius
-        active_opacity = 1.0,    -- focused window opacity (1 = opaque)
-        inactive_opacity = 0.90, -- unfocused window opacity
-        dim_inactive = true,
-        dim_strength = 0.12,
-    },
-})
-```
-
----
+The theme controls `rounding`, `border_width` and inactive `window_opacity`. Adjust focus dimming and active opacity in the compositor's `decoration` table.
 
 ## Window Rules
 
@@ -286,7 +203,7 @@ CSS is split into four files imported by `style.css`:
 
 | File | Purpose |
 |---|---|
-| `styles/base.css` | Color palette, fonts, bar/tooltip background |
+| `styles/base.css` | Global widget rules and bar/tooltip styling |
 | `styles/modules.css` | Module colors, padding, hover effects |
 | `styles/states.css` | State-specific styles (battery warning, muted, etc.) |
 | `styles/workspaces.css` | Workspace button styles |
@@ -334,11 +251,11 @@ Wofi reads `config/wofi/config` for dimensions, search and icon settings, and `c
 
 ```toml
 [any]
-path = "~/Pictures/wallpapers"
+path = "{{wallpaper_path}}"
 duration = "10m"
 ```
 
-- Rotates through all images in `~/Pictures/wallpapers/` every 10 minutes
+- Rotates through the selected theme’s images every 10 minutes. Mocha uses `~/Pictures/wallpapers/`
 - Applies to outputs without a more specific section
 - Clicking the clock module in waybar triggers next/previous wallpaper (`wpaperctl next`/`wpaperctl previous`)
 
@@ -381,7 +298,7 @@ Set `LIVEWALL_VIDEO` and optionally `LIVEWALL_OUTPUT` in the session environment
 ### Layout
 
 The lock screen displays:
-- **Background:** `~/Pictures/wallpapers/bg1.jpg` (no blur)
+- **Background:** selected lock image, defaulting to `~/Pictures/wallpapers/bg1.jpg` for Mocha (no blur)
 - **Time:** centered, 72px font, positioned above center
 - **Date:** centered, 24px font (updates every minute via `cmd[update:1000]`)
 - **Username:** centered, 16px, below center
@@ -389,15 +306,7 @@ The lock screen displays:
 
 ### Customizing
 
-Change the background image:
-
-```conf
-background {
-  path = $HOME/Pictures/wallpapers/my-lock-bg.png
-  blur_passes = 3    # enable blur
-  blur_size = 8
-}
-```
+Set the theme’s optional `lockscreen` image in its manifest. Edit the shared background block to change blur.
 
 Change label fonts, sizes, and positions:
 
@@ -452,7 +361,7 @@ Click Waybar's idle inhibitor to pause idle actions.
 
 ## Notifications (Mako)
 
-Edit `config/mako/config` to change the top-right placement, rounded borders, and urgency-specific timeouts. The DND mode hides incoming notifications until disabled.
+Edit `config/mako/config` to change the top-right placement and urgency-specific timeouts. The DND mode hides incoming notifications until disabled.
 
 ### Do Not Disturb
 

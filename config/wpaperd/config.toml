@@ -2,5 +2,5 @@
 # https://github.com/danyspin97/wpaperd
 
 [any]
-path = "~/Pictures/wallpapers"
+path = "{{wallpaper_path}}"
 duration = "10m"

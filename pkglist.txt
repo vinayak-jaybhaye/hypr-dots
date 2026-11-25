@@ -1,5 +1,7 @@
 hyprland
 lua
+python
+libpng
 hypridle
 hyprlock
 hyprsunset

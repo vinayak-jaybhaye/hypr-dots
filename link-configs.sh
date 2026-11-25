@@ -61,11 +61,13 @@ flock "$lock_fd"
 # -------------------------------
 # Link configs
 # -------------------------------
+"$HYPR_DOTS/scripts/theme.py" init
 for dir in "$CONFIG_SRC"/*; do
 	[ -d "$dir" ] || continue
 
 	name="$(basename "$dir")"
 	target="$CONFIG_HOME/$name"
+	view="$CONFIG_HOME/hypr-dots-theme/apps/$name"
 
 	# Never move or remove the checkout containing our sources.
 	if [[ "$dir" == "$target" ]]; then
@@ -76,8 +78,14 @@ for dir in "$CONFIG_SRC"/*; do
 	fi
 
 	# If correct symlink already exists → skip
-	if [ -L "$target" ] && [ "$(readlink -f "$target")" = "$dir" ]; then
+	if [[ -L "$target" && "$(readlink -f "$target")" == "$view" ]]; then
 		info "$name already linked — skipping"
+		continue
+	fi
+
+	# Upgrade only direct links to this checkout from the previous installer.
+	if [[ -L "$target" && "$(readlink -f "$target")" == "$dir" ]]; then
+		ln -sfnT -- "$view" "$target"
 		continue
 	fi
 
@@ -102,14 +110,14 @@ for dir in "$CONFIG_SRC"/*; do
 		fi
 	fi
 
-	if ! ln -sT -- "$dir" "$target"; then
+	if ! ln -sT -- "$view" "$target"; then
 		# Roll back this replacement if link creation failed after backup.
 		if [[ -n "$saved" && ! -e "$target" && ! -L "$target" ]]; then
 			mv -T -- "$saved" "$target"
 		fi
 		exit 1
 	fi
-	info "linked $target → $dir"
+	info "linked $target → $view"
 done
 
 info "Done."

@@ -56,7 +56,7 @@ bash -x "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"hyprsunset-status.sh
 5. Make sure the symlink is correct:
    ```bash
    ls -la ~/.config/waybar
-   # Should point to config/waybar in your checkout
+   # Should point to hypr-dots-theme/apps/waybar in your XDG config directory
    ```
 
 ### Waybar modules not updating

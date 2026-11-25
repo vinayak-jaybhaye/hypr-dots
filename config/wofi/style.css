@@ -1,15 +1,10 @@
 /* wofi - Minimalist Spotlight Theme (Catppuccin Mocha) */
 
-* {
-  font-family: "JetBrainsMono Nerd Font", "JetBrainsMono NF", "JetBrainsMono NFM", sans-serif;
-  font-size: 14px;
-}
-
 window {
   margin: 0px;
-  background-color: #1e1e2e; /* Base */
-  border: 2px solid #313244; /* Surface0 */
-  border-radius: 12px;
+  background-color: @base; /* Base */
+  border-style: solid;
+  border-color: @surface0; /* Surface0 */
 }
 
 #outer-box {
@@ -21,15 +16,15 @@ window {
 #input {
   margin: 0px;
   padding: 10px 14px;
-  background-color: #181825; /* Mantle */
-  color: #cdd6f4; /* Text */
-  border: 1px solid #313244; /* Surface0 */
+  background-color: @mantle; /* Mantle */
+  color: @text; /* Text */
+  border: 1px solid @surface0; /* Surface0 */
   border-radius: 8px;
   box-shadow: none;
 }
 
 #input:focus {
-  border: 1px solid #cba6f7; /* Mauve on focus */
+  border: 1px solid @mauve; /* Mauve on focus */
 }
 
 #scroll {
@@ -49,24 +44,24 @@ window {
   margin: 2px 0px;
   border-radius: 8px;
   background-color: transparent;
-  color: #cdd6f4;
+  color: @text;
 }
 
 #entry:hover {
-  background-color: rgba(255, 255, 255, 0.04);
+  background-color: alpha(@glass_edge, 0.04);
 }
 
 #entry:selected {
-  background-color: #313244; /* Surface0 highlight */
+  background-color: @surface0; /* Surface0 highlight */
 }
 
 #entry:selected #text {
-  color: #cba6f7; /* Selected text turns Mauve */
+  color: @mauve; /* Selected text turns Mauve */
 }
 
 #text {
   margin-left: 12px;
-  color: #cdd6f4;
+  color: @text;
 }
 
 #img {

@@ -1,0 +1,38 @@
+wallpapers = ["wallpaper.png"]
+
+[palette]
+base = "faf1dd"
+mantle = "f4e7cd"
+crust = "e9dcc0"
+text = "463b31"
+subtext0 = "665a4a"
+subtext1 = "594b3c"
+surface0 = "e8d9bc"
+surface1 = "d9c7a8"
+surface2 = "c7b392"
+overlay0 = "8f7e63"
+overlay1 = "83705b"
+overlay2 = "74614e"
+blue = "315f89"
+lavender = "615383"
+sapphire = "256578"
+sky = "216f77"
+teal = "27665a"
+green = "42672e"
+yellow = "856317"
+peach = "995523"
+maroon = "99545b"
+red = "a5423d"
+mauve = "785385"
+pink = "934b72"
+flamingo = "985855"
+rosewater = "874f3e"
+
+[style]
+variant = "light"
+rounding = 8
+terminal_opacity = 0.97
+bar_surface = "f4e7cd"
+glass_edge = "49392a"
+lock_text = "463b31"
+lock_input = "594b3c"

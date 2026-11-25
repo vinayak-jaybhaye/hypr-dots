@@ -82,7 +82,7 @@ Styles are stored under `config/waybar/styles/` or the root `config/waybar/style
 
 ### Colors & Palette Integration
 - **Zero Hex Code Rule**: Never hardcode hex color strings (`#ffffff`, `#1e1e2e`) directly inside `modules.css`, `states.css`, or `workspaces.css`.
-- **Variable Usage**: All colors must reference the variables defined in [base.css](../config/waybar/styles/base.css) (e.g. `@base`, `@text`, `@mauve`, `@red`).
+- **Variable Usage**: All colors must reference the variables provided by the selected [theme manifest](theming.md) (e.g. `@base`, `@text`, `@mauve`, `@red`).
 - **Indentation**: Use **2 spaces** for CSS properties.
 
 ---

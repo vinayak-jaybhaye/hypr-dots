@@ -26,7 +26,7 @@ hl.on("hyprland.start", function()
     -- Idle manager — handles screen lock, DPMS off, and suspend after inactivity
     hl.exec_cmd("hypridle")
 
-    -- Wallpaper — wpaperd rotates wallpapers from ~/Pictures/wallpapers/ every 10min
+    -- Wallpaper — wpaperd rotates the selected theme’s wallpapers every 10min (Mocha uses ~/Pictures/wallpapers/)
     -- hyprpaper is disabled (see docs/decisions/0005-wpaperd-over-hyprpaper.md)
     -- hl.exec_cmd("hyprpaper")
     hl.exec_cmd("wpaperd")

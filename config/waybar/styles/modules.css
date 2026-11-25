@@ -5,13 +5,13 @@
 #group-hardware,
 #group-power-group,
 #group-sys-status {
-  background-color: rgba(30, 30, 46, 0.45);
+  background-color: alpha(@base, 0.45);
   /* Semi-transparent Catppuccin Base */
   border-radius: 16px;
   padding: 2px 8px;
   margin: 4px 4px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border: 1px solid alpha(@glass_edge, 0.06);
+  box-shadow: 0 4px 8px alpha(@shadow, 0.15);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -22,10 +22,10 @@
 #group-hardware:hover,
 #group-power-group:hover,
 #group-sys-status:hover {
-  background-color: rgba(49, 50, 68, 0.65);
+  background-color: alpha(@surface0, 0.65);
   /* Surface1 on hover */
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 4px 12px rgba(137, 180, 250, 0.12);
+  border-color: alpha(@glass_edge, 0.12);
+  box-shadow: 0 4px 12px alpha(@blue, 0.12);
   /* Subtle blue glow */
 }
 

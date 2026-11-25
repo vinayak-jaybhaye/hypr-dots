@@ -25,7 +25,8 @@ Hyprland uses a modular **native Lua configuration** system (`hyprland.lua`). Th
 1. `programs.lua` — default user applications table (`terminal`, `fileManager`, `menu`)
 2. `exec.lua` — autostart services using `hl.on("hyprland.start", function() ... end)`
 3. `keybinds.lua` — keyboard shortcuts, submaps, mouse buttons, and media keys
-4. `windowrules.lua` — per-window rules using `hl.window_rule`
+4. `theme.lua` — applies the selected appearance through the native Lua API.
+5. `windowrules.lua` — per-window rules using `hl.window_rule`
 
 **Module Resolution:** `hyprland.lua` dynamically sets `package.path` so that modules inside `config/hypr/` resolve cleanly regardless of invocation directory. Legacy `.conf` files are archived in `config/hypr/legacy/`.
 
@@ -45,7 +46,8 @@ Waybar uses a **two-level include pattern**:
 - `modules/custom.jsonc` — custom module definitions (power, hyprsunset, dnd, power-btn)
 
 **CSS (visual):** `style.css` imports via `@import`:
-- `styles/base.css` — Catppuccin Mocha `@define-color` variables + global styles
+- `theme.css` — selected palette and typography
+- `styles/base.css` — shared global styles
 - `styles/modules.css` — per-module colors + hover effects
 - `styles/states.css` — state-dependent styles (battery warning, muted, etc.) + blink animation
 - `styles/workspaces.css` — workspace button styles
@@ -64,18 +66,9 @@ Custom waybar modules use a **toggle/status pattern**:
 | RTMIN+2 | `custom/hyprsunset` | `hyprsunset-toggle.sh` |
 | RTMIN+3 | `custom/dnd` | `mako-dnd-toggle.sh` |
 
-### Color System
+### Color system
 
-- **Canonical source:** Catppuccin Mocha palette defined as CSS `@define-color` variables in `config/waybar/styles/base.css`
-- **Foot:** the default terminal stores its palette in `config/foot/foot.ini`.
-- **Kitty:** has its own copy of the same palette as `colorN` values in `kitty.conf`
-- **Hyprland:** border colors are defined as hex/gradient in `hyprland.lua` `general.col` table (`rgba(cba6f7ee)` and `rgba(89b4faee)`)
-- **Hyprlock:** uses hardcoded `rgba()` values
-- **Mako:** styled with Catppuccin Mocha theme in `config/mako/config`
-
-Theme edits belong in each affected application’s native configuration, including Wofi and Mako.
-
----
+Themes live in `themes/<id>/theme.toml`. Mocha is the default. Keep functional config under `config/`, shared style defaults in `themes/defaults.toml`, and application-specific token mappings in `themes/templates/`. The linker creates per-user app directories. Edit sources in the checkout. Run `./scripts/theme.py validate` and `python3 tests/themes.py` for theme changes. See [theming](docs/theming.md).
 
 ## Modification Rules
 
@@ -134,7 +127,7 @@ Theme edits belong in each affected application’s native configuration, includ
 | `keybinds.lua` | **HIGH** | Contains submaps (opacity, mouse). Missing escape/reset bindings breaks ALL keybinds globally. |
 | `exec.lua` | **MEDIUM** | Startup order matters — clipboard watchers must run after waybar for tray integration; polkit agent must start for privilege escalation. |
 | `modules/right.jsonc` | **MEDIUM** | Module ordering directly controls visual bar layout. Adding modules here without definitions in system.jsonc/custom.jsonc causes waybar errors. |
-| `styles/base.css` | **MEDIUM** | CSS `@define-color` variables are used by every other stylesheet. Renaming or removing a variable breaks styles globally. |
+| `themes/templates/waybar.css` | **MEDIUM** | CSS `@define-color` variables are used by every other stylesheet. Renaming or removing a variable breaks styles globally. |
 | `link-configs.sh` | **HIGH** | Handles backup + symlink logic. Bugs here can delete existing user configs. The `--force` flag removes existing targets. |
 | `hyprland.lua` | **MEDIUM** | Root compositor entry point. Syntax or type errors prevent Hyprland from starting. |
 
@@ -173,7 +166,7 @@ Theme edits belong in each affected application’s native configuration, includ
 
 - **Hyprland configs:** 4-space indent, section comments with `### SECTION ###` banner style
 - **Waybar JSON:** 2-space indent, JSONC format (comments allowed)
-- **CSS:** 2-space indent, use `@define-color` variable references (`@blue`, `@red`, etc.) from `base.css` — never hardcode hex colors in `modules.css`, `states.css`, or `workspaces.css`
+- **CSS:** 2-space indent, use `@define-color` variable references (`@blue`, `@red`, etc.) from the selected `theme.css` — never hardcode hex colors in `modules.css`, `states.css`, or `workspaces.css`
 - **Shell scripts:** tabs for indentation, minimal comments, no unnecessary quoting of simple strings
 
 ## Decision Recording

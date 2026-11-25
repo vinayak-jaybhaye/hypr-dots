@@ -1,0 +1,18 @@
+# Shared desktop dimensions and typography. Themes override individual keys.
+variant = "dark"
+ui_font = "JetBrainsMono Nerd Font"
+terminal_font = "JetBrains Mono"
+terminal_size = 12.5
+terminal_opacity = 0.7
+window_opacity = 0.90
+rounding = 10
+border_width = 2
+bar_surface = "000000"
+glass_edge = "ffffff"
+bar_opacity = 0.65
+lock_text = "ffffff"
+lock_input = "c8c8c8"
+bar_font_size = 13
+launcher_font_size = 14
+notification_font_size = 10
+launcher_radius = 12
