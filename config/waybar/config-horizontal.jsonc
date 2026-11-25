@@ -3,7 +3,7 @@
   "layer": "top",
   "position": "top",
   "height": 44,
-  "spacing": 4,
+  "spacing": 2,
 
   "include": [
     "modules/left.jsonc",

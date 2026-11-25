@@ -165,6 +165,8 @@ Add commands to the existing `hl.on("hyprland.start", function() ... end)` block
 
 The default edge is in `config/waybar/config.jsonc`. The position menu (Super+Alt+W) stores your choice in `${XDG_STATE_HOME:-$HOME/.local/state}/hypr-dots/waybar-position.jsonc`. Each edge selects `config-horizontal.jsonc` or `config-vertical.jsonc`. Both layouts include the files in `modules/`. Put shared actions and module settings there, and add overrides to the vertical profile for compact formatting.
 
+Top and bottom show the weekday, date and time together. Left and right stack hours over minutes and show the remaining charge beneath the battery icon. The blue marker on the active workspace faces the windows on each edge. Hover over the network icon on any edge for the address and current transfer rates.
+
 ### Adding a module
 
 1. Define the module in the appropriate module file (e.g., `modules/system.jsonc`):
@@ -195,7 +197,7 @@ Don't forget to add it to the shared selector block and hover block in `modules.
 
 ### Module order
 
-Module order is controlled by the arrays in `modules/left.jsonc`, `modules/center.jsonc`, and `modules/right.jsonc`. Simply reorder the module names in the array.
+Module order is controlled by the arrays in `modules/left.jsonc`, `modules/center.jsonc`, and `modules/right.jsonc`. Reorder the module names in the array. Set a group’s `orientation` to `inherit` so it follows the bar when you switch edges. Waybar exposes `group/audio` to GTK as `#audio`.
 
 ### Styling
 

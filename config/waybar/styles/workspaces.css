@@ -1,27 +1,28 @@
 #workspaces {
-  background-color: alpha(@base, 0.45); /* Semi-transparent Catppuccin Base */
-  border-radius: 16px;
-  padding: 2px 6px;
-  margin: 4px 4px;
+  background-color: alpha(@base, 0.76); /* Semi-transparent Catppuccin Base */
+  border-radius: 10px;
+  padding: 0 2px;
+  margin: 4px 3px;
   border: 1px solid alpha(@glass_edge, 0.06);
-  box-shadow: 0 4px 8px alpha(@shadow, 0.15);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px alpha(@shadow, 0.15);
+  transition: background-color 160ms ease-out, border-color 160ms ease-out;
 }
 
 #workspaces:hover {
   background-color: alpha(@surface0, 0.65); /* Surface1 on hover */
   border-color: alpha(@glass_edge, 0.12);
-  box-shadow: 0 4px 12px alpha(@blue, 0.12);
+  box-shadow: 0 1px 3px alpha(@blue, 0.12);
 }
 
 #workspaces button {
-  padding: 0 8px;
-  margin: 2px 2px;
-  border-radius: 12px;
+  padding: 0 5px;
+  min-width: 18px;
+  margin: 2px 1px;
+  border-radius: 7px;
   background-color: transparent;
-  color: @overlay0;
+  color: @subtext0;
   border: none;
-  transition: all 0.2s ease-in-out;
+  transition: background-color 140ms ease-out, color 140ms ease-out;
 }
 
 #workspaces button:hover {
@@ -30,10 +31,15 @@
 }
 
 #workspaces button.active {
-  background-color: @blue;
-  color: @crust;
-  box-shadow: 0 2px 6px alpha(@blue, 0.4);
+  background-color: mix(@base, @blue, 0.18);
+  color: @blue;
 }
+
+/* Mark the active workspace on the side facing the windows. */
+.top #workspaces button.active { box-shadow: inset 0 -2px @blue; }
+.bottom #workspaces button.active { box-shadow: inset 0 2px @blue; }
+.left #workspaces button.active { box-shadow: inset -2px 0 @blue; }
+.right #workspaces button.active { box-shadow: inset 2px 0 @blue; }
 
 #workspaces button.urgent {
   background-color: @red;
@@ -43,20 +49,15 @@
 /* ========================================================================= */
 /* Vertical Orientation Workspaces (Left & Right)                            */
 /* ========================================================================= */
-window#waybar.vertical #workspaces,
-window#waybar.left #workspaces,
-window#waybar.right #workspaces {
-  padding: 6px 0;
-  margin: 4px 4px;
+window#waybar.vertical #workspaces {
+  padding: 2px 0;
+  margin: 4px 3px;
 }
 
-window#waybar.vertical #workspaces button,
-window#waybar.left #workspaces button,
-window#waybar.right #workspaces button {
-  padding: 4px 0;
+window#waybar.vertical #workspaces button {
+  padding: 1px 0;
   margin: 2px 3px;
   min-width: 32px;
-  min-height: 28px;
-  font-size: 14px;
+  min-height: 24px;
+  font-size: 1em;
 }
-

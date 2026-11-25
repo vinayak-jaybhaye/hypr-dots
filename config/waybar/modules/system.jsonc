@@ -51,15 +51,16 @@
     "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-",
     "scroll-step": 5,
     "tooltip": true,
-    "tooltip-format": "Microphone: {volume}%"
+    "tooltip-format": "{source_desc}\nMicrophone: {source_volume}%"
   },
   "network": {
     "interval": 2,
-    "format-wifi": " ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
-    "format-ethernet": "󰈀 ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
+    "format-wifi": " {signalStrength}%",
+    "format-ethernet": "󰈀 LAN",
     "format-disconnected": "⚠ Disconnected",
-    "tooltip-format-wifi": "󰤨 {essid}\n󰒢 {signalStrength}%\n󰩟 {ipaddr}",
-    "tooltip-format-ethernet": "󰈀 {ifname}\n󰩟 {ipaddr}",
+    "tooltip-format-wifi": "󰤨 {essid}\n󰒢 {signalStrength}%\n󰩟 {ipaddr}\n↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}",
+    "tooltip-format-ethernet": "󰈀 {ifname}\n󰩟 {ipaddr}\n↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}",
+    "tooltip-format-disconnected": "Network disconnected",
     "on-click": "kitty -e nmtui"
   },
   "bluetooth": {

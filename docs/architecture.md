@@ -33,7 +33,7 @@ graph TD
 ### Waybar Composition
 Waybar uses a two-level structure for both its configurations (JSON) and layouts (CSS):
 
-1. **Configuration JSON**. The project default or saved edge selects a horizontal or vertical profile. Each profile draws on the same module fragments. The including profile wins for each field it overrides.
+1. **Configuration JSON**. The project default or saved edge selects a horizontal or vertical profile. Each profile draws on the same module fragments. The including profile wins for each field it overrides. Groups inherit the bar orientation, so shared module ordering works on every edge.
    - Includes layout fragments from `modules/left.jsonc` (workspaces, active window title).
    - Includes layout fragments from `modules/center.jsonc` (clock, custom night mode, custom DND).
    - Includes layout fragments from `modules/right.jsonc` (ordered list of system modules).

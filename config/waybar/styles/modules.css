@@ -1,31 +1,31 @@
 /* Glassmorphic Pill Container Styling for Groups and Standalone Clock */
-#group-center-trio,
-#group-connections,
-#group-audio,
-#group-hardware,
-#group-power-group,
-#group-sys-status {
-  background-color: alpha(@base, 0.45);
+#center-trio,
+#connections,
+#audio,
+#hardware,
+#power-group,
+#sys-status {
+  background-color: alpha(@base, 0.76);
   /* Semi-transparent Catppuccin Base */
-  border-radius: 16px;
-  padding: 2px 8px;
-  margin: 4px 4px;
+  border-radius: 10px;
+  padding: 0 3px;
+  margin: 4px 1px;
   border: 1px solid alpha(@glass_edge, 0.06);
-  box-shadow: 0 4px 8px alpha(@shadow, 0.15);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px alpha(@shadow, 0.12);
+  transition: background-color 160ms ease-out, border-color 160ms ease-out;
 }
 
 /* Hover effects for the pills */
-#group-center-trio:hover,
-#group-connections:hover,
-#group-audio:hover,
-#group-hardware:hover,
-#group-power-group:hover,
-#group-sys-status:hover {
+#center-trio:hover,
+#connections:hover,
+#audio:hover,
+#hardware:hover,
+#power-group:hover,
+#sys-status:hover {
   background-color: alpha(@surface0, 0.65);
   /* Surface1 on hover */
   border-color: alpha(@glass_edge, 0.12);
-  box-shadow: 0 4px 12px alpha(@blue, 0.12);
+  box-shadow: 0 1px 3px alpha(@blue, 0.10);
   /* Subtle blue glow */
 }
 
@@ -43,19 +43,25 @@
 #memory,
 #custom-power,
 #battery,
-#idle-inhibitor,
+#idle_inhibitor,
 #tray,
 #custom-power-btn {
   background-color: transparent;
   border: none;
-  padding: 0 8px;
+  padding: 0 5px;
+  border-radius: 7px;
   margin: 0;
-  transition: all 0.2s ease-in-out;
+  transition: background-color 140ms ease-out, color 140ms ease-out;
 }
 
 /* Individual Module Colors */
+#center-trio {
+  background-color: mix(@base, @lavender, 0.13);
+  border-color: alpha(@lavender, 0.30);
+}
+
 #clock {
-  color: @lavender;
+  color: @text;
 }
 
 #custom-hyprsunset {
@@ -106,16 +112,16 @@
   color: @green;
 }
 
-#idle-inhibitor {
+#idle_inhibitor {
   color: @red;
 }
 
 #custom-power-btn {
   color: @red;
-  margin-right: 10px;
 }
 
 /* Hover micro-animations for individual interactive modules */
+#clock:hover,
 #custom-hyprsunset:hover,
 #custom-dnd:hover,
 #network:hover,
@@ -124,7 +130,8 @@
 #pulseaudio.microphone:hover,
 #backlight:hover,
 #custom-power-btn:hover,
-#idle-inhibitor:hover {
+#idle_inhibitor:hover {
+  background-color: alpha(@text, 0.10);
   color: @text;
 }
 
@@ -133,110 +140,68 @@
   background-color: transparent;
   border: none;
   color: @subtext0;
-  padding: 0 12px;
+  padding: 0 5px;
   font-weight: normal;
 }
 
 /* ========================================================================= */
 /* Vertical Orientation Styles (Left & Right)                               */
 /* ========================================================================= */
-window#waybar.vertical #group-center-trio,
-window#waybar.left #group-center-trio,
-window#waybar.right #group-center-trio,
-window#waybar.vertical #group-connections,
-window#waybar.left #group-connections,
-window#waybar.right #group-connections,
-window#waybar.vertical #group-audio,
-window#waybar.left #group-audio,
-window#waybar.right #group-audio,
-window#waybar.vertical #group-hardware,
-window#waybar.left #group-hardware,
-window#waybar.right #group-hardware,
-window#waybar.vertical #group-power-group,
-window#waybar.left #group-power-group,
-window#waybar.right #group-power-group,
-window#waybar.vertical #group-sys-status,
-window#waybar.left #group-sys-status,
-window#waybar.right #group-sys-status {
-  padding: 6px 0;
-  margin: 4px 4px;
+window#waybar.vertical #center-trio,
+window#waybar.vertical #connections,
+window#waybar.vertical #audio,
+window#waybar.vertical #hardware,
+window#waybar.vertical #power-group,
+window#waybar.vertical #sys-status {
+  padding: 2px 0;
+  margin: 1px 3px;
 }
 
 window#waybar.vertical #clock,
-window#waybar.left #clock,
-window#waybar.right #clock,
 window#waybar.vertical #custom-hyprsunset,
-window#waybar.left #custom-hyprsunset,
-window#waybar.right #custom-hyprsunset,
 window#waybar.vertical #custom-dnd,
-window#waybar.left #custom-dnd,
-window#waybar.right #custom-dnd,
 window#waybar.vertical #network,
-window#waybar.left #network,
-window#waybar.right #network,
 window#waybar.vertical #bluetooth,
-window#waybar.left #bluetooth,
-window#waybar.right #bluetooth,
 window#waybar.vertical #pulseaudio,
-window#waybar.left #pulseaudio,
-window#waybar.right #pulseaudio,
 window#waybar.vertical #pulseaudio.microphone,
-window#waybar.left #pulseaudio.microphone,
-window#waybar.right #pulseaudio.microphone,
 window#waybar.vertical #backlight,
-window#waybar.left #backlight,
-window#waybar.right #backlight,
 window#waybar.vertical #cpu,
-window#waybar.left #cpu,
-window#waybar.right #cpu,
 window#waybar.vertical #temperature,
-window#waybar.left #temperature,
-window#waybar.right #temperature,
 window#waybar.vertical #memory,
-window#waybar.left #memory,
-window#waybar.right #memory,
 window#waybar.vertical #custom-power,
-window#waybar.left #custom-power,
-window#waybar.right #custom-power,
 window#waybar.vertical #battery,
-window#waybar.left #battery,
-window#waybar.right #battery,
-window#waybar.vertical #idle-inhibitor,
-window#waybar.left #idle-inhibitor,
-window#waybar.right #idle-inhibitor,
+window#waybar.vertical #idle_inhibitor,
 window#waybar.vertical #tray,
-window#waybar.left #tray,
-window#waybar.right #tray,
-window#waybar.vertical #custom-power-btn,
-window#waybar.left #custom-power-btn,
-window#waybar.right #custom-power-btn {
-  padding: 5px 0;
-  margin: 0;
-  min-width: 40px;
-  font-size: 17px;
-}
-
-window#waybar.vertical #group-center-trio #custom-hyprsunset {
-  padding: 4px 0 2px 0;
-  font-size: 16px;
-}
-
-window#waybar.vertical #group-center-trio #clock,
-window#waybar.left #group-center-trio #clock,
-window#waybar.right #group-center-trio #clock {
+window#waybar.vertical #custom-power-btn {
   padding: 2px 0;
-  font-size: 13px;
+  margin: 0;
+  min-height: 24px;
+  font-size: 1.12em;
+}
+
+window#waybar.vertical #center-trio #custom-hyprsunset {
+  padding: 4px 0 2px 0;
+  font-size: 1.05em;
+}
+
+window#waybar.vertical #center-trio #clock {
+  padding: 2px 0;
+  font-size: 1em;
   font-weight: bold;
 }
 
-window#waybar.vertical #group-center-trio #custom-dnd {
+window#waybar.vertical #center-trio #custom-dnd {
   padding: 2px 0 4px 0;
-  font-size: 16px;
+  font-size: 1.05em;
 }
 
-window#waybar.vertical #custom-power-btn,
-window#waybar.left #custom-power-btn,
-window#waybar.right #custom-power-btn {
-  margin-right: 0;
-  margin-bottom: 4px;
+window#waybar.vertical #battery {
+  font-size: 1em;
+}
+
+/* Center text-only controls after Waybar hides the optional image widget. */
+window#waybar.vertical #custom-hyprsunset:only-child,
+window#waybar.vertical #custom-dnd:only-child,
+window#waybar.vertical #custom-power-btn:only-child {
+  min-width: 38px;
 }

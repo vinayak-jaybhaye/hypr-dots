@@ -3,14 +3,14 @@
   "modules-center": ["group/center-trio"],
 
   "group/center-trio": {
-    "orientation": "horizontal",
+    "orientation": "inherit",
     "modules": ["custom/hyprsunset", "clock", "custom/dnd"]
   },
 
   "clock": {
     "interval": 60,
     "tooltip": true,
-    "format": "{:%H:%M}",
+    "format": "{:%a %d  %H:%M}",
     "tooltip-format": "<span>{:%A, %B %d, %Y}</span>\n<tt><small>{calendar}</small></tt>",
     "calendar": {
       "mode": "month",

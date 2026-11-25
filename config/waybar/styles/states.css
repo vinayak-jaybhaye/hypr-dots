@@ -1,12 +1,12 @@
 /* BATTERY STATES */
-#battery.warning {
+#battery.discharging.warning {
   color: @yellow;
 }
 
-#battery.critical {
+#battery.discharging.critical {
   color: @red;
   animation-name: blink;
-  animation-duration: 0.5s;
+  animation-duration: 1.5s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-direction: alternate;
@@ -30,12 +30,25 @@
 }
 
 /* AUDIO & MICROPHONE STATES */
-#pulseaudio.muted {
+#pulseaudio.muted:not(.microphone) {
   color: @red;
 }
 
-#pulseaudio.microphone.muted {
+#pulseaudio.microphone.source-muted {
   color: @red;
+}
+
+#network.disconnected,
+#temperature.critical {
+  color: @red;
+}
+
+#idle_inhibitor.activated {
+  color: @yellow;
+}
+
+#idle_inhibitor.deactivated {
+  color: @subtext0;
 }
 
 /* BLUETOOTH STATES */
@@ -73,7 +86,6 @@
 /* BLINK ANIMATION */
 @keyframes blink {
   to {
-    background-color: @red;
-    color: @base;
+    background-color: alpha(@red, 0.18);
   }
 }

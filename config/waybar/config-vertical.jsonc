@@ -3,30 +3,14 @@
   "layer": "top",
   "position": "left",
   "width": 50,
-  "spacing": 4,
+  "spacing": 2,
   "modules-left": [
     "ext/workspaces"
   ],
-  "group/center-trio": {
-    "orientation": "vertical"
-  },
-  "group/connections": {
-    "orientation": "vertical"
-  },
-  "group/audio": {
-    "orientation": "vertical"
-  },
-  "group/hardware": {
-    "orientation": "vertical"
-  },
   "group/power-group": {
-    "orientation": "vertical",
     "modules": [
       "battery"
     ]
-  },
-  "group/sys-status": {
-    "orientation": "vertical"
   },
   "clock": {
     "align": 0.5,
@@ -41,10 +25,7 @@
     "format-disconnected": "󰤮",
     "format-disabled": "󰤮",
     "align": 0.5,
-    "justify": "center",
-    "tooltip-format-wifi": "󰤨 {essid}\n󰒢 {signalStrength}%\n󰩟 {ipaddr}\n↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
-    "tooltip-format-ethernet": "󰈀 {ifname}\n󰩟 {ipaddr}\n↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
-    "tooltip-format-disconnected": "Network disconnected"
+    "justify": "center"
   },
   "bluetooth": {
     "format-connected": "󰂱",
@@ -76,10 +57,10 @@
     "justify": "center"
   },
   "battery": {
-    "format": "{icon}",
-    "format-charging": "󰂄",
-    "format-plugged": "",
-    "format-full": "󰁹",
+    "format": "{icon}\n<small>{capacity}%</small>",
+    "format-charging": "󰂄\n<small>{capacity}%</small>",
+    "format-plugged": "\n<small>{capacity}%</small>",
+    "format-full": "󰁹\n<small>{capacity}%</small>",
     "align": 0.5,
     "justify": "center"
   },

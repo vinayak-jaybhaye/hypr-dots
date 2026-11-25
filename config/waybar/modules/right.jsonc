@@ -8,27 +8,27 @@
   ],
 
   "group/connections": {
-    "orientation": "horizontal",
+    "orientation": "inherit",
     "modules": ["network", "bluetooth"]
   },
 
   "group/audio": {
-    "orientation": "horizontal",
+    "orientation": "inherit",
     "modules": ["pulseaudio", "pulseaudio#microphone", "backlight"]
   },
 
   "group/hardware": {
-    "orientation": "horizontal",
+    "orientation": "inherit",
     "modules": ["cpu", "temperature", "memory"]
   },
 
   "group/power-group": {
-    "orientation": "horizontal",
+    "orientation": "inherit",
     "modules": ["custom/power", "battery"]
   },
 
   "group/sys-status": {
-    "orientation": "horizontal",
+    "orientation": "inherit",
     "modules": ["idle_inhibitor", "tray", "custom/power-btn"]
   }
 }
