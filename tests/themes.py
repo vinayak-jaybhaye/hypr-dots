@@ -25,6 +25,7 @@ class ThemeTests(unittest.TestCase):
             shutil.copytree(ROOT / folder, self.repo / folder, symlinks=True)
         self.env = os.environ | {
             "HOME": str(self.home), "XDG_CONFIG_HOME": str(self.config),
+            "XDG_DATA_HOME": str(self.home / "data"),
             "XDG_RUNTIME_DIR": str(self.home), "WAYLAND_DISPLAY": "",
             "HYPRLAND_INSTANCE_SIGNATURE": "", "DBUS_SESSION_BUS_ADDRESS": "disabled:",
         }

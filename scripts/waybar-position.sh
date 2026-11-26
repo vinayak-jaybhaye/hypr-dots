@@ -64,7 +64,7 @@ mv -T -- "$temp" "$profile"
 if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
 	if ! pkill -USR2 -u "$UID" --env "HYPR_DOTS_WAYBAR_DISPLAY=$WAYLAND_DISPLAY" -x waybar &&
 		pkill -u "$UID" --env "WAYLAND_DISPLAY=$WAYLAND_DISPLAY" -x waybar; then
-		start_bar &
+		start_bar </dev/null >/dev/null 2>&1 &
 	fi
 fi
 echo "Waybar position set to $position"

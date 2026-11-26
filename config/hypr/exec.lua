@@ -13,8 +13,8 @@ hl.on("hyprland.start", function()
     -- Status bar
     hl.exec_cmd([["${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/waybar-position.sh" --start]])
 
-    -- Night mode — starts enabled by default; toggle with the Waybar night light widget
-    hl.exec_cmd("hyprsunset")
+    -- Night mode starts enabled by default. Settings → Display controls it at runtime and at login.
+    hl.exec_cmd([["${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/desktop_controls.py" login]])
 
     -- Authentication agent — required for GUI apps that need root privileges (e.g. package managers)
     hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")

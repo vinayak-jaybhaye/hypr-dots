@@ -7,6 +7,12 @@
 
 -- Float specific settings/dialog windows to protect tiling layout
 hl.window_rule({
+    match = { class = "^io[.]github[.]hyprdots[.]Settings$" },
+    float = true,
+    center = true,
+})
+
+hl.window_rule({
     match = { class = "^(pavucontrol)$" },
     float = true,
     size  = "800 600",

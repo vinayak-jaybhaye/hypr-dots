@@ -1,6 +1,10 @@
 hyprland
 lua
 python
+python-gobject
+python-cairo
+libadwaita
+gtk4
 libpng
 hypridle
 hyprlock
@@ -13,6 +17,8 @@ cliphist
 wl-clipboard
 grim
 slurp
+wf-recorder
+gpu-screen-recorder
 wpaperd
 playerctl
 brightnessctl

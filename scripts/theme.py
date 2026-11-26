@@ -150,6 +150,10 @@ def render(name):
     return files
 
 
+def theme_names():
+    return sorted(p.parent.name for p in THEMES.glob("*/theme.toml"))
+
+
 def selected():
     try:
         name = (ACTIVE / "theme-id").read_text().strip()
@@ -315,7 +319,7 @@ def main():
     use.add_argument("name")
     use.add_argument("--no-reload", action="store_true")
     args = parser.parse_args()
-    names = sorted(p.parent.name for p in THEMES.glob("*/theme.toml"))
+    names = theme_names()
     if args.command == "list":
         print("\n".join(names))
     elif args.command == "current":

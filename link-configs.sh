@@ -120,4 +120,14 @@ for dir in "$CONFIG_SRC"/*; do
 	info "linked $target → $view"
 done
 
+# Wofi discovers desktop entries in the XDG applications directory.
+applications="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
+launcher="$applications/io.github.hyprdots.Settings.desktop"
+mkdir -p -- "$applications"
+if [[ ! -e "$launcher" && ! -L "$launcher" ]]; then
+	ln -sT -- "$CONFIG_HOME/hypr-dots-theme/apps/hypr/scripts/io.github.hyprdots.Settings.desktop" "$launcher"
+elif [[ ! "$launcher" -ef "$HYPR_DOTS/scripts/io.github.hyprdots.Settings.desktop" ]]; then
+	warn "$launcher exists — keeping existing launcher"
+fi
+
 info "Done."

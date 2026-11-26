@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Settings
+Comment=Appearance, display, screen recording, sound and notifications
+Icon=preferences-system-symbolic
+Categories=Settings;DesktopSettings;
+Terminal=false
+Exec=sh -c "exec \\"\\${XDG_CONFIG_HOME:-\\$HOME/.config}/hypr-dots-theme/apps/hypr/scripts/settings.py\\""

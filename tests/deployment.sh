@@ -7,6 +7,7 @@ trap 'rm -rf -- "$sandbox"' EXIT
 export HOME="$sandbox/home"
 export XDG_CONFIG_HOME="$HOME/config with spaces"
 export XDG_STATE_HOME="$HOME/state with spaces"
+export XDG_DATA_HOME="$HOME/data with spaces"
 unset HYPR_DOTS WAYLAND_DISPLAY
 checkout="$sandbox/renamed checkout"
 mkdir -p "$checkout" "$XDG_CONFIG_HOME/kitty" "$sandbox/bin"
@@ -39,6 +40,17 @@ done
 after=("$HOME"/.config_backup_*)
 [[ ${#after[@]} == 1 ]]
 [[ -x "$XDG_CONFIG_HOME/hypr/scripts/screenshot.sh" ]]
+launcher="$XDG_DATA_HOME/applications/io.github.hyprdots.Settings.desktop"
+[[ "$launcher" -ef "$checkout/scripts/io.github.hyprdots.Settings.desktop" ]]
+# Exercise the desktop entry's actual argument expansion from a relocated checkout.
+printf '#!/bin/sh\ntouch "$HOME/settings-opened"\n' > "$checkout/scripts/settings.py"
+gio launch "$launcher"
+for _ in {1..30}; do [[ -f "$HOME/settings-opened" ]] && break; sleep 0.1; done
+[[ -f "$HOME/settings-opened" ]]
+unlink "$launcher"
+echo keep > "$launcher"
+"$checkout/link-configs.sh"
+[[ $(cat "$launcher") == keep ]]
 
 switcher="$XDG_CONFIG_HOME/hypr/scripts/waybar-position.sh"
 profile="$XDG_STATE_HOME/hypr-dots/waybar-position.jsonc"
