@@ -53,7 +53,7 @@ hl.config({
     general = {
         gaps_in  = 4,
         gaps_out = 8,
-        resize_on_border = false,
+        resize_on_border = true,
         allow_tearing = false,
         -- Default layout. Can be toggled at runtime via SUPER+M (master) / SUPER+D (dwindle)
         layout = "master",
