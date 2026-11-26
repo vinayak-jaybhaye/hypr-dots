@@ -20,73 +20,73 @@ local scripts = '"${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"'
 -- ########################
 -- ### LAUNCHERS ##########
 -- ########################
-hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
-hl.bind(mainMod .. " + E",      hl.dsp.exec_cmd(fileManager))
-hl.bind(mainMod .. " + R",      hl.dsp.exec_cmd(menu))
-hl.bind(mainMod .. " + escape", hl.dsp.exec_cmd("hyprlock"))
+hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal), { description = "Open terminal" })
+hl.bind(mainMod .. " + E",      hl.dsp.exec_cmd(fileManager), { description = "Open file manager" })
+hl.bind(mainMod .. " + R",      hl.dsp.exec_cmd(menu), { description = "Open application launcher" })
+hl.bind(mainMod .. " + escape", hl.dsp.exec_cmd("hyprlock"), { description = "Lock screen" })
 
 -- ########################
 -- ### WINDOW ACTIONS #####
 -- ########################
-hl.bind(mainMod .. " + C",         hl.dsp.window.close())
+hl.bind(mainMod .. " + C",         hl.dsp.window.close(), { description = "Close focused window" })
 -- Fullscreen: entire screen
-hl.bind(mainMod .. " + F",         hl.dsp.window.fullscreen({ mode = "fullscreen" }))
+hl.bind(mainMod .. " + F",         hl.dsp.window.fullscreen({ mode = "fullscreen" }), { description = "Toggle fullscreen" })
 
 -- Maximize: preserve gaps and Waybar space
-hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen({ mode = "maximized" }))
-hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.exit())
+hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen({ mode = "maximized" }), { description = "Toggle maximized window" })
+hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.exit(), { description = "Exit Hyprland" })
 
 -- Floating window management
-hl.bind(mainMod .. " + SHIFT + C", hl.dsp.window.float({ action = "toggle" }))
-hl.bind(mainMod .. " + ALT + C",   hl.dsp.window.center())
-hl.bind(mainMod .. " + ALT + P",   hl.dsp.window.pin())
-hl.bind(mainMod .. " + ALT + H",   hl.dsp.window.alter_zorder({ mode = "bottom" }))
-hl.bind(mainMod .. " + ALT + L",   hl.dsp.window.alter_zorder({ mode = "top" }))
+hl.bind(mainMod .. " + SHIFT + C", hl.dsp.window.float({ action = "toggle" }), { description = "Toggle floating window" })
+hl.bind(mainMod .. " + ALT + C",   hl.dsp.window.center(), { description = "Center floating window" })
+hl.bind(mainMod .. " + ALT + P",   hl.dsp.window.pin(), { description = "Toggle pinning on all workspaces" })
+hl.bind(mainMod .. " + ALT + H",   hl.dsp.window.alter_zorder({ mode = "bottom" }), { description = "Lower window to bottom" })
+hl.bind(mainMod .. " + ALT + L",   hl.dsp.window.alter_zorder({ mode = "top" }), { description = "Raise window to top" })
 
 -- ########################
 -- ### LAYOUT #############
 -- ########################
 
 -- Window behavior
-hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
-hl.bind(mainMod .. " + S", hl.dsp.layout("togglesplit"))
+hl.bind(mainMod .. " + P", hl.dsp.window.pseudo(), { description = "Toggle window pseudotiling" })
+hl.bind(mainMod .. " + S", hl.dsp.layout("togglesplit"), { description = "Toggle split direction" })
 
 -- Toggle master - dwindle layout
 -- NOTE: SUPER+M was previously also bound to the mouse submap below.
 -- With mouse submap entry commented out, SUPER+M switches to master layout.
-hl.bind(mainMod .. " + M", function() hl.config({ general = { layout = "master" } }) end)
-hl.bind(mainMod .. " + D", function() hl.config({ general = { layout = "dwindle" } }) end)
+hl.bind(mainMod .. " + M", function() hl.config({ general = { layout = "master" } }) end, { description = "Use master layout" })
+hl.bind(mainMod .. " + D", function() hl.config({ general = { layout = "dwindle" } }) end, { description = "Use dwindle layout" })
 
 -- ########################
 -- ### FOCUS MOVEMENT #####
 -- ########################
-hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
-hl.bind(mainMod .. " + L", hl.dsp.focus({ direction = "right" }))
-hl.bind(mainMod .. " + K", hl.dsp.focus({ direction = "up" }))
-hl.bind(mainMod .. " + J", hl.dsp.focus({ direction = "down" }))
+hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }), { description = "Focus window to the left" })
+hl.bind(mainMod .. " + L", hl.dsp.focus({ direction = "right" }), { description = "Focus window to the right" })
+hl.bind(mainMod .. " + K", hl.dsp.focus({ direction = "up" }), { description = "Focus window above" })
+hl.bind(mainMod .. " + J", hl.dsp.focus({ direction = "down" }), { description = "Focus window below" })
 
 -- ########################
 -- ### WINDOW MOVEMENT ####
 -- ########################
-hl.bind(mainMod .. " + SHIFT + H", hl.dsp.window.move({ direction = "left" }))
-hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.move({ direction = "right" }))
-hl.bind(mainMod .. " + SHIFT + K", hl.dsp.window.move({ direction = "up" }))
-hl.bind(mainMod .. " + SHIFT + J", hl.dsp.window.move({ direction = "down" }))
+hl.bind(mainMod .. " + SHIFT + H", hl.dsp.window.move({ direction = "left" }), { description = "Move window left" })
+hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.move({ direction = "right" }), { description = "Move window right" })
+hl.bind(mainMod .. " + SHIFT + K", hl.dsp.window.move({ direction = "up" }), { description = "Move window up" })
+hl.bind(mainMod .. " + SHIFT + J", hl.dsp.window.move({ direction = "down" }), { description = "Move window down" })
 
 -- ########################
 -- ### RESIZE #############
 -- ########################
-hl.bind(mainMod .. " + CTRL + H", hl.dsp.window.resize({ x = -20, y = 0, relative = true }))
-hl.bind(mainMod .. " + CTRL + L", hl.dsp.window.resize({ x = 20, y = 0, relative = true }))
-hl.bind(mainMod .. " + CTRL + K", hl.dsp.window.resize({ x = 0, y = -20, relative = true }))
-hl.bind(mainMod .. " + CTRL + J", hl.dsp.window.resize({ x = 0, y = 20, relative = true }))
+hl.bind(mainMod .. " + CTRL + H", hl.dsp.window.resize({ x = -20, y = 0, relative = true }), { description = "Decrease window width" })
+hl.bind(mainMod .. " + CTRL + L", hl.dsp.window.resize({ x = 20, y = 0, relative = true }), { description = "Increase window width" })
+hl.bind(mainMod .. " + CTRL + K", hl.dsp.window.resize({ x = 0, y = -20, relative = true }), { description = "Decrease window height" })
+hl.bind(mainMod .. " + CTRL + J", hl.dsp.window.resize({ x = 0, y = 20, relative = true }), { description = "Increase window height" })
 
 -- ########################
 -- ### WINDOW OPACITY #####
 -- ########################
 -- SUBMAP: opacity — SUPER+O enters, press 0-9 to set opacity, ESC to cancel.
 -- Each key sets opacity and immediately resets the submap (returns to normal).
-hl.bind(mainMod .. " + O", hl.dsp.submap("opacity"))
+hl.bind(mainMod .. " + O", hl.dsp.submap("opacity"), { description = "Enter window opacity submap" })
 hl.define_submap("opacity", function()
     for i = 1, 9 do
         local opacity = i / 10
@@ -97,7 +97,7 @@ hl.define_submap("opacity", function()
                 value = tostring(opacity),
             }))
             hl.dispatch(hl.dsp.submap("reset"))
-        end)
+        end, { description = ("Set window opacity to %d%%"):format(i * 10) })
     end
 
     hl.bind("0", function()
@@ -106,9 +106,9 @@ hl.define_submap("opacity", function()
             value = "1.0",
         }))
         hl.dispatch(hl.dsp.submap("reset"))
-    end)
+    end, { description = "Set window opacity to 100%" })
 
-    hl.bind("escape", hl.dsp.submap("reset"))
+    hl.bind("escape", hl.dsp.submap("reset"), { description = "Exit opacity submap" })
 end)
 
 -- ########################
@@ -116,8 +116,8 @@ end)
 -- ########################
 for i = 1, 10 do
     local key = i % 10
-    hl.bind(mainMod .. " + " .. key,         hl.dsp.focus({ workspace = i }))
-    hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
+    hl.bind(mainMod .. " + " .. key,         hl.dsp.focus({ workspace = i }), { description = ("Switch to workspace %d"):format(i) })
+    hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }), { description = ("Move window to workspace %d"):format(i) })
 end
 
 -- ########################
@@ -125,63 +125,63 @@ end
 -- ########################
 
 -- Scratchpad (special workspace)
-hl.bind(mainMod .. " + grave",         hl.dsp.workspace.toggle_special("scratch"))
-hl.bind(mainMod .. " + SHIFT + grave", hl.dsp.window.move({ workspace = "special:scratch" }))
-hl.bind(mainMod .. " + CTRL + grave",  hl.dsp.window.move({ workspace = "previous" }))
+hl.bind(mainMod .. " + grave",         hl.dsp.workspace.toggle_special("scratch"), { description = "Toggle scratchpad" })
+hl.bind(mainMod .. " + SHIFT + grave", hl.dsp.window.move({ workspace = "special:scratch" }), { description = "Move window to scratchpad" })
+hl.bind(mainMod .. " + CTRL + grave",  hl.dsp.window.move({ workspace = "previous" }), { description = "Move window to previous workspace" })
 
 -- ########################
 -- ### CLIPBOARD ##########
 -- ########################
-hl.bind(mainMod .. " + V",         hl.dsp.exec_cmd("cliphist list | wofi --dmenu | cliphist decode | wl-copy"))
-hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("cliphist wipe"))
+hl.bind(mainMod .. " + V",         hl.dsp.exec_cmd("cliphist list | wofi --dmenu | cliphist decode | wl-copy"), { description = "Open clipboard history" })
+hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("cliphist wipe"), { description = "Clear clipboard history" })
 
 -- ########################
 -- ### SCREENSHOTS ########
 -- ########################
 -- Full screen → save + notify
-hl.bind("Print", hl.dsp.exec_cmd(scripts .. "screenshot.sh full"))
+hl.bind("Print", hl.dsp.exec_cmd(scripts .. "screenshot.sh full"), { description = "Save full-screen screenshot" })
 
 -- Region → save + copy + notify
-hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd(scripts .. "screenshot.sh region"))
+hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd(scripts .. "screenshot.sh region"), { description = "Save and copy region screenshot" })
 
 -- Region → clipboard only + notify
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(scripts .. "screenshot.sh clipboard"))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(scripts .. "screenshot.sh clipboard"), { description = "Copy region screenshot to clipboard" })
 
 -- ########################
 -- ### MOUSE ##############
 -- ########################
-hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
-hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
+hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true, description = "Drag window" })
+hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true, description = "Resize window" })
 
-hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
-hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
+hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }), { description = "Focus next workspace" })
+hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }), { description = "Focus previous workspace" })
 
 -- ########################
 -- ### MEDIA / SYSTEM #####
 -- ########################
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true })
-hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),     { locked = true, repeating = true })
-hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true, repeating = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true, description = "Raise speaker volume" })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true, description = "Lower speaker volume" })
+hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),     { locked = true, repeating = true, description = "Toggle speaker mute" })
+hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true, repeating = true, description = "Toggle microphone mute" })
 
-hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"),                  { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"),                  { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"),                  { locked = true, repeating = true, description = "Increase brightness" })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"),                  { locked = true, repeating = true, description = "Decrease brightness" })
 
-hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),       { locked = true })
-hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
-hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
-hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
+hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),       { locked = true, description = "Play next track" })
+hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true, description = "Toggle media playback" })
+hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"), { locked = true, description = "Toggle media playback" })
+hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true, description = "Play previous track" })
 
 -- ########################
 -- ### CUSTOM #############
 -- ########################
-hl.bind(mainMod .. " + W",         hl.dsp.exec_cmd(scripts .. "toggle-livewall.sh"))
-hl.bind(mainMod .. " + ALT + W",   hl.dsp.exec_cmd(scripts .. "waybar-position.sh"))
+hl.bind(mainMod .. " + W",         hl.dsp.exec_cmd(scripts .. "toggle-livewall.sh"), { description = "Toggle live wallpaper" })
+hl.bind(mainMod .. " + ALT + W",   hl.dsp.exec_cmd(scripts .. "waybar-position.sh"), { description = "Choose Waybar position" })
 
 -- Window Groups - group multiple windows into one container
-hl.bind(mainMod .. " + G",         hl.dsp.group.toggle())
-hl.bind(mainMod .. " + Tab",       hl.dsp.group.next())
-hl.bind(mainMod .. " + SHIFT + G", hl.dsp.group.move_window())
+hl.bind(mainMod .. " + G",         hl.dsp.group.toggle(), { description = "Toggle window group" })
+hl.bind(mainMod .. " + Tab",       hl.dsp.group.next(), { description = "Focus next window in group" })
+hl.bind(mainMod .. " + SHIFT + G", hl.dsp.group.move_window(), { description = "Move window within group" })
 
 -- SUBMAP: mouse — keyboard-driven cursor control via ydotool.
 -- Requires: ydotool (not in pkglist.txt, install separately).

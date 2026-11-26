@@ -244,7 +244,8 @@ Desktop helpers are also available through the relative link [config/hypr/script
 
 ## Desktop settings
 
-- [settings.py](../scripts/settings.py) builds the three GTK pages, reads the visible controls and routes user actions.
+- [settings.py](../scripts/settings.py) builds the Settings window, reads the visible controls and routes user actions.
+- [shortcuts.py](../scripts/shortcuts.py) reads `hyprctl -j binds` and displays searchable global and submap shortcuts. Set `description` on a Lua bind to label its action.
 - [recording.py](../scripts/recording.py) provides the Display page's folder picker and capture controls, owns the recorder and finalizes its MP4. [Recording lifecycle](decisions/0014-screen-recording.md) · [Workspace and window capture](decisions/0015-portal-recording.md)
 - [desktop_controls.py](../scripts/desktop_controls.py) reads desktop values and saves the login preference. Its `login` entry point starts night light when enabled.
 - [Desktop launcher](../scripts/io.github.hyprdots.Settings.desktop) exposes the window in Wofi and other application menus.

@@ -23,6 +23,7 @@ Click the gear at the end of Waybar to open Settings in a centered floating wind
 | Appearance | Choose a theme, restore the previous theme when available, move Waybar to any edge, or step through the wallpaper rotation. |
 | Display | Pause automatic idle actions with Keep awake, set panel brightness and night light, or record a workspace, window, monitor or region with optional audio and a choice of save folder. |
 | Sound & notifications | Adjust output volume, mute the default microphone, or switch Do Not Disturb on and off. |
+| Shortcuts | Search the running Hyprland session’s key and mouse bindings by key, action or submap. |
 
 Hardware keys and Waybar controls still work while the window is open. Unsupported devices and unavailable services appear as disabled rows.
 

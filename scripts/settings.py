@@ -14,6 +14,7 @@ from gi.repository import Adw, Gdk, GdkPixbuf, GLib, Gtk
 
 import desktop_controls as controls
 from recording import Recorder, RecordingGroup
+from shortcuts import ShortcutsPage, read_bindings
 import theme
 
 ERRORS = (OSError, ValueError, TypeError, KeyError, IndexError, RuntimeError, subprocess.SubprocessError, GLib.Error)
@@ -148,6 +149,8 @@ class Settings(Adw.ApplicationWindow):
         self.switch(notifications, "Do Not Disturb", controls.dnd,
                     lambda on: controls.run(controls.SCRIPTS / "mako-dnd-toggle.sh", "on" if on else "off"))
 
+        self.shortcuts = ShortcutsPage()
+        self.tabs.add_titled_with_icon(self.shortcuts, "shortcuts", "Shortcuts", "input-keyboard-symbolic")
         if recorder.phase != "idle":
             self.tabs.set_visible_child_name("display")
         self.tabs.connect("notify::visible-child", lambda *_: self.refresh())
@@ -268,6 +271,8 @@ class Settings(Adw.ApplicationWindow):
             return not self.closed
         page = self.tabs.get_visible_child()
         reads = {key: read for key, (owner, read, _, _) in self.readers.items() if owner == page}
+        if page == self.shortcuts:
+            reads["Shortcuts"] = read_bindings
         revision = self.revision
         self.reading = True
 
@@ -294,6 +299,9 @@ class Settings(Adw.ApplicationWindow):
         self.updating = True
         try:
             values = future.result()
+            if page == self.shortcuts:
+                self.shortcuts.update_bindings(*values["Shortcuts"])
+                return False
             for key, (value, error) in values.items():
                 _, _, show, row = self.readers[key]
                 if key in self.debounce:

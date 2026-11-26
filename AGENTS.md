@@ -88,6 +88,7 @@ Themes live in `themes/<id>/theme.toml`. Mocha is the default. Keep functional c
 
 - Add to `keybinds.lua` under the appropriate section comment block
 - Follow the existing pattern: `hl.bind(keys, dispatcher_or_function, opts)`
+- Set `opts.description` to a short action label. Settings reads it from the compositor alongside the registered keys and submap.
 - If adding a new section, use the existing comment banner style
 
 ### Adding a New Submap
