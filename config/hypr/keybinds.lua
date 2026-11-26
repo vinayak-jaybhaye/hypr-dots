@@ -4,7 +4,7 @@
 -- All keyboard shortcuts and submaps are defined here using the native Lua API (hl.bind, hl.dsp).
 -- Uses programs defined in require("programs").
 --
--- SUBMAP WARNING: This file contains two submaps (opacity, mouse). Submaps capture
+-- SUBMAP WARNING: This file contains one submap (opacity). Submaps capture
 -- ALL input until explicitly exited. Always ensure every submap has an escape/exit
 -- binding that resets to the default submap (hl.dsp.submap("reset")).
 -- #######################################################################################
@@ -182,49 +182,3 @@ hl.bind(mainMod .. " + ALT + W",   hl.dsp.exec_cmd(scripts .. "waybar-position.s
 hl.bind(mainMod .. " + G",         hl.dsp.group.toggle(), { description = "Toggle window group" })
 hl.bind(mainMod .. " + Tab",       hl.dsp.group.next(), { description = "Focus next window in group" })
 hl.bind(mainMod .. " + SHIFT + G", hl.dsp.group.move_window(), { description = "Move window within group" })
-
--- SUBMAP: mouse — keyboard-driven cursor control via ydotool.
--- Requires: ydotool (not in pkglist.txt, install separately).
--- Requires: ydotoold systemd service running (systemctl --user enable --now ydotool).
--- SUPER+M enters mouse mode. All keys below work ONLY inside this submap.
--- Press ESC to exit back to normal keybinds.
-
--- #### UNCOMMENT THIS IF YDOTOOL IS NEEDED
--- hl.bind(mainMod .. " + M", hl.dsp.submap("mouse"))
-
--- hl.define_submap("mouse", function()
---     -- Movement
---     hl.bind("h", hl.dsp.exec_cmd("ydotool mousemove -- -20 0"))
---     hl.bind("l", hl.dsp.exec_cmd("ydotool mousemove -- 20 0"))
---     hl.bind("k", hl.dsp.exec_cmd("ydotool mousemove -- 0 -20"))
---     hl.bind("j", hl.dsp.exec_cmd("ydotool mousemove -- 0 20"))
---
---     -- Faster movement
---     hl.bind("SHIFT + h", hl.dsp.exec_cmd("ydotool mousemove -- -100 0"))
---     hl.bind("SHIFT + l", hl.dsp.exec_cmd("ydotool mousemove -- 100 0"))
---     hl.bind("SHIFT + k", hl.dsp.exec_cmd("ydotool mousemove -- 0 -100"))
---     hl.bind("SHIFT + j", hl.dsp.exec_cmd("ydotool mousemove -- 0 100"))
---
---     -- Clicks (ydotool click codes)
---     hl.bind("space",  hl.dsp.exec_cmd("ydotool click 0xC0"))    -- left click
---     hl.bind("Return", hl.dsp.exec_cmd("ydotool click 0xC1"))  -- right click
---
---     -- Drag (vim-style)
---     hl.bind("v", hl.dsp.exec_cmd("ydotool click 0x40"))  -- press
---     hl.bind("y", hl.dsp.exec_cmd("ydotool click 0x80"))  -- release
---
---     -- Vertical scroll
---     hl.bind("u", hl.dsp.exec_cmd("ydotool mousemove -w -- 0 2"))
---     hl.bind("d", hl.dsp.exec_cmd("ydotool mousemove -w -- 0 -2"))
---
---     -- Horizontal scroll
---     hl.bind("left",  hl.dsp.exec_cmd("ydotool mousemove -w -- -1 0"))
---     hl.bind("right", hl.dsp.exec_cmd("ydotool mousemove -w -- 1 0"))
---
---     -- Fast scroll
---     hl.bind("up",   hl.dsp.exec_cmd("ydotool mousemove -w -- 0 8"))
---     hl.bind("down", hl.dsp.exec_cmd("ydotool mousemove -w -- 0 -8"))
---
---     -- Exit
---     hl.bind("escape", hl.dsp.submap("reset"))
--- end)
