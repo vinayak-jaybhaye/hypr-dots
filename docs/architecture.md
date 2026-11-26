@@ -35,8 +35,8 @@ Waybar uses a two-level structure for both its configurations (JSON) and layouts
 
 1. **Configuration JSON**. The project default or saved edge selects a horizontal or vertical profile. Each profile draws on the same module fragments. The including profile wins for each field it overrides. Groups inherit the bar orientation, so shared module ordering works on every edge.
    - Includes layout fragments from `modules/left.jsonc` (workspaces, active window title).
-   - Includes layout fragments from `modules/center.jsonc` (clock, custom night mode, custom DND).
-   - Includes layout fragments from `modules/right.jsonc` (ordered list of system modules).
+   - Loads the standalone clock and its calendar from `modules/center.jsonc`.
+   - Loads system modules and the Settings gear’s hover drawer from `modules/right.jsonc`.
    - Loads module definitions from `modules/system.jsonc` (built-in CPU, memory, battery, etc.) and `modules/custom.jsonc` (custom scripts).
 
 2. **Styling CSS (`style.css`)**:
@@ -56,7 +56,7 @@ Applications and services are launched sequentially via the `hyprland.start` eve
 | **1** | `nm-applet` | NetworkManager Applet | Provides the system tray network indicator and network selector. |
 | **2** | `blueman-applet` | Bluetooth Manager Applet | Provides the system tray Bluetooth controls and connection status. |
 | **3** | `waybar-position.sh --start` | Status Bar | Renders the primary user interface bar (workspaces, system status, clock). |
-| **4** | `hyprsunset` | Night Light filter | Starts the blue-light/temperature filter to protect eyes. Starts enabled. |
+| **4** | `desktop_controls.py login` | Night light | Starts hyprsunset when enabled at login. The default is enabled. |
 | **5** | `/usr/lib/polkit-kde-authentication-agent-1` | Polkit Authentication Agent | Handles graphical permission escalation dialogs (e.g., when launching package managers). |
 | **6** | `wl-paste --type text --watch cliphist store` | Clipboard Manager (Text) | Monitors clipboard copy actions and stores text snippets in `cliphist`. |
 | **7** | `wl-paste --type image --watch cliphist store` | Clipboard Manager (Images) | Monitors clipboard copy actions and stores image captures in `cliphist`. |
@@ -69,26 +69,13 @@ Applications and services are launched sequentially via the `hyprland.start` eve
 
 The default Mocha palette and each additional theme live in `themes/<id>/theme.toml`. Shared defaults define typography, opacity and borders. A switch validates the manifest, renders small native adapters, copies theme artwork and atomically selects the resulting build. Applications read shared behavior through native includes or links. The installer gives each application a stable directory so relative Waybar imports continue working across switches. See the [theme guide](theming.md) and [decision 0012](decisions/0012-desktop-themes.md).
 
-## Script Execution Flow
+## Desktop settings
 
-Custom integrations use a **Toggle/Status Script Pattern** to connect the Waybar status bar and keybinds to background CLI tools.
+Wofi launches the GTK4 settings window through an XDG desktop entry. The visible page refreshes every two seconds and after each change. Theme selection and bar position use their existing commands and files. Audio, panel brightness, wallpaper rotation, notification mode and the running night light schedule use their native controls. The separate login preference lives in `${XDG_CONFIG_HOME:-$HOME/.config}/hypr-dots/preferences.json`. [State ownership and extension guidelines](decisions/0013-desktop-settings.md)
 
-### Communication Pattern
-For custom toggleable modules (such as Night Mode or Do Not Disturb):
+During a screen recording the application holds a reference to its own recorder process and stays available after the window closes. Reopening Settings exposes the stop control. The save folder uses the shared preferences file. [Recording lifecycle](decisions/0014-screen-recording.md)
 
-1. **Waybar Custom Module**: Configured in [custom.jsonc](../config/waybar/modules/custom.jsonc) with `"return-type": "json"`. It runs a status script at intervals or listens to a system signal.
-2. **Status Script**: Runs periodically, checks process state, and outputs JSON with text, tooltip, and CSS class (e.g. `{"text":"󰖔","tooltip":"Hyprsunset Enabled","class":"enabled"}`).
-3. **Toggle Script**: Kills or starts the target daemon, waits briefly, and executes `pkill -RTMIN+N waybar` to force Waybar to instantly refresh the corresponding module.
-4. **Click action**: The night light and DND widgets invoke the toggle scripts through the deployed `hypr/scripts` directory.
-
-### Signal Allocations
-To avoid conflicts, Waybar signals (`RTMIN+N`) must be unique:
-
-| Signal | Custom Module | Toggle Script | Status Script |
-| :--- | :--- | :--- | :--- |
-| `RTMIN+2` | `custom/hyprsunset` | `hyprsunset-toggle.sh` | `hyprsunset-status.sh` |
-| `RTMIN+3` | `custom/dnd` | `mako-dnd-toggle.sh` | `mako-dnd-status.sh` |
-| `RTMIN+4` | *(Next available)* | — | — |
+Settings acquires an idle inhibitor from systemd-logind. The application owns the file descriptor and stays alive while the switch is on. Closing the window preserves the inhibitor. Turning it off or exiting the application releases it. Hypridle observes logind idle inhibitors with the shipped configuration.
 
 ---
 

@@ -1,4 +1,8 @@
 {
+  "tray": {
+    "icon-size": 18,
+    "spacing": 8
+  },
   "cpu": {
     "interval": 5,
     "format": " {usage}%",
@@ -91,14 +95,5 @@
     "on-scroll-up": "brightnessctl set 5%+",
     "on-scroll-down": "brightnessctl set 5%-",
     "tooltip": false
-  },
-  "idle_inhibitor": {
-    "format": "{icon}",
-    "format-icons": {
-      "activated": "",
-      "deactivated": ""
-    },
-    "tooltip-format-activated": "Idle Inhibitor: Active",
-    "tooltip-format-deactivated": "Idle Inhibitor: Inactive"
   }
 }

@@ -235,7 +235,7 @@ The toggle script sends the update signal after changing state:
 pkill -RTMIN+4 waybar
 ```
 
-Currently used signals: `RTMIN+2` (hyprsunset), `RTMIN+3` (DND).
+The shipped modules use no real-time refresh signals.
 
 ---
 
@@ -357,7 +357,7 @@ listener {
 
 ### Disabling idle temporarily
 
-Click Waybar's idle inhibitor to pause idle actions.
+Open **Settings → Display → Keep awake** to pause idle actions for this session.
 
 ---
 
@@ -367,4 +367,4 @@ Edit `config/mako/config` to change the top-right placement and urgency-specific
 
 ### Do Not Disturb
 
-DND is toggled via the waybar module or `scripts/mako-dnd-toggle.sh`. It uses `makoctl mode -t do-not-disturb` to suppress notifications.
+Use **Settings → Sound & notifications → Do Not Disturb**. This switch calls `scripts/mako-dnd-toggle.sh`.

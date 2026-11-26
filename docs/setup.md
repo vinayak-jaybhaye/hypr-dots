@@ -25,6 +25,8 @@ The linker builds the active theme and installs one directory symlink per applic
 
 Correct links are skipped on every run. After moving the checkout, rerun the linker to refresh source links in the managed views. To restore one application, verify its destination with `readlink`, unlink the project symlink, then move the matching backup into its original location.
 
+The linker also registers Hypr Dots Settings under `${XDG_DATA_HOME:-$HOME/.local/share}/applications/`. An existing launcher with the same name is preserved. Open it from Wofi with Super+R.
+
 ## Wallpapers and hardware
 
 | Feature | Default or customization |
@@ -43,4 +45,4 @@ Foot and Kitty both start zsh. Network controls expect NetworkManager, and Bluet
 Hyprland --verify-config -c "$PWD/config/hypr/hyprland.lua"
 ```
 
-At login, Super+Return should open Foot, Super+R should open Wofi, and Super+E should open Thunar. Use Super+Alt+W to try the four bar edges. Night mode and DND should update immediately on click. Check `hyprctl configerrors` inside the session if a binding fails.
+At login, Super+Return should open Foot, Super+R should open Wofi, and Super+E should open Thunar. Use Super+Alt+W to try the four bar edges. Click the gear to open Settings. Display includes night light and Keep awake. Sound & notifications includes Do Not Disturb. Check `hyprctl configerrors` inside the session if a binding fails.

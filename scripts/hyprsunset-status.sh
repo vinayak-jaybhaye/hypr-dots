@@ -1,11 +1,10 @@
 #!/bin/sh
-# hyprsunset-status.sh — Waybar custom module status script
+# hyprsunset-status.sh — JSON status for custom integrations
 # Purpose: Outputs JSON indicating whether hyprsunset (night mode) is running.
-# Called by: Waybar custom/hyprsunset module (config/waybar/modules/custom.jsonc)
 # Output: JSON with text (icon), tooltip, and class (for CSS state styling)
 # Dependencies: pgrep
 
-if pgrep -u "$(id -u)" -x hyprsunset >/dev/null 2>&1; then
+if [ "$("$(dirname -- "$0")/hyprsunset-toggle.sh" status)" = on ]; then
 	echo '{"text":"󰖔","tooltip":"Hyprsunset Enabled","class":"enabled"}'
 else
 	echo '{"text":"","tooltip":"Hyprsunset Disabled","class":"disabled"}'

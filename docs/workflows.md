@@ -10,7 +10,7 @@ When you log into the Hyprland session:
 1. The background systems start (see [Architecture: Startup Sequence](architecture.md#startup-sequence)).
 2. The network (`nm-applet`) and Bluetooth (`blueman-applet`) system trays start in the background.
 3. The wallpaper is set by `wpaperd` (rotating a static image from `~/Pictures/wallpapers/` every 10 minutes).
-4. `hyprsunset` turns on night light/warm screen colors by default.
+4. The login hook starts `hyprsunset` by default. Change this in Hypr Dots Settings under Display.
 5. The `waybar` panel renders at the saved edge (bottom by default). Press `SUPER + ALT + W` to choose an edge.
 
 ---
@@ -46,7 +46,7 @@ The default compositor layout is **Master** (the left screen holds a large maste
 ### Focus & Layout Controls
 - **Move Focus**: Press `SUPER + [H/J/K/L]` (Vim-style navigation: Left, Down, Up, Right).
 - **Move Window Position**: Press `SUPER + SHIFT + [H/J/K/L]`.
-- **Resize Windows**: Press `SUPER + CTRL + [H/J/K/L]`.
+- To resize a floating window, left-drag an edge or corner when the resize cursor appears. You can also hold Super and right-drag inside the window, or press `SUPER + CTRL + [H/J/K/L]`.
 - **Close Window**: Press `SUPER + C`.
 - **Toggle Floating State**: Press `SUPER + SHIFT + C`.
 - **Toggle Fullscreen (Active Window)**: Press `SUPER + F`.
@@ -121,25 +121,29 @@ Text snippets and image captures are tracked automatically.
 
 ## Night Mode & Do Not Disturb
 
-These features can be controlled by clicking their status bar widgets.
+Click the Waybar gear and open **Display → Night light**. **Night light now** controls the running schedule. **Start enabled at login** controls future sessions.
 
-### Night Light (Blue light filter)
-- **Waybar Widget**: Shows a peach icon.
-  - 󰖔 (Peach color) = Active/Enabled
-  - 󰖙 (Gray color) = Disabled
-- **Click**: Click the peach widget on the bar to toggle night mode.
-- **Signal**: The status updates immediately.
-
-### Do Not Disturb (DND)
-- **Waybar Widget**: Shows a pink bell.
-  - 󰂛 (Pink color) = DND active (notifications suppressed)
-  - 󰂚 (Gray color) = DND inactive (notifications allowed)
-- **Click**: Click the pink bell widget to toggle DND.
-- **Signal**: The status updates immediately.
+Use **Settings → Sound & notifications → Do Not Disturb** to silence Mako notifications. Under **Display → Screen**, turn on **Keep awake** to pause automatic locking, screen-off and idle suspend. You can close Settings and reopen it to turn Keep awake off. This switch resets when the session ends.
 
 ---
 
 ## Screen Capture
+
+### Record video
+
+Open the Waybar gear and go to **Display → Screen recording**. **Save recordings to** opens a folder picker. The default is your XDG Videos folder or `~/Videos`. To enter a path in the picker, press Ctrl+L.
+
+Choose a capture area, turn on **Include audio** if wanted, then click **Start recording**.
+
+| Capture area | What gets recorded |
+|---|---|
+| This monitor | The display containing Settings, including workspace switches on that display. |
+| Select a region | A rectangle you drag within one monitor. Press Escape to cancel selection. |
+| Choose a workspace or window | Select an existing workspace or an individual window in Hyprland’s sharing dialog, or dismiss it to cancel. A workspace capture stays with that workspace when you switch away. Optional audio captures the default sound output across workspaces. |
+
+You can close Settings while recording. Reopen it with the gear and click **Stop recording** to finish the MP4. Settings shows the saved path. The folder is remembered for the next session.
+
+### Take a screenshot
 
 Shortcuts capture image files to `~/Pictures/`:
 

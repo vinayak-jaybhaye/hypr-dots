@@ -61,38 +61,11 @@ bash -x "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"hyprsunset-status.sh
 
 ### Waybar modules not updating
 
-**Symptoms:** Custom modules (hyprsunset, DND, power) show stale data or are blank.
+If the wattage readout is blank, run the helper directly. It displays a value when UPower reports a battery charge or discharge rate.
 
-**Solutions:**
-
-1. Check that scripts are executable:
-   ```bash
-   chmod +x "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"*.sh
-   ```
-
-2. Run the status script directly to check output:
-   ```bash
-   "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"hyprsunset-status.sh
-   "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"mako-dnd-status.sh
-   "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"power.sh
-   ```
-
-3. Verify signal numbers match between toggle and custom module:
-   - `custom/hyprsunset` uses signal `2` → toggle sends `pkill -RTMIN+2 waybar`
-   - `custom/dnd` uses signal `3` → toggle sends `pkill -RTMIN+3 waybar`
-
-4. Check that required tools are installed:
-   ```bash
-   which makoctl    # needed for DND status/toggle
-   which upower     # needed for power.sh
-   which pactl      # needed for mic.sh
-   ```
-
-5. Force a manual update:
-   ```bash
-   pkill -RTMIN+2 waybar   # refresh hyprsunset
-   pkill -RTMIN+3 waybar   # refresh DND
-   ```
+```sh
+"${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/power.sh"
+```
 
 ### Waybar shows garbled icons
 
@@ -306,31 +279,13 @@ To restore Caps Lock, remove or change `kb_options` in `hyprland.lua`.
 
 ### Night mode not toggling
 
-**Symptoms:** Clicking the hyprsunset waybar icon does nothing, or the icon doesn't update.
+Open **Settings → Display** and toggle **Night light now**. Check whether the daemon is running for this Wayland session with the same command Settings uses.
 
-**Solutions:**
+```bash
+"${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/hyprsunset-toggle.sh" status
+```
 
-1. Test the toggle script:
-   ```bash
-   "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"hyprsunset-toggle.sh
-   ```
-
-2. Check if hyprsunset process toggles:
-   ```bash
-   pgrep -x hyprsunset   # should appear/disappear on toggle
-   ```
-
-3. Check the status script output:
-   ```bash
-   "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/scripts/"hyprsunset-status.sh
-   # Should output JSON with text, tooltip, class
-   ```
-
-4. Verify the waybar signal:
-   ```bash
-   # The custom module uses signal 2:
-   pkill -RTMIN+2 waybar   # force refresh
-   ```
+The command prints `on` or `off`. If it prints `on` but the display looks unchanged, check the active time and temperature in `hypr/hyprsunset.conf`.
 
 ---
 
@@ -400,7 +355,7 @@ To restore Caps Lock, remove or change `kb_options` in `hyprland.lua`.
 
 ### Bluetooth/Network icons missing from tray
 
-**Symptoms:** No bluetooth or network icons in the waybar tray area.
+Hover over the Settings gear to reveal the tray. If the Bluetooth or network applet is still missing, check its package and process below.
 
 **Solutions:**
 

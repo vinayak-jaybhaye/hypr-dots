@@ -1,11 +1,6 @@
 {
   "include": "theme-calendar.jsonc",
-  "modules-center": ["group/center-trio"],
-
-  "group/center-trio": {
-    "orientation": "inherit",
-    "modules": ["custom/hyprsunset", "clock", "custom/dnd"]
-  },
+  "modules-center": ["clock"],
 
   "clock": {
     "interval": 60,

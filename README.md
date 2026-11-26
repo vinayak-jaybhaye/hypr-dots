@@ -14,6 +14,18 @@ cd hypr-dots
 
 You can clone anywhere. Bootstrap offers to install the official packages, offers the AUR packages when yay or paru is available, then links each application's directory under `$XDG_CONFIG_HOME` (normally `~/.config`). Existing configurations are skipped. To adopt the project configuration for conflicting apps, `./link-configs.sh --force` backs them up first. Mocha uses your wallpaper directory. Fjord and Dune include their own artwork. [Setup and recovery](docs/setup.md)
 
+## Desktop settings
+
+Click the gear at the end of Waybar to open Settings in a centered floating window. Hover over the gear to reveal the tray applets and power menu. You can also press **Super+R** and search for **Settings**, or run `./scripts/settings.py` from the checkout. On an existing install, run `./install-packages.sh` and `./link-configs.sh` to install the GTK dependencies and register the launcher.
+
+| Page | Controls |
+|---|---|
+| Appearance | Choose a theme, restore the previous theme when available, move Waybar to any edge, or step through the wallpaper rotation. |
+| Display | Pause automatic idle actions with Keep awake, set panel brightness and night light, or record a workspace, window, monitor or region with optional audio and a choice of save folder. |
+| Sound & notifications | Adjust output volume, mute the default microphone, or switch Do Not Disturb on and off. |
+
+Hardware keys and Waybar controls still work while the window is open. Unsupported devices and unavailable services appear as disabled rows.
+
 ## Themes
 
 Run `./link-configs.sh` once when upgrading an existing installation. Then select a theme from inside the desktop session.
@@ -52,4 +64,4 @@ The reference laptop keeps its 10-bit SDR panel profile. Other outputs use their
 
 <!-- Screenshots coming soon -->
 
-Run `python3 tests/themes.py` for theme switching and recovery. Run `./tests/deployment.sh` for an isolated installation and bar-position smoke test. It uses Bash and Python 3, with stand-ins for the package managers and desktop processes.
+Run `python3 tests/settings.py` for preference and control checks. Add `--gtk` in a graphical session to exercise the window with simulated devices. Run `python3 tests/themes.py` for theme switching and recovery. Run `./tests/deployment.sh` for an isolated installation and bar-position smoke test. It uses Bash and Python 3, with stand-ins for the package managers and desktop processes.

@@ -72,7 +72,7 @@ Waybar configurations are stored under `config/waybar/`.
 
 ### Module Naming Rules
 - Built-in system modules should match the default Waybar module name (e.g. `"cpu"`, `"memory"`, `"pulseaudio"`).
-- Custom modules must start with a `custom/` prefix (e.g. `"custom/hyprsunset"`, `"custom/dnd"`).
+- Custom modules must start with a `custom/` prefix (e.g. `"custom/settings"`, `"custom/power-btn"`).
 
 ---
 

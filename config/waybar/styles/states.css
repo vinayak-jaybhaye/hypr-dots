@@ -20,15 +20,6 @@
   color: @green;
 }
 
-/* CUSTOM HYPRSUNSET STATES */
-#custom-hyprsunset.enabled {
-  color: @peach;
-}
-
-#custom-hyprsunset.disabled {
-  color: @overlay0;
-}
-
 /* AUDIO & MICROPHONE STATES */
 #pulseaudio.muted:not(.microphone) {
   color: @red;
@@ -41,14 +32,6 @@
 #network.disconnected,
 #temperature.critical {
   color: @red;
-}
-
-#idle_inhibitor.activated {
-  color: @yellow;
-}
-
-#idle_inhibitor.deactivated {
-  color: @subtext0;
 }
 
 /* BLUETOOTH STATES */
@@ -72,15 +55,6 @@
 
 #bluetooth.discovering {
   color: @sapphire;
-}
-
-/* DND STATES */
-#custom-dnd.enabled {
-  color: @red;
-}
-
-#custom-dnd.disabled {
-  color: @overlay0;
 }
 
 /* BLINK ANIMATION */

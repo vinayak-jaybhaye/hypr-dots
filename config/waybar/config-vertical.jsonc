@@ -89,14 +89,6 @@
     "align": 0.5,
     "justify": "center"
   },
-  "idle_inhibitor": {
-    "align": 0.5,
-    "justify": "center"
-  },
-  "tray": {
-    "icon-size": 18,
-    "spacing": 6
-  },
   "include": [
     "modules/left.jsonc",
     "modules/center.jsonc",

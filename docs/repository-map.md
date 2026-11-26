@@ -170,10 +170,10 @@ Shared application configuration lives here. The linker exposes it alongside sel
 
 #### Modules (`config/waybar/modules/`)
 - [left.jsonc](../config/waybar/modules/left.jsonc): Defines components on the left (workspaces, active window title).
-- [center.jsonc](../config/waybar/modules/center.jsonc): Defines components in the center (clock, custom night mode, custom DND).
+- [center.jsonc](../config/waybar/modules/center.jsonc) configures the clock and its calendar.
 - [right.jsonc](../config/waybar/modules/right.jsonc): Declares the layout ordering of system widgets on the right.
 - [system.jsonc](../config/waybar/modules/system.jsonc): Configuration details for all standard system widgets (battery, disk, CPU, memory).
-- [custom.jsonc](../config/waybar/modules/custom.jsonc): Configuration details for custom scripts (power menus, microphone toggle status, night mode indicator).
+- [custom.jsonc](../config/waybar/modules/custom.jsonc) defines the wattage readout, Settings gear and power menu.
 
 #### Styles (`config/waybar/styles/`)
 - [base.css](../config/waybar/styles/base.css): Global widget, tooltip and bar rules using the selected palette.
@@ -190,24 +190,24 @@ Desktop helpers are also available through the relative link [config/hypr/script
 [screenshot.sh](../scripts/screenshot.sh) implements the full-screen, region and clipboard bindings.
 
 #### [hyprsunset-status.sh](../scripts/hyprsunset-status.sh)
-- **Purpose**: Checks if `hyprsunset` is active and outputs JSON for the Waybar custom night-mode module.
+- Reports the current night light state as JSON for custom integrations.
 - **Owner**: Status Indicator.
 - **Modification**: Customize returned text icons or tooltips.
 
 #### [hyprsunset-toggle.sh](../scripts/hyprsunset-toggle.sh)
-- **Purpose**: Toggles `hyprsunset` daemon and triggers a Waybar custom module update signal (`RTMIN+2`).
+- Controls the session’s `hyprsunset` process for Settings and the login hook.
 - **Owner**: User Command Action.
-- **Modification**: Modify execution logic or change signal numbers.
+- Supports `on`, `off`, `toggle` and `status`.
 
 #### [mako-dnd-status.sh](../scripts/mako-dnd-status.sh)
-- **Purpose**: Queries notification DND state and outputs JSON for Waybar.
+- **Purpose**: Queries notification DND state and outputs JSON for custom integrations.
 - **Owner**: Status Indicator.
 - **Modification**: Customize DND text icons.
 
 #### [mako-dnd-toggle.sh](../scripts/mako-dnd-toggle.sh)
-- **Purpose**: Toggles DND mode via `makoctl` and signals Waybar (`RTMIN+3`).
+- **Purpose**: Toggles DND mode via `makoctl` for Settings.
 - **Owner**: User Command Action.
-- **Modification**: Change notification modes or signal number.
+- **Modification**: Change the notification mode controlled by Settings.
 
 #### [mic.sh](../scripts/mic.sh)
 - **Purpose**: Resolves default microphone capture state and outputs active/muted JSON.
@@ -242,7 +242,17 @@ Desktop helpers are also available through the relative link [config/hypr/script
 - [themes/defaults.toml](../themes/defaults.toml) holds shared style values. The `catppuccin-mocha`, `fjord` and `dune` directories each contain a palette manifest. The latter two also contain a PNG wallpaper.
 - [themes/templates/](../themes/templates/) contains adapters for Hyprland, Hyprlock, Waybar CSS and calendar markup, Wofi, Foot, Kitty and Mako. Wpaperd's template stays with its native rotation settings in `config/wpaperd/config.toml`.
 
+## Desktop settings
+
+- [settings.py](../scripts/settings.py) builds the three GTK pages, reads the visible controls and routes user actions.
+- [recording.py](../scripts/recording.py) provides the Display page's folder picker and capture controls, owns the recorder and finalizes its MP4. [Recording lifecycle](decisions/0014-screen-recording.md) · [Workspace and window capture](decisions/0015-portal-recording.md)
+- [desktop_controls.py](../scripts/desktop_controls.py) reads desktop values and saves the login preference. Its `login` entry point starts night light when enabled.
+- [Desktop launcher](../scripts/io.github.hyprdots.Settings.desktop) exposes the window in Wofi and other application menus.
+- [Decision 0013](decisions/0013-desktop-settings.md) records each setting's owner and lifetime.
+
 ## Regression tests
+
+[tests/settings.py](../tests/settings.py) covers preference recovery, native state readers, session-scoped night light control and optional GTK interactions.
 
 [tests/themes.py](../tests/themes.py) covers discovery, native configs, persistence, asset validation, invalid selections, overrides, concurrent publication and recovery.
 

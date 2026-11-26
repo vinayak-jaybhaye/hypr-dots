@@ -34,6 +34,12 @@ Hyprland uses a modular **native Lua configuration** system (`hyprland.lua`). Th
 
 The linker discovers the checkout from its own location and deploys under `${XDG_CONFIG_HOME:-$HOME/.config}`. Scripts stay executable in Git. Reference them through the deployed `hypr/scripts` directory link. Waybar edge changes go under `${XDG_STATE_HOME:-$HOME/.local/state}/hypr-dots/`.
 
+### Desktop settings
+
+Keep each setting with its owner. The window in `scripts/settings.py` calls the existing theme and Waybar helpers and reads live service or hardware values. New project-only preferences go through `scripts/desktop_controls.py`. Settings manages night light and its login preference. Settings controls Mako DND and holds a logind idle inhibitor while Keep awake is enabled. Run `python3 tests/settings.py` for changes to these controls. Use `--gtk` in a graphical session to exercise the window. [Decision 0013](docs/decisions/0013-desktop-settings.md)
+
+The Display page runs screen capture through `scripts/recording.py`. Keep the recorder bound to the application lifetime so closing the window leaves the stop control available on reopen. Monitor and region capture use wf-recorder. Workspace and window capture use the native portal picker. [Recording lifecycle](docs/decisions/0014-screen-recording.md) · [Capture sources](docs/decisions/0015-portal-recording.md)
+
 ### Waybar Module Architecture
 
 Waybar uses a **two-level include pattern**:
@@ -43,7 +49,7 @@ Waybar uses a **two-level include pattern**:
 - `modules/center.jsonc` — defines `modules-center` array + clock config
 - `modules/right.jsonc` — defines `modules-right` array (module ordering)
 - `modules/system.jsonc` — built-in module definitions (cpu, memory, battery, etc.)
-- `modules/custom.jsonc` — custom module definitions (power, hyprsunset, dnd, power-btn)
+- `modules/custom.jsonc` — custom module definitions (power, settings, power-btn)
 
 **CSS (visual):** `style.css` imports via `@import`:
 - `theme.css` — selected palette and typography
@@ -54,17 +60,7 @@ Waybar uses a **two-level include pattern**:
 
 ### Script ↔ Waybar Communication
 
-Custom waybar modules use a **toggle/status pattern**:
-
-1. **Status script** (e.g., `hyprsunset-status.sh`): outputs JSON `{"text":"…","tooltip":"…","class":"…"}` — waybar polls this via `exec`
-2. **Toggle script** (e.g., `hyprsunset-toggle.sh`): toggles the process, then sends `pkill -RTMIN+N waybar` to trigger an immediate refresh
-3. **Module config** specifies `"return-type": "json"` and `"signal": N` to listen for RTMIN+N
-
-**Current signal assignments:**
-| Signal | Module | Toggle Script |
-|--------|--------|---------------|
-| RTMIN+2 | `custom/hyprsunset` | `hyprsunset-toggle.sh` |
-| RTMIN+3 | `custom/dnd` | `mako-dnd-toggle.sh` |
+The wattage module polls its helper. The stock bar has no signal-driven modules. Optional custom modules can use a status script and a dedicated real-time refresh signal.
 
 ### Color system
 

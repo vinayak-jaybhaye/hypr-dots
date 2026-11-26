@@ -1,5 +1,5 @@
 /* Glassmorphic Pill Container Styling for Groups and Standalone Clock */
-#center-trio,
+#clock,
 #connections,
 #audio,
 #hardware,
@@ -16,7 +16,7 @@
 }
 
 /* Hover effects for the pills */
-#center-trio:hover,
+#clock:hover,
 #connections:hover,
 #audio:hover,
 #hardware:hover,
@@ -30,9 +30,6 @@
 }
 
 /* Individual Module Styles (Inside the Pills) */
-#clock,
-#custom-hyprsunset,
-#custom-dnd,
 #network,
 #bluetooth,
 #pulseaudio,
@@ -43,8 +40,8 @@
 #memory,
 #custom-power,
 #battery,
-#idle_inhibitor,
 #tray,
+#custom-settings,
 #custom-power-btn {
   background-color: transparent;
   border: none;
@@ -55,21 +52,11 @@
 }
 
 /* Individual Module Colors */
-#center-trio {
+#clock {
+  padding: 0 10px;
+  color: @text;
   background-color: mix(@base, @lavender, 0.13);
   border-color: alpha(@lavender, 0.30);
-}
-
-#clock {
-  color: @text;
-}
-
-#custom-hyprsunset {
-  color: @peach;
-}
-
-#custom-dnd {
-  color: @pink;
 }
 
 #network {
@@ -112,8 +99,8 @@
   color: @green;
 }
 
-#idle_inhibitor {
-  color: @red;
+#custom-settings {
+  color: @lavender;
 }
 
 #custom-power-btn {
@@ -121,16 +108,13 @@
 }
 
 /* Hover micro-animations for individual interactive modules */
-#clock:hover,
-#custom-hyprsunset:hover,
-#custom-dnd:hover,
 #network:hover,
 #bluetooth:hover,
 #pulseaudio:hover,
 #pulseaudio.microphone:hover,
 #backlight:hover,
-#custom-power-btn:hover,
-#idle_inhibitor:hover {
+#custom-settings:hover,
+#custom-power-btn:hover {
   background-color: alpha(@text, 0.10);
   color: @text;
 }
@@ -147,7 +131,7 @@
 /* ========================================================================= */
 /* Vertical Orientation Styles (Left & Right)                               */
 /* ========================================================================= */
-window#waybar.vertical #center-trio,
+window#waybar.vertical #clock,
 window#waybar.vertical #connections,
 window#waybar.vertical #audio,
 window#waybar.vertical #hardware,
@@ -157,9 +141,6 @@ window#waybar.vertical #sys-status {
   margin: 1px 3px;
 }
 
-window#waybar.vertical #clock,
-window#waybar.vertical #custom-hyprsunset,
-window#waybar.vertical #custom-dnd,
 window#waybar.vertical #network,
 window#waybar.vertical #bluetooth,
 window#waybar.vertical #pulseaudio,
@@ -170,8 +151,8 @@ window#waybar.vertical #temperature,
 window#waybar.vertical #memory,
 window#waybar.vertical #custom-power,
 window#waybar.vertical #battery,
-window#waybar.vertical #idle_inhibitor,
 window#waybar.vertical #tray,
+window#waybar.vertical #custom-settings,
 window#waybar.vertical #custom-power-btn {
   padding: 2px 0;
   margin: 0;
@@ -179,20 +160,9 @@ window#waybar.vertical #custom-power-btn {
   font-size: 1.12em;
 }
 
-window#waybar.vertical #center-trio #custom-hyprsunset {
-  padding: 4px 0 2px 0;
-  font-size: 1.05em;
-}
-
-window#waybar.vertical #center-trio #clock {
-  padding: 2px 0;
+window#waybar.vertical #clock {
+  padding: 5px 0;
   font-size: 1em;
-  font-weight: bold;
-}
-
-window#waybar.vertical #center-trio #custom-dnd {
-  padding: 2px 0 4px 0;
-  font-size: 1.05em;
 }
 
 window#waybar.vertical #battery {
@@ -200,8 +170,7 @@ window#waybar.vertical #battery {
 }
 
 /* Center text-only controls after Waybar hides the optional image widget. */
-window#waybar.vertical #custom-hyprsunset:only-child,
-window#waybar.vertical #custom-dnd:only-child,
+window#waybar.vertical #custom-settings:only-child,
 window#waybar.vertical #custom-power-btn:only-child {
   min-width: 38px;
 }

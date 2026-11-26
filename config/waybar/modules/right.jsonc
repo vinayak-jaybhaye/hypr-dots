@@ -29,6 +29,10 @@
 
   "group/sys-status": {
     "orientation": "inherit",
-    "modules": ["idle_inhibitor", "tray", "custom/power-btn"]
+    "drawer": {
+      "transition-duration": 160,
+      "transition-left-to-right": false
+    },
+    "modules": ["custom/settings", "tray", "custom/power-btn"]
   }
 }
